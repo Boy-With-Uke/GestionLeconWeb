@@ -1,28 +1,26 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { Button } from "./components/ui/button";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <div className="flex flex-col">
-        <button
-          className="bg-blue-500"
+      <div className="flex flex-col bg-background max-w-md m-auto gap-5">
+        <Button
+          className="bg-primary"
           onClick={() => setCount((count) => count + 1)}
         >
           up
-        </button>
-        <button
-          className="bg-red-500"
+        </Button>
+        <Button
+          className="bg-primary"
           onClick={() => setCount((count) => count - 1)}
         >
           down
-        </button>
+        </Button>
+        <p>{count}</p>
       </div>
-      <p>{count}</p>
     </>
   );
 }
