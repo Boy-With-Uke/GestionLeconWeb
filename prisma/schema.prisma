@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id_user          Int                         @unique @default(autoincrement())
+  nom              String
+  prenom           String
+  email            String                      @unique
+  motDePasse       String
+  coursUtilisateur Int?
+  niveauAccess     Role                        @default(USER)
+  cours            utilisateurSuivantLeCours[]
+  Matiere          Matiere[]
+}
+
+model Matiere {
+  id_matiere            Int     @unique @default(autoincrement())
+  nom                   String
+  description           String
+  enseignantDelaMatiere Int
+  enseignant            User    @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
+  cours                 Cours[]
+}
+
+model Cours {
+  id_cours              Int                         @unique @default(autoincrement())
+  utilisateurquiSuivent utilisateurSuivantLeCours[]
+  titre                 String
+  dateDebut             DateTime?
+  dateFin               DateTime?
+  enseignant            String?
+  matiereConcernee      Int
+  courMatiere           Matiere                     @relation(fields: [matiereConcernee], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
+  evaluations           coursContenantEvaluation[]
+  coursLesson           coursContenantLecon[]
+}
+
+model utilisateurSuivantLeCours {
+  courses Cours @relation(fields: [coursId], references: [id_cours], onDelete: Cascade, onUpdate: Cascade)
+  coursId Int
+  user    User  @relation(fields: [userId], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
+  userId  Int
+
+  assignedAt DateTime @default(now())
+
+  @@unique([userId, coursId])
+}
+
+model coursContenantLecon {
+  courses    Cours    @relation(fields: [coursId], references: [id_cours], onDelete: Cascade, onUpdate: Cascade)
+  coursId    Int
+  lessons    Lecon    @relation(fields: [lessonId], references: [id_lecon], onDelete: Cascade, onUpdate: Cascade)
+  lessonId   Int
+  assignedAt DateTime @default(now())
+
+  @@unique([coursId, lessonId])
+}
+
+model coursContenantEvaluation {
+  courses       Cours      @relation(fields: [coursId], references: [id_cours])
+  coursId       Int
+  evaluations   Evaluation @relation(fields: [evaluationsId], references: [id_evaluation])
+  evaluationsId Int
+  assignedAt    DateTime   @default(now())
+
+  @@unique([coursId, evaluationsId])
+}
+
+model Evaluation {
+  id_evaluation   Int                        @unique @default(autoincrement())
+  titre           String
+  description     String
+  typeEvaluation  Type                       @default(Controle)
+  dateLimite      DateTime
+  coursEvaluation coursContenantEvaluation[]
+}
+
+model Lecon {
+  id_lecon    Int                   @unique @default(autoincrement())
+  titre       String
+  contenue    String
+  coursLesson coursContenantLecon[]
+}
+
+enum Type {
+  Controle
+  Examen
+}
+
+enum Role {
+  USER
+  ENSEIGNANT
+  ADMIN
+}

@@ -13,6 +13,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "hono": "^4.4.5"
+    "@hono/zod-validator": "^0.2.2",
+    "@prisma/client": "5.15.0",
+    "hono": "^4.4.5",
+    "prisma": "^5.15.0",
+    "prisma-client": "^0.0.0",
+    "zod": "^3.23.8"
   }
 }
