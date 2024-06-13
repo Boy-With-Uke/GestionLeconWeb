@@ -1,20 +1,13 @@
 import { ModeToggle } from "./mode-toogle";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
-
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import NavContent from "./NavContent";
 
 export default function Navbar() {
+  const userCoockie = Cookies.get("user");
+  const navigate = useNavigate();
   return (
     <nav className="fixed inset-x-0 top-0 z-50 bg-gray-300 shadow-sm dark:bg-gray-950/90">
       <div className="w-full max-w-7xl mx-auto px-4">
@@ -27,24 +20,42 @@ export default function Navbar() {
             <NavContent />
           </nav>
           <div className="flex items-center gap-4">
-            <Link to={"/Connexion"}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-primary hover:bg-primary hover:text-white"
-              >
-                Connexion
-              </Button>
-            </Link>
-            <Link to={"/Inscription"}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-primary hover:bg-primary hover:text-white"
-              >
-                Inscription
-              </Button>
-            </Link>
+            {userCoockie ? (
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-primary hover:bg-primary hover:text-white"
+                  onClick={() => {
+                    Cookies.remove("user");
+                    navigate("/");
+                  }}
+                >
+                  Deconnexion
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to={"/Connexion"}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-primary hover:bg-primary hover:text-white"
+                  >
+                    Connexion
+                  </Button>
+                </Link>
+                <Link to={"/Inscription"}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-primary hover:bg-primary hover:text-white"
+                  >
+                    Inscription
+                  </Button>
+                </Link>
+              </>
+            )}
             <ModeToggle />
           </div>
         </div>

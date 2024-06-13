@@ -31,6 +31,28 @@ export const userRoutes = new Hono()
 
     return c.json({ users });
   })
+  .get("/:id{[0-9]+}", async (c) => {
+    const userId = Number.parseInt(c.req.param("id"));
+    try {
+      const user = await prisma.user.findFirst({
+        where: {
+          id_user: userId,
+        },
+        select:{
+          id_user: true,
+          nom: true,
+          prenom: true,
+          email: true,
+          niveauAccess: true,
+        }
+      });
+      c.status(200);
+      return c.json( {user} );
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
+    }
+  })
   .post("/", zValidator("json", postUserSchema), async (c) => {
     const body = await c.req.valid("json");
 
@@ -65,7 +87,6 @@ export const userRoutes = new Hono()
       return c.json({ message, newUser });
     } catch (error) {
       c.status(500);
-      return c.json({ error: error.message });
+      return c.json({ Error: error });
     }
   });
-

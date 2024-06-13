@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Navbar from "@/components/navbar";
-
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -39,6 +40,7 @@ const formSchema = z
 
 export default function Inscription() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,54 +53,56 @@ export default function Inscription() {
   });
 
   // 2. Define a submit handler.
-const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  try {
-    const req = await fetch(`http://localhost:5173/api/user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nom: values.name,
-        prenom: values.firstName,
-        email: values.email,
-        motDePasse: values.password,
-      }),
-    });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const req = await fetch(`http://localhost:5173/api/user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nom: values.name,
+          prenom: values.firstName,
+          email: values.email,
+          motDePasse: values.password,
+        }),
+      });
 
-    const data = await req.json(); // Parse the response JSON
+      const data = await req.json(); // Parse the response JSON
 
-    if (req.status === 401) {
+      if (req.status === 401) {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: data.message || "Email déjà lié à un compte",
+        });
+      } else if (req.status === 200) {
+        toast({
+          title: `Félicitations`,
+          description: `Inscription réussie`,
+        });
+        navigate("/");
+        Cookies.set("user", data.newUser.id_user, { expires: 7, path: "/" });
+      } else {
+        // Handle other status codes
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: data.message || "Une erreur est survenue",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'inscription:", error);
       toast({
         variant: "destructive",
         title: `Erreur`,
-        description: data.message || "Email déjà lié à un compte",
-      });
-    } else if (req.status === 200) {
-      toast({
-        title: `Félicitations`,
-        description: `Inscription réussie`,
-      });
-    } else {
-      // Handle other status codes
-      toast({
-        variant: "destructive",
-        title: `Erreur`,
-        description: data.message || "Une erreur est survenue",
+        description:
+          "Une erreur est survenue lors de la tentative d'inscription.",
       });
     }
-  } catch (error) {
-    console.error("Erreur lors de l'inscription:", error);
-    toast({
-      variant: "destructive",
-      title: `Erreur`,
-      description:
-        "Une erreur est survenue lors de la tentative d'inscription.",
-    });
-  }
 
-  console.log(values.password);
-};
+    console.log(values.password);
+  };
 
   return (
     <>
