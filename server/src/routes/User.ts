@@ -35,6 +35,22 @@ export const userRoutes = new Hono()
     const body = await c.req.valid("json");
 
     try {
+      // Vérifier si l'email existe déjà
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          email: body.email,
+        },
+      });
+
+      if (existingUser) {
+        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+        c.status(401);
+        return c.json({
+          message: "L'email est deja liee a un compte",
+        });
+      }
+
+      // Créer un nouvel utilisateur
       const newUser = await prisma.user.create({
         data: {
           nom: body.nom,
@@ -43,8 +59,13 @@ export const userRoutes = new Hono()
           motDePasse: body.motDePasse,
         },
       });
-      let message = "Nouveau utilisateur creer avec succes";
+
+      let message = "Nouvel utilisateur créé avec succès";
       c.status(200);
       return c.json({ message, newUser });
-    } catch (error) {}
+    } catch (error) {
+      c.status(500);
+      return c.json({ error: error.message });
+    }
   });
+

@@ -27,10 +27,24 @@ export default function Navbar() {
             <NavContent />
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm">
-              Sign in
-            </Button>
-            <Button size="sm">Sign up</Button>
+            <Link to={"/Connexion"}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-primary hover:bg-primary hover:text-white"
+              >
+                Connexion
+              </Button>
+            </Link>
+            <Link to={"/Inscription"}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-primary hover:bg-primary hover:text-white"
+              >
+                Inscription
+              </Button>
+            </Link>
             <ModeToggle />
           </div>
         </div>

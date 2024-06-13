@@ -42,16 +42,13 @@ export default function Connexion() {
     // ✅ This will be type-safe and validated.
     console.log(values.password);
   }
-
   return (
     <>
       <div className="min-h-screen flex items-center justify-center bg-gray-200 dark:bg-gray-900">
         <Navbar />
         <div className=" bg-gray-300 p-8 rounded-lg shadow-xl shadow-primary w-full max-w-md dark:bg-gray-950/90">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              Veuillez Vous connecter
-            </h2>
+            <h2 className="text-2xl font-bold mb-4 text-center">Connexion</h2>
           </div>
           <div>
             <Form {...form}>
