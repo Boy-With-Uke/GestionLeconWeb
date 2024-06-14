@@ -8,15 +8,17 @@ datasource db {
 }
 
 model User {
-  id_user          Int                         @unique @default(autoincrement())
-  nom              String
-  prenom           String
-  email            String                      @unique
-  motDePasse       String
-  coursUtilisateur Int?
-  niveauAccess     Role                        @default(USER)
-  cours            utilisateurSuivantLeCours[]
-  Matiere          Matiere[]
+  id_user           Int                         @unique @default(autoincrement())
+  nom               String
+  prenom            String
+  email             String                      @unique
+  motDePasse        String
+  classeUtilisateur Int
+  classe            Classe                      @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
+  coursUtilisateur  Int?
+  niveauAccess      Role                        @default(USER)
+  cours             utilisateurSuivantLeCours[]
+  Matiere           Matiere[]
 }
 
 model Matiere {
@@ -46,6 +48,23 @@ model Classe {
   id_classe     Int                 @unique @default(autoincrement())
   nomClasse     String              @unique
   classeMatiere matiereDeLaClasse[]
+  userClasse    User[]
+}
+
+model Evaluation {
+  id_evaluation   Int                        @unique @default(autoincrement())
+  titre           String
+  description     String
+  typeEvaluation  Type                       @default(Controle)
+  dateLimite      DateTime
+  coursEvaluation coursContenantEvaluation[]
+}
+
+model Lecon {
+  id_lecon    Int                   @unique @default(autoincrement())
+  titre       String
+  contenue    String
+  coursLesson coursContenantLecon[]
 }
 
 model matiereDeLaClasse {
@@ -87,22 +106,6 @@ model coursContenantEvaluation {
   assignedAt    DateTime   @default(now())
 
   @@unique([coursId, evaluationsId])
-}
-
-model Evaluation {
-  id_evaluation   Int                        @unique @default(autoincrement())
-  titre           String
-  description     String
-  typeEvaluation  Type                       @default(Controle)
-  dateLimite      DateTime
-  coursEvaluation coursContenantEvaluation[]
-}
-
-model Lecon {
-  id_lecon    Int                   @unique @default(autoincrement())
-  titre       String
-  contenue    String
-  coursLesson coursContenantLecon[]
 }
 
 enum Type {

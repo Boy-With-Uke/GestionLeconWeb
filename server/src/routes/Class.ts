@@ -36,6 +36,14 @@ export const classesRoutes = new Hono()
             },
           },
         },
+        userClasse: {
+          select: {
+            id_user: true,
+            nom: true,
+            prenom: true,
+            niveauAccess: true,
+          },
+        },
       },
     });
 
@@ -44,7 +52,7 @@ export const classesRoutes = new Hono()
   .get("/:id{[0-9]+}", async (c) => {
     const classId = Number.parseInt(c.req.param("id"));
     try {
-      const user = await prisma.classe.findFirst({
+      const classe = await prisma.classe.findFirst({
         where: {
           id_classe: classId,
         },
@@ -69,10 +77,18 @@ export const classesRoutes = new Hono()
               },
             },
           },
+          userClasse: {
+            select: {
+              id_user: true,
+              nom: true,
+              prenom: true,
+              niveauAccess: true,
+            },
+          },
         },
       });
       c.status(200);
-      return c.json({ user });
+      return c.json({ classe });
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
@@ -114,7 +130,7 @@ export const classesRoutes = new Hono()
   })
   .delete("/:id{[0-9]+}", async (c) => {
     const classId = Number.parseInt(c.req.param("id"));
-    
+
     try {
       const existingClasse = await prisma.classe.findFirst({
         where: {
@@ -164,9 +180,9 @@ export const classesRoutes = new Hono()
           where: {
             id_classe: classId,
           },
-          data:{
+          data: {
             nomClasse: body.nomClasse,
-          }
+          },
         });
         message = `La classe avec l\'id: ${classId} a été modifie avec succès`;
         c.status(200);

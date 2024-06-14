@@ -10,10 +10,13 @@ const userSchema = z.object({
   nom: z.string(),
   prenom: z.string(),
   email: z.string(),
+  classe: z.number(),
+  niveauAccess: z.string(),
   motDePasse: z.string(),
 });
 
-const postUserSchema = userSchema.omit({ id_user: true });
+const postUserSchema = userSchema.omit({ id_user: true, niveauAccess: true });
+const upsteUserSchema = userSchema.omit({ id_user: true, motDePasse: true });
 
 export const userRoutes = new Hono()
   .get("/", async (c) => {
@@ -38,16 +41,16 @@ export const userRoutes = new Hono()
         where: {
           id_user: userId,
         },
-        select:{
+        select: {
           id_user: true,
           nom: true,
           prenom: true,
           email: true,
           niveauAccess: true,
-        }
+        },
       });
       c.status(200);
-      return c.json( {user} );
+      return c.json({ user });
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
@@ -79,12 +82,80 @@ export const userRoutes = new Hono()
           prenom: body.prenom,
           email: body.email,
           motDePasse: body.motDePasse,
+          classe: {
+            connect: {
+              id_classe: body.classe,
+            },
+          },
         },
       });
 
       let message = "Nouvel utilisateur créé avec succès";
       c.status(200);
       return c.json({ message, newUser });
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
+    }
+  })
+  .delete("/:id{[0-9]+}", async (c) => {
+    const userId = Number.parseInt(c.req.param("id"));
+
+    try {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          id_user: userId,
+        },
+      });
+
+      let message;
+
+      if (!existingUser) {
+        message = `L'utilisateur avec l\'id: ${userId} n'existe pas`;
+        c.status(404);
+        return c.json({ message });
+      } else {
+        const deletedClasse = await prisma.user.delete({
+          where: {
+            id_user: userId,
+          },
+        });
+        message = `L'utilisateur avec l\'id: ${userId} a été supprimé avec succès`;
+        c.status(200);
+        return c.json({ message, deletedClasse });
+      }
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
+    }
+  })
+
+  .put("/:id{[0-9]+}", async (c) => {
+    const userId = Number.parseInt(c.req.param("id"));
+
+    try {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          id_user: userId,
+        },
+      });
+
+      let message;
+
+      if (!existingUser) {
+        message = `L'utilisateur avec l\'id: ${userId} n'existe pas`;
+        c.status(404);
+        return c.json({ message });
+      } else {
+        const deletedClasse = await prisma.user.delete({
+          where: {
+            id_user: userId,
+          },
+        });
+        message = `L'utilisateur avec l\'id: ${userId} a été supprimé avec succès`;
+        c.status(200);
+        return c.json({ message, deletedClasse });
+      }
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
