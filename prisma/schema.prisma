@@ -6,6 +6,7 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
 model User {
   id_user          Int                         @unique @default(autoincrement())
   nom              String
@@ -19,12 +20,13 @@ model User {
 }
 
 model Matiere {
-  id_matiere            Int     @unique @default(autoincrement())
+  id_matiere            Int                 @unique @default(autoincrement())
   nom                   String
   description           String
   enseignantDelaMatiere Int
-  enseignant            User    @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
+  enseignant            User                @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
   cours                 Cours[]
+  classeMatiere         matiereDeLaClasse[]
 }
 
 model Cours {
@@ -38,6 +40,22 @@ model Cours {
   courMatiere           Matiere                     @relation(fields: [matiereConcernee], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
   evaluations           coursContenantEvaluation[]
   coursLesson           coursContenantLecon[]
+}
+
+model Classe {
+  id_classe     Int                 @unique @default(autoincrement())
+  nomClasse     String              @unique
+  classeMatiere matiereDeLaClasse[]
+}
+
+model matiereDeLaClasse {
+  classes    Classe   @relation(fields: [classId], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
+  classId    Int
+  matieres   Matiere  @relation(fields: [matiereId], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
+  matiereId  Int
+  assignedAt DateTime @default(now())
+
+  @@unique([classId, matiereId])
 }
 
 model utilisateurSuivantLeCours {
