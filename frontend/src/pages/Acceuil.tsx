@@ -3,6 +3,19 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import { Hero } from "@/components/Hero";
+import { Sponsors } from "@/components/Sponsors";
+import { About } from "@/components/About";
+import { HowItWorks } from "@/components/HowItWorks";
+import { Features } from "@/components/Features";
+import { Services } from "@/components/Services";
+import { Cta } from "@/components/Cta";
+import { Testimonials } from "@/components/Testimonials";
+import { Team } from "@/components/Team";
+import { Pricing } from "@/components/Pricing";
+import { Newsletter } from "@/components/Newsletter";
+import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 export default function Acceuil() {
   type User = {
@@ -66,9 +79,17 @@ export default function Acceuil() {
         </div>
       ) : (
         <>
-          <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
+          <div className="min-h-screen bg-slate-100 dark:bg-slate-950">
             <Navbar />
-            <Hero/>
+            <Hero />
+            <Sponsors />
+            <About />
+            <HowItWorks />
+            <Features />
+            <Services />
+            <FAQ />
+            <Footer />
+            <ScrollToTop />
           </div>
         </>
       )}

@@ -108,7 +108,7 @@ export default function Inscription() {
     <>
       <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
         <Navbar />
-        <div className=" bg-white p-8 rounded-lg shadow-xl shadow-primary w-full max-w-md dark:bg-slate-900">
+        <div className=" bg-white p-8 rounded-lg shadow-xl drop-shadow-xl shadow-black/10 w-full max-w-md dark:bg-slate-900 dark:shadow-primary">
           <div>
             <h2 className="text-2xl font-bold mb-4 text-center">Inscription</h2>
           </div>
