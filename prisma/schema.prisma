@@ -17,7 +17,7 @@ model User {
   classe            Classe?                      @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
   coursUtilisateur  Int?
   niveauAccess      Role                        @default(USER)
-  cours             utilisateurSuivantLeCours[]
+  cours             usersFav[]
   Matiere           Matiere[]
 }
 
@@ -33,11 +33,10 @@ model Matiere {
 
 model Cours {
   id_cours              Int                         @unique @default(autoincrement())
-  utilisateurquiSuivent utilisateurSuivantLeCours[]
-  titre                 String
+  utilisateurquiSuivent usersFav[]
+  titre                 String  @unique
   dateDebut             DateTime?
   dateFin               DateTime?
-  enseignant            String?
   matiereConcernee      Int
   courMatiere           Matiere                     @relation(fields: [matiereConcernee], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
   evaluations           coursContenantEvaluation[]
@@ -77,7 +76,7 @@ model matiereDeLaClasse {
   @@unique([classId, matiereId])
 }
 
-model utilisateurSuivantLeCours {
+model usersFav {
   courses Cours @relation(fields: [coursId], references: [id_cours], onDelete: Cascade, onUpdate: Cascade)
   coursId Int
   user    User  @relation(fields: [userId], references: [id_user], onDelete: Cascade, onUpdate: Cascade)

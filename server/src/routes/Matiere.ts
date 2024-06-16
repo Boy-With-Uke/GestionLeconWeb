@@ -6,7 +6,7 @@ import { number, z } from "zod";
 const prisma = new PrismaClient();
 
 const matiereSchema = z.object({
-  id_matiere: number(),
+  id_matiere: z.number(),
   nom: z.string(),
   description: z.string(),
   enseignantDelaMatiere: z.number().min(1),
@@ -38,6 +38,14 @@ export const subjectRoutes = new Hono()
     const matieres = await prisma.matiere.findMany({});
     c.status(200);
     return c.json({ Matiere: matieres });
+  })
+  .get("/:id{[0-9]+}", async (c) => {
+    const matiereId = Number.parseInt(c.req.param("id"));
+    const matiere = await prisma.matiere.findUnique({
+      where: { id_matiere: matiereId },
+    });
+    c.status(200);
+    return c.json({ matiere });
   })
   .post("/", zValidator("json", postMatiereSchema), async (c) => {
     const body = await c.req.valid("json");
@@ -200,37 +208,34 @@ export const subjectRoutes = new Hono()
       return c.json({ Error: error });
     }
   })
-  .delete(
-    "/:id{[0-9]+}",
-    async (c) => {
-      const matiereId = Number.parseInt(c.req.param("id"));
-      try {
-        const existingMatiere = await prisma.matiere.findUnique({
-          where: {
-            id_matiere: matiereId,
-          },
-        });
+  .delete("/:id{[0-9]+}", async (c) => {
+    const matiereId = Number.parseInt(c.req.param("id"));
+    try {
+      const existingMatiere = await prisma.matiere.findUnique({
+        where: {
+          id_matiere: matiereId,
+        },
+      });
 
-        if (!existingMatiere) {
-          c.status(401);
-          return c.json({
-            message: "Matiere non existante",
-          });
-        }
-        const deletedMatiere = await prisma.matiere.delete({
-          where: {
-            id_matiere: matiereId,
-          },
-        });
-
-        c.status(200);
+      if (!existingMatiere) {
+        c.status(401);
         return c.json({
-          deletedMatiere,
-          message: " Suppression de la matiere est un succes",
+          message: "Matiere non existante",
         });
-      } catch (error) {
-        c.status(500);
-        return c.json({ Error: error });
       }
+      const deletedMatiere = await prisma.matiere.delete({
+        where: {
+          id_matiere: matiereId,
+        },
+      });
+
+      c.status(200);
+      return c.json({
+        deletedMatiere,
+        message: " Suppression de la matiere est un succes",
+      });
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
     }
-  );
+  });
