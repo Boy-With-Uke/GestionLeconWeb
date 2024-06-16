@@ -1,6 +1,7 @@
 import Navbar from "@/components/navbar";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import OrbitingLoader from "@/components/OrbitingLoader";
 
 export default function Acceuil() {
   type User = {
@@ -13,6 +14,7 @@ export default function Acceuil() {
 
   const userCookie = Cookies.get("user");
   const [actualUser, setActualUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   console.log("User cookie:", userCookie);
 
@@ -38,16 +40,38 @@ export default function Acceuil() {
   };
 
   useEffect(() => {
+    // Show the loader for at least 3 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Fetch user data
     getActualUser();
+
+    // Clear the timer if the component unmounts
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <Navbar />
-      <div style={{ marginTop: "50px" }}>
-        <p>essaie</p>
-        <p className="text-black">{actualUser?.nom}</p>
-      </div>
+      {isLoading ? (
+        <div
+          className="flex justify-center items-center bg-gray-300 dark:bg-gray-950/90"
+          style={{
+            height: "100vh",
+          }}
+        >
+          <OrbitingLoader />
+        </div>
+      ) : (
+        <>
+          <div className="min-h-screen flex items-center justify-center bg-gray-200 dark:bg-gray-900">
+            <Navbar />
+            <p>essaie</p>
+            <p className="text-black">{actualUser?.nom}</p>
+          </div>
+        </>
+      )}
     </>
   );
 }
