@@ -14,7 +14,7 @@ model User {
   email             String                      @unique
   motDePasse        String
   classeUtilisateur Int
-  classe            Classe                      @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
+  classe            Classe?                      @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
   coursUtilisateur  Int?
   niveauAccess      Role                        @default(USER)
   cours             utilisateurSuivantLeCours[]

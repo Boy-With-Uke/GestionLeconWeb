@@ -46,7 +46,7 @@ export const classesRoutes = new Hono()
         },
       },
     });
-
+    c.status(200)
     return c.json({ classes });
   })
   .get("/:id{[0-9]+}", async (c) => {
@@ -63,7 +63,6 @@ export const classesRoutes = new Hono()
             select: {
               matieres: {
                 select: {
-                  id_matiere: true,
                   nom: true,
                   description: true,
                   enseignant: {
