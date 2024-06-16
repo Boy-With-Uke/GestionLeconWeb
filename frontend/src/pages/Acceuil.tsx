@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import OrbitingLoader from "@/components/OrbitingLoader";
+import { Hero } from "@/components/Hero";
 
 export default function Acceuil() {
   type User = {
@@ -56,7 +57,7 @@ export default function Acceuil() {
     <>
       {isLoading ? (
         <div
-          className="flex justify-center items-center bg-gray-300 dark:bg-gray-950/90"
+          className="flex justify-center items-center bg-white dark:bg-gray-950/90"
           style={{
             height: "100vh",
           }}
@@ -65,10 +66,9 @@ export default function Acceuil() {
         </div>
       ) : (
         <>
-          <div className="min-h-screen flex items-center justify-center bg-gray-200 dark:bg-gray-900">
+          <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
             <Navbar />
-            <p>essaie</p>
-            <p className="text-black">{actualUser?.nom}</p>
+            <Hero/>
           </div>
         </>
       )}

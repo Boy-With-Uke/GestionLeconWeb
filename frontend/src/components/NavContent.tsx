@@ -58,7 +58,7 @@ export default function NavContent() {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Link to="/docs">
+          <Link to="/">
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Acceuil
             </NavigationMenuLink>
