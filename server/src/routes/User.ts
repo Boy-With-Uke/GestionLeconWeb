@@ -15,7 +15,13 @@ const userSchema = z.object({
   motDePasse: z.string(),
 });
 
-const postUserSchema = userSchema.omit({ id_user: true, niveauAccess: true });
+const postUserSchema = z.object({
+  nom: z.string(),
+  prenom: z.string(),
+  email: z.string(),
+  classe: z.string(),
+  motDePasse: z.string(),
+});
 const updateteUserSchema = userSchema.omit({
   id_user: true,
   motDePasse: true,
@@ -123,7 +129,7 @@ export const userRoutes = new Hono()
           motDePasse: body.motDePasse,
           classe: {
             connect: {
-              id_classe: body.classe,
+              nomClasse: body.classe,
             },
           },
         },

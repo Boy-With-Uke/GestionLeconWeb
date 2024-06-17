@@ -58,6 +58,8 @@ export default function Inscription() {
       password: "",
       name: "",
       firstName: "",
+      classe: "",
+      filiere: "",
     },
   });
 
@@ -72,6 +74,7 @@ export default function Inscription() {
           nom: values.name,
           prenom: values.firstName,
           email: values.email,
+          classe: values.classe,
           motDePasse: values.password,
         }),
       });
@@ -108,7 +111,7 @@ export default function Inscription() {
       });
     }
 
-    console.log(values.password);
+    console.log(values);
   };
 
   useEffect(() => {
@@ -228,7 +231,10 @@ export default function Inscription() {
                           <FormItem className="flex-1">
                             <FormLabel>Classe</FormLabel>
                             <FormControl>
-                              <ClassCombo queryParam={selectedFiliere} />
+                              <ClassCombo
+                                queryParam={selectedFiliere}
+                                onSelect={(classe) => field.onChange(classe)} // Ajout de la fonction de rappel
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>

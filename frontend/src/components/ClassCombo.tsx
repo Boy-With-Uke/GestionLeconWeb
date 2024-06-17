@@ -21,9 +21,10 @@ import { useEffect, useState } from "react";
 
 type ClassComboProps = {
   queryParam: string;
+  onSelect: (classe: string) => void; // Ajout de la fonction de rappel
 };
 
-export default function ClassCombo({ queryParam }: ClassComboProps) {
+export default function ClassCombo({ queryParam, onSelect }: ClassComboProps) {
   type Classe = {
     id_classe: number;
     nomClasse: string;
@@ -61,6 +62,7 @@ export default function ClassCombo({ queryParam }: ClassComboProps) {
   const handleSelect = (currentValue: string) => {
     setValue(currentValue);
     setOpen(false);
+    onSelect(currentValue); // Appel de la fonction de rappel
   };
 
   return (
