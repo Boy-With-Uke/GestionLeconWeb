@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import NavContent from "./NavContent";
+import { CircleUserRound } from "lucide-react";
 
 export default function Navbar() {
   const userCoockie = Cookies.get("user");
@@ -22,13 +23,16 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             {userCoockie ? (
               <>
+                <Link to='/Inscription'>
+                  <CircleUserRound className="text-primary"/>
+                </Link>
                 <Button
                   variant="outline"
                   size="sm"
                   className="text-primary hover:bg-primary hover:text-white"
                   onClick={() => {
                     Cookies.remove("user");
-                    navigate("/");
+                    navigate("/Connexion");
                   }}
                 >
                   Deconnexion

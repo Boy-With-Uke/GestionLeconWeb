@@ -1,10 +1,11 @@
 "use client";
-
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Navbar from "@/components/navbar";
-
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import { useEffect, useState } from "react";
 import { Footer } from "@/components/Footer";
+import { password } from "bun";
 
 const formSchema = z.object({
   email: z.string().min(2, {
@@ -30,7 +32,9 @@ const formSchema = z.object({
 });
 
 export default function Connexion() {
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+  const navigate = useNavigate();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,20 +45,64 @@ export default function Connexion() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values.password);
-  }
-    useEffect(() => {
-      // Show the loader for at least 3 seconds
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const req = await fetch(`http://localhost:5173/api/user/connexion`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          motDePasse: values.password,
+        }),
+      });
 
-      // Clear the timer if the component unmounts
-      return () => clearTimeout(timer);
-    }, []);
+      const data = await req.json();
+
+      if (req.status === 404) {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: data.message || "Aucun compte trouvee veuillez verifier vos identifiants",
+        });
+      } else if (req.status === 200) {
+        toast({
+          title: `Connexion réussie`,
+          description: `Connecter en tant que ${data.existingUser.nom} ${data.existingUser.prenom}`,
+        });
+        navigate("/");
+        Cookies.set("user", data.existingUser.id_user, {
+          expires: 7,
+          path: "/",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: data.message || "Une erreur est survenue",
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la connexion:", error);
+      toast({
+        variant: "destructive",
+        title: `Erreur`,
+        description:
+          "Une erreur est survenue lors de la tentative de connexion.",
+      });
+    }
+    console.log(values);
+  };
+  useEffect(() => {
+    // Show the loader for at least 3 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Clear the timer if the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <>
       {isLoading ? (
@@ -126,7 +174,7 @@ export default function Connexion() {
               </div>
             </div>
           </div>
-          <Footer/>
+          <Footer />
         </>
       )}
     </>

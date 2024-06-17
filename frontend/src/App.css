@@ -13,7 +13,7 @@ html {
   top: 200px;
   height: 400px;
   filter: blur(150px);
-  animation: shadow-slide infinite 4s linear alternate;
+  animation: shadow-slide infinite 2.5s linear alternate;
 }
 
 @keyframes shadow-slide {

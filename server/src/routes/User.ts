@@ -31,6 +31,11 @@ const postUserFav = z.object({
   id_cours: z.number(),
 });
 
+const connexionUserSchema = postUserSchema.omit({
+  nom: true,
+  prenom: true,
+  classe: true,
+});
 const updateUserPasswordSchema = userSchema
   .omit({
     id_user: true,
@@ -138,6 +143,34 @@ export const userRoutes = new Hono()
       let message = "Nouvel utilisateur créé avec succès";
       c.status(200);
       return c.json({ message, newUser });
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
+    }
+  })
+  .post("/connexion", zValidator("json", connexionUserSchema), async (c) => {
+    const body = await c.req.valid("json");
+
+    try {
+      // Vérifier si l'email existe déjà
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          email: body.email,
+          motDePasse: body.motDePasse,
+        },
+      });
+
+      if (!existingUser) {
+        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+        c.status(404);
+        return c.json({
+          message: "Aucun compte trouve veuillez verifier vos identifiants",
+        });
+      } else {
+        let message = "Nouvel utilisateur créé avec succès";
+        c.status(200);
+        return c.json({ message, existingUser });
+      }
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
