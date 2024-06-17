@@ -35,6 +35,7 @@ export default function Connexion() {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const userCookie = Cookies.get("user");
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,7 +65,9 @@ export default function Connexion() {
         toast({
           variant: "destructive",
           title: `Erreur`,
-          description: data.message || "Aucun compte trouvee veuillez verifier vos identifiants",
+          description:
+            data.message ||
+            "Aucun compte trouvee veuillez verifier vos identifiants",
         });
       } else if (req.status === 200) {
         toast({
@@ -102,6 +105,16 @@ export default function Connexion() {
 
     // Clear the timer if the component unmounts
     return () => clearTimeout(timer);
+  }, []);
+
+  function redirection() {
+    if (userCookie) {
+      navigate("/");
+    }
+  }
+
+  useEffect(() => {
+    redirection();
   }, []);
   return (
     <>

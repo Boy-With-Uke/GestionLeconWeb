@@ -47,6 +47,7 @@ const formSchema = z
 export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
+   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFiliere, setSelectedFiliere] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -120,6 +121,15 @@ export default function Inscription() {
     return () => clearTimeout(timer);
   }, []);
 
+    function redirection() {
+      if (userCookie) {
+        navigate("/");
+      }
+    }
+
+    useEffect(() => {
+      redirection();
+    }, []);
   return (
     <>
       {isLoading ? (
