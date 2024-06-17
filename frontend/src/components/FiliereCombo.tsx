@@ -1,7 +1,4 @@
-"use client";
-
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -20,7 +17,11 @@ import {
 } from "@/components/ui/popover";
 import { useEffect, useState } from "react";
 
-export default function Test() {
+type FiliereComboProps = {
+  onFiliereSelect: (filiere: string) => void;
+};
+
+export default function FiliereCombo({ onFiliereSelect }: FiliereComboProps) {
   type Filiere = {
     id_filiere: number;
     nomFiliere: string;
@@ -49,7 +50,13 @@ export default function Test() {
       }
     };
     fetchFilieres();
-  }, []);
+  }, [toast]);
+
+  const handleSelect = (currentValue: string) => {
+    setValue(currentValue);
+    setOpen(false);
+    onFiliereSelect(currentValue);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -77,10 +84,7 @@ export default function Test() {
                 <CommandItem
                   key={filiere.id_filiere}
                   value={filiere.nomFiliere}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
-                    setOpen(false);
-                  }}
+                  onSelect={handleSelect}
                 >
                   {filiere.nomFiliere}
                   <CheckIcon

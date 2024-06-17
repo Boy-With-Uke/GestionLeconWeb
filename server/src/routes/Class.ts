@@ -10,7 +10,9 @@ const classSchema = z.object({
   nomClasse: z.string(),
 });
 
-const postClassSchema = classSchema.omit({ id_classe: true });
+const postClassSchema = classSchema
+  .omit({ id_classe: true })
+  .extend({ id_filiere: z.number() });
 
 export const classesRoutes = new Hono()
   .get("/", async (c) => {
@@ -46,7 +48,23 @@ export const classesRoutes = new Hono()
         },
       },
     });
-    c.status(200)
+    c.status(200);
+    return c.json({ classes });
+  })
+  .get("/names/:filiere", async (c) => {
+    const filiere = String(c.req.param("filiere"));
+    const classes = await prisma.classe.findMany({
+      where: {
+        classeFiliere: {
+          nomFiliere: filiere,
+        },
+      },
+      select: {
+        id_classe: true,
+        nomClasse: true,
+      },
+    });
+    c.status(200);
     return c.json({ classes });
   })
   .get("/:id{[0-9]+}", async (c) => {
@@ -103,6 +121,19 @@ export const classesRoutes = new Hono()
           nomClasse: body.nomClasse,
         },
       });
+      const existingFiliere = await prisma.filiere.findUnique({
+        where: {
+          id_filiere: body.id_filiere,
+        },
+      });
+
+      if (!existingFiliere) {
+        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+        c.status(401);
+        return c.json({
+          message: "filiere non existante",
+        });
+      }
 
       if (existingClasse) {
         // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
@@ -116,6 +147,11 @@ export const classesRoutes = new Hono()
       const newClasse = await prisma.classe.create({
         data: {
           nomClasse: body.nomClasse,
+          classeFiliere: {
+            connect: {
+              id_filiere: body.id_filiere,
+            },
+          },
         },
       });
 

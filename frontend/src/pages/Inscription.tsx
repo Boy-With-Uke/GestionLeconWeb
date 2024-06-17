@@ -1,4 +1,5 @@
 "use client";
+
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,10 +22,14 @@ import { Input } from "@/components/ui/input";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import { useEffect, useState } from "react";
 import { Footer } from "@/components/Footer";
+import FiliereCombo from "@/components/FiliereCombo";
+import ClassCombo from "@/components/ClassCombo";
 
 const formSchema = z
   .object({
     name: z.string(),
+    filiere: z.string(),
+    classe: z.string(),
     firstName: z.string(),
     email: z.string().min(2, {
       message: "L'email doit au minimum contenir 2 caractères",
@@ -45,7 +50,7 @@ export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  // 1. Define your form.
+  const [selectedFiliere, setSelectedFiliere] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,7 +61,6 @@ export default function Inscription() {
     },
   });
 
-  // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const req = await fetch(`http://localhost:5173/api/user`, {
@@ -72,7 +76,7 @@ export default function Inscription() {
         }),
       });
 
-      const data = await req.json(); // Parse the response JSON
+      const data = await req.json();
 
       if (req.status === 401) {
         toast({
@@ -88,7 +92,6 @@ export default function Inscription() {
         navigate("/");
         Cookies.set("user", data.newUser.id_user, { expires: 7, path: "/" });
       } else {
-        // Handle other status codes
         toast({
           variant: "destructive",
           title: `Erreur`,
@@ -107,13 +110,12 @@ export default function Inscription() {
 
     console.log(values.password);
   };
+
   useEffect(() => {
-    // Show the loader for at least 3 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
-    // Clear the timer if the component unmounts
     return () => clearTimeout(timer);
   }, []);
 
@@ -132,7 +134,7 @@ export default function Inscription() {
         <>
           <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
             <Navbar />
-            <div className=" bg-white p-8 rounded-lg shadow-xl drop-shadow-xl shadow-black/10 w-full max-w-md dark:bg-slate-900 dark:shadow-primary">
+            <div className="bg-white p-8 rounded-lg shadow-xl drop-shadow-xl shadow-black/10 w-full max-w-4xl dark:bg-slate-900 dark:shadow-primary">
               <div>
                 <h2 className="text-2xl font-bold mb-4 text-center">
                   Inscription
@@ -144,95 +146,140 @@ export default function Inscription() {
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="space-y-6"
                   >
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nom</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Nom" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-gray-900 dark:text-white">
-                            Veuillez entrer votre nom.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className="flex space-x-4">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Nom</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Nom" {...field} />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer votre nom.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="firstName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nom</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Prenom" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-gray-900 dark:text-white">
-                            Veuillez entrer votre prenom.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name="firstName"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Prénom</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Prénom" {...field} />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer votre prénom.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <FormField
                       control={form.control}
                       name="email"
                       render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Email" {...field} />
-                          </FormControl>
-                          <FormDescription className="text-gray-900 dark:text-white">
-                            Veuillez entrer votre email.
-                          </FormDescription>
-                          <FormMessage />
+                        <FormItem className="flex justify-center">
+                          <div className="w-full max-w-md">
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Email" {...field} />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer votre email.
+                            </FormDescription>
+                            <FormMessage />
+                          </div>
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Mot de passe</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Mot de passe"
-                              {...field}
-                              type="password"
-                            />
-                          </FormControl>
-                          <FormDescription className=" text-gray-900 dark:text-white">
-                            Veuillez entrer votre mot de passe.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="password2"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Confirmez votre mot de passe</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Mot de passe"
-                              {...field}
-                              type="password"
-                            />
-                          </FormControl>
-                          <FormDescription className=" text-gray-900 dark:text-white">
-                            Entrer de nouveau votre mot de passe.
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+
+                    <div className="flex space-x-4">
+                      <FormField
+                        control={form.control}
+                        name="filiere"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Filière</FormLabel>
+                            <FormControl>
+                              <FiliereCombo
+                                onFiliereSelect={(filiere) => {
+                                  field.onChange(filiere);
+                                  setSelectedFiliere(filiere);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="classe"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Classe</FormLabel>
+                            <FormControl>
+                              <ClassCombo queryParam={selectedFiliere} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <div className="flex space-x-4">
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Mot de passe</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Mot de passe"
+                                {...field}
+                                type="password"
+                              />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer votre mot de passe.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="password2"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormLabel>Confirmez votre mot de passe</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Mot de passe"
+                                {...field}
+                                type="password"
+                              />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Entrer de nouveau votre mot de passe.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <Button type="submit" className="w-full">
                       S'inscrire
                     </Button>

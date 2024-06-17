@@ -8,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id_user           Int                         @unique @default(autoincrement())
+  id_user           Int        @unique @default(autoincrement())
   nom               String
   prenom            String
-  email             String                      @unique
+  email             String     @unique
   motDePasse        String
   classeUtilisateur Int
-  classe            Classe?                      @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
+  classe            Classe?    @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
   coursUtilisateur  Int?
-  niveauAccess      Role                        @default(USER)
+  niveauAccess      Role       @default(USER)
   cours             usersFav[]
   Matiere           Matiere[]
 }
@@ -32,15 +32,21 @@ model Matiere {
 }
 
 model Cours {
-  id_cours              Int                         @unique @default(autoincrement())
+  id_cours              Int                        @unique @default(autoincrement())
   utilisateurquiSuivent usersFav[]
-  titre                 String  @unique
+  titre                 String                     @unique
   dateDebut             DateTime?
   dateFin               DateTime?
   matiereConcernee      Int
-  courMatiere           Matiere                     @relation(fields: [matiereConcernee], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
+  courMatiere           Matiere                    @relation(fields: [matiereConcernee], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
   evaluations           coursContenantEvaluation[]
   coursLesson           coursContenantLecon[]
+}
+
+model Filiere {
+  id_filiere Int      @unique @default(autoincrement())
+  nomFiliere String   @unique
+  classes    Classe[]
 }
 
 model Classe {
@@ -48,6 +54,8 @@ model Classe {
   nomClasse     String              @unique
   classeMatiere matiereDeLaClasse[]
   userClasse    User[]
+  filiere       Int
+  classeFiliere Filiere             @relation(fields: [filiere], references: [id_filiere], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Evaluation {
