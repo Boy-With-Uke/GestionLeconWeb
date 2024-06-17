@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
-import kerman from '../assets/kerman.png'
+import kerman from '../assets/Images/kerman.png'
 import {
   Card,
   CardContent,

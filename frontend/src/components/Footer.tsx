@@ -2,10 +2,10 @@ import { LogoIcon } from "./Icons2";
 
 export const Footer = () => {
   return (
-    <footer id="footer">
+    <footer id="footer" className="dark:bg-slate-900/90">
       <hr className="w-11/12 mx-auto" />
 
-      <section className="container p-14 text-center">
+      <section className="container p-14 text-center dark:bg-slate-900/90">
         <h3>
           &copy; 2024 E-Hianatra by{" "}
           <a

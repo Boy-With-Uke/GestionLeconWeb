@@ -4,7 +4,8 @@ import Connexion from "./pages/Connexion";
 import Test from "./pages/Test";
 import Inscription from "./pages/Inscription";
 import Acceuil from "./pages/Acceuil";
-import './App.css'
+import Profil from "./pages/Profil";
+import "./App.css";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -14,6 +15,7 @@ function App() {
           <Route path="/Connexion" element={<Connexion />} />
           <Route path="/Inscription" element={<Inscription />} />
           <Route path="/Test" element={<Test />} />
+          <Route path="/Profil" element={<Profil />} />
         </Routes>
       </Router>
     </ThemeProvider>

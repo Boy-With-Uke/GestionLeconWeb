@@ -87,11 +87,11 @@ export default function NavContent() {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="/docs" title="Creer un compte">
+              <ListItem href="/Inscription" title="Creer un compte">
                 Si vous n'avez pas encore de compte veuillez vous-en creer un,
                 c'est completement gratuit
               </ListItem>
-              <ListItem href="/docs/installation" title="Se connecter">
+              <ListItem href="/Connexion" title="Se connecter">
                 Si vous avez deja un compte, vous pouvez vous connecter en
                 utilisants vos identifiants
               </ListItem>

@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "Asquire";
+  src: url("../fonts/Asquire.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Amperzand";
+  src: url("../fonts/Amperzand.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}

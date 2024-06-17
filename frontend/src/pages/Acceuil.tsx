@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import { Hero } from "@/components/Hero";
-import { Sponsors } from "@/components/Sponsors";
 import { About } from "@/components/About";
 import { HowItWorks } from "@/components/HowItWorks";
 import { Features } from "@/components/Features";

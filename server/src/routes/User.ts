@@ -95,12 +95,23 @@ export const userRoutes = new Hono()
           classe: {
             select: {
               nomClasse: true,
+              classeFiliere:{
+                select:{
+                  nomFiliere:true
+                }
+              }
             },
           },
+          cours:{
+            select:{
+              coursId: true
+            }
+          }
         },
       });
+      const coursCount = user?.cours.length
       c.status(200);
-      return c.json({ user });
+      return c.json({ user , coursCount});
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });

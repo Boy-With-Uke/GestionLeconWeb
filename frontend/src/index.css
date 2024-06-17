@@ -1,7 +1,6 @@
 @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
-
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
@@ -49,13 +48,19 @@
     --ring: 142.4 71.8% 29.2%;
   }
 }
- 
 
-  @layer base {
-    * {
-      @apply border-border;
-    }
-    body {
-      @apply bg-background text-foreground;
-    }
+@layer base {
+  @font-face {
+    font-family: "Amper";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(/frontend/src/assets/fonts/Amperzand.ttf) format("ttf");
   }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
