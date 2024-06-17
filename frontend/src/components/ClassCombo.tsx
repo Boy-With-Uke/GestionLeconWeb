@@ -70,17 +70,20 @@ export default function ClassCombo({ queryParam }: ClassComboProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[200px] justify-between dark:hover:bg-primary"
         >
           {value
             ? classes.find((classe) => classe.nomClasse === value)?.nomClasse
-            : "Select classe..."}
+            : "Classe..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search classe..." className="h-9" />
+      <PopoverContent className="w-[200px] p-0 dark:bg-slate-900">
+        <Command className="dark:bg-slate-900">
+          <CommandInput
+            placeholder="Search classe..."
+            className="h-9 dark:bg-slate-900"
+          />
           <CommandList>
             <CommandEmpty>No classe found.</CommandEmpty>
             <CommandGroup>
@@ -89,6 +92,7 @@ export default function ClassCombo({ queryParam }: ClassComboProps) {
                   key={classe.id_classe}
                   value={classe.nomClasse}
                   onSelect={handleSelect}
+                  className="dark:hover:bg-primary"
                 >
                   {classe.nomClasse}
                   <CheckIcon

@@ -65,18 +65,21 @@ export default function FiliereCombo({ onFiliereSelect }: FiliereComboProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[200px] justify-between dark:hover:bg-primary"
         >
           {value
             ? filieres.find((filiere) => filiere.nomFiliere === value)
                 ?.nomFiliere
-            : "Select filiere..."}
+            : "Filiere..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search filiere..." className="h-9" />
+      <PopoverContent className="w-[200px] p-0 dark:bg-slate-900">
+        <Command className="dark:bg-slate-900">
+          <CommandInput
+            placeholder="Recherche..."
+            className="h-9 dark:bg-slate-900"
+          />
           <CommandList>
             <CommandEmpty>No filiere found.</CommandEmpty>
             <CommandGroup>
@@ -85,6 +88,7 @@ export default function FiliereCombo({ onFiliereSelect }: FiliereComboProps) {
                   key={filiere.id_filiere}
                   value={filiere.nomFiliere}
                   onSelect={handleSelect}
+                  className="dark:hover:bg-primary"
                 >
                   {filiere.nomFiliere}
                   <CheckIcon
