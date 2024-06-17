@@ -1,4 +1,3 @@
-import { useToast } from "@/components/ui/use-toast";
 import Navbar from "@/components/navbar";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +12,7 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-  import "../assets/css/fonts.css";
+import "../assets/css/fonts.css";
 
 export default function Profil() {
   type User = {
@@ -29,9 +28,8 @@ export default function Profil() {
   const [isLoading, setIsLoading] = useState(true);
   const [userFiliere, setUserFiliere] = useState("");
   const [userClasse, setUserClasse] = useState("");
-  const [favorisCount , setFavorisCount] = useState(0)
+  const [favorisCount, setFavorisCount] = useState(0);
 
-  const { toast } = useToast();
   const navigate = useNavigate();
   // 1. Define your form
   const getActualUser = async () => {
