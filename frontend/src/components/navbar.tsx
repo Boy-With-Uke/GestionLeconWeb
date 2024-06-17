@@ -1,11 +1,10 @@
-import { ModeToggle } from "./mode-toogle";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import NavContent from "./NavContent";
 import { CircleUserRound } from "lucide-react";
-import { useEffect, useState } from "react";
+import { SVGProps, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import NavContent from "./NavContent";
+import { ModeToggle } from "./mode-toogle";
 
 export default function Navbar() {
   type User = {
@@ -48,49 +47,22 @@ export default function Navbar() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-slate-900">
-      <div className="w-full max-w-7xl mx-auto px-4">
-        <div className="flex justify-between h-14 items-center">
+      
+      <div className="px-4 mx-auto w-full max-w-7xl">
+        <div className="flex justify-between items-center h-14">
           <Link to="/" className="flex items-center">
-            <MountainIcon className="h-6 w-6" />
+            <MountainIcon className="w-6 h-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          <nav className="hidden md:flex gap-4">
+          <nav className="hidden gap-4 md:flex">
             <NavContent />
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex gap-4 items-center">
             {userCookie ? (
               <>
                 <Link to="/Profil">
                   <CircleUserRound className="text-primary" />
                 </Link>
-
-                {actualUser?.niveauAccess === "ADMIN" ? (
-                  <>
-                    <Link to="/admin">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-primary hover:bg-primary hover:text-white"
-                      >
-                        Admin
-                      </Button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-primary hover:bg-primary hover:text-white"
-                      onClick={() => {
-                        Cookies.remove("user");
-                        navigate("/Connexion");
-                      }}
-                    >
-                      Deconnexion
-                    </Button>
-                  </>
-                )}
                 <Button
                   variant="outline"
                   size="sm"
@@ -132,8 +104,7 @@ export default function Navbar() {
     </nav>
   );
 }
-
-function MountainIcon(props: any) {
+function MountainIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
@@ -146,6 +117,7 @@ function MountainIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="dark:text-primary"
     >
       <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
     </svg>

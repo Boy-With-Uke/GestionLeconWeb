@@ -1,11 +1,7 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { Footer } from "@/components/Footer";
+import OrbitingLoader from "@/components/OrbitingLoader";
 import Navbar from "@/components/navbar";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,10 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import OrbitingLoader from "@/components/OrbitingLoader";
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { Footer } from "@/components/Footer";
-import { password } from "bun";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const formSchema = z.object({
   email: z.string().min(2, {
@@ -129,11 +128,11 @@ export default function Connexion() {
         </div>
       ) : (
         <>
-          <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
+          <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-slate-950">
             <Navbar />
-            <div className="  bg-white p-8 rounded-lg shadow-xl drop-shadow-xl shadow-black/10 w-full max-w-md dark:bg-slate-900 dark:shadow-primary">
+            <div className="p-8 w-full max-w-md bg-white rounded-lg shadow-xl drop-shadow-xl shadow-black/10 dark:bg-slate-900 dark:shadow-primary">
               <div>
-                <h2 className="text-2xl font-bold mb-4 text-center">
+                <h2 className="mb-4 text-2xl font-bold text-center">
                   Connexion
                 </h2>
               </div>
@@ -172,7 +171,7 @@ export default function Connexion() {
                               type="password"
                             />
                           </FormControl>
-                          <FormDescription className=" text-gray-900 dark:text-white">
+                          <FormDescription className="text-gray-900 dark:text-white">
                             Veuillez entrer l'Email lier a votre compte.
                           </FormDescription>
                           <FormMessage />

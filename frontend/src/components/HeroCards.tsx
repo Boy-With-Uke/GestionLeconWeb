@@ -1,26 +1,24 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Badge } from "./ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
-import kerman from '../assets/Images/kerman.png'
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
-import { Check, Linkedin } from "lucide-react";
-import { LightBulbIcon } from "./Icons2";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { FacebookIcon } from "lucide-react";
+import { FacebookIcon, Linkedin } from "lucide-react";
+import kerman from '../assets/Images/kerman.png';
+import { LightBulbIcon } from "./Icons2";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export const HeroCards = () => {
   return (
     <div className="hidden lg:flex flex-row flex-wrap gap-8 relative w-[700px] h-[500px]">
       {/* Testimonial */}
       <Card className="absolute w-[340px] top-[10px] drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
-        <CardHeader className="flex flex-row items-center gap-4 pb-2">
+        <CardHeader className="flex flex-row gap-4 items-center pb-2">
           <Avatar>
             <AvatarImage
               alt=""
@@ -52,7 +50,7 @@ export const HeroCards = () => {
 
       {/* Team */}
       <Card className="absolute right-[20px] top-4 w-80 flex flex-col justify-center items-center drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
-        <CardHeader className="mt-8 flex justify-center items-center pb-2">
+        <CardHeader className="flex justify-center items-center pb-2 mt-8">
           <img
             src={kerman}
             alt="user avatar"
@@ -64,7 +62,7 @@ export const HeroCards = () => {
           </CardDescription>
         </CardHeader>
 
-        <CardContent className="text-center pb-2">
+        <CardContent className="pb-2 text-center">
           <p>Transformer vos reves en choses concretes et ma passion</p>
         </CardContent>
 
@@ -115,13 +113,13 @@ export const HeroCards = () => {
 
       {/* Service */}
       <Card className="absolute w-[350px] -right-[10px] bottom-[35px]  drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
-        <CardHeader className="space-y-1 flex md:flex-row justify-start items-start gap-4">
-          <div className="mt-1 bg-primary/20 p-1 rounded-2xl">
+        <CardHeader className="flex gap-4 justify-start items-start space-y-1 md:flex-row">
+          <div className="p-1 mt-1 rounded-2xl bg-primary/20">
             <LightBulbIcon />
           </div>
           <div>
             <CardTitle>Moins de temps perdue</CardTitle>
-            <CardDescription className="text-md mt-2">
+            <CardDescription className="mt-2 text-md">
               Tous vos documents disponible partout
             </CardDescription>
           </div>
