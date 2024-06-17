@@ -85,12 +85,12 @@ export default function Profil() {
         <>
           <Navbar />
           <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
-            <Card className=" top-4 w-l flex flex-col justify-center items-center drop-shadow-xl  shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
+            <Card className=" top-4 w-l flex flex-col justify-center items-center shadow-xl  shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
               <CardHeader className="mt-8 flex justify-center items-center pb-2">
                 <img
-                  src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${actualUser?.email}`}
+                  src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${actualUser?.email}${actualUser?.nom}`}
                   alt="user avatar"
-                  className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
+                  className="absolute grayscale-[0%] top-72 rounded-full w-24 h-24 aspect-square object-cover"
                 />
                 <CardTitle className="text-center">{`${actualUser?.nom} ${actualUser?.prenom}`}</CardTitle>
                 <CardDescription className="font-normal text-primary">
@@ -98,34 +98,54 @@ export default function Profil() {
                 </CardDescription>
               </CardHeader>
 
-              <CardContent className="flex flex-row gap-x-28 items-center text-center">
+              <CardContent className="flex flex-row gap-x-12 items-center text-center">
                 <div className="flex flex-col text-center">
-                  <p className="text-3xl" style={{ fontFamily: "Asquire" }}>
+                  <p
+                    className="text-3xl text-center"
+                    style={{ fontFamily: "Asquire" }}
+                  >
                     Filiere:
                   </p>
-                  <p className="mt-8 text-2xl font-bold text-primary">
+                  <p className="mt-8 text-2xl font-bold text-primary text-center">
                     {userFiliere}
                   </p>
                 </div>
                 <div className="flex flex-col text-center">
-                  <p className="text-3xl" style={{ fontFamily: "Asquire" }}>
+                  <p
+                    className="text-3xl text-center"
+                    style={{ fontFamily: "Asquire" }}
+                  >
                     Classe:
                   </p>
-                  <p className="mt-8 text-2xl font-bold text-primary">
+                  <p className="mt-8 text-2xl font-bold text-primary text-center">
                     {userClasse}
                   </p>
                 </div>
                 <div className="flex flex-col text-center">
-                  <p className="text-3xl" style={{ fontFamily: "Asquire" }}>
+                  <p
+                    className="text-3xl text-center"
+                    style={{ fontFamily: "Asquire" }}
+                  >
                     Favoris:
                   </p>
-                  <p className="mt-8 text-2xl font-bold text-primary">
+                  <p className="mt-8 text-2xl text-center font-bold text-primary">
                     {favorisCount}
                   </p>
                 </div>
               </CardContent>
 
-              <CardFooter></CardFooter>
+              <CardFooter>
+                <button
+                  onClick={() => {
+                    Cookies.remove("user");
+                    navigate("/");
+                  }}
+                  type="button"
+                  className="bg-primary text-white font-bold py-2 px-4 rounded-full"
+                >
+                  Déconnexion
+                </button>
+              </CardFooter>
             </Card>
           </div>
 
