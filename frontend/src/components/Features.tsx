@@ -18,35 +18,32 @@ interface FeatureProps {
 
 const features: FeatureProps[] = [
   {
-    title: "Responsive Design",
+    title: "Filtrage",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Les matiereset les cours sont filtrees selon votre classe, plus besoin de chercher loin",
     image: image4,
   },
   {
-    title: "Intuitive user interface",
+    title: "Interface utilisateur intuitif",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Notre application offre un design intuitive et modern tout en conservant sa fluidite",
     image: image3,
   },
   {
-    title: "AI-Powered insights",
+    title: "Contenu sous pdf",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Nos lecons et evaluations sont sous pdf pour une meilleur manipulation",
     image: image,
   },
 ];
 
 const featureList: string[] = [
   "Dark/Light theme",
-  "Reviews",
-  "Features",
-  "Pricing",
-  "Contact form",
-  "Our team",
-  "Responsive design",
-  "Newsletter",
-  "Minimalist",
+  "Favoris",
+  "Filtrage",
+  "Pdf",
+  "Contenu simple",
+  "Recherche",
 ];
 
 export const Features = () => {

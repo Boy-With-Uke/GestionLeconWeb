@@ -19,7 +19,7 @@ export const HeroCards = () => {
   return (
     <div className="hidden lg:flex flex-row flex-wrap gap-8 relative w-[700px] h-[500px]">
       {/* Testimonial */}
-      <Card className="absolute w-[340px] -top-[15px] drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
+      <Card className="absolute w-[340px] top-[10px] drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
         <CardHeader className="flex flex-row items-center gap-4 pb-2">
           <Avatar>
             <AvatarImage

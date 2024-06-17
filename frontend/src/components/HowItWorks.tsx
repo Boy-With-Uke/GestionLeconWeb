@@ -10,27 +10,27 @@ interface FeatureProps {
 const features: FeatureProps[] = [
   {
     icon: <MedalIcon />,
-    title: "Accessibility",
+    title: "Accessibiliter",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Un serveur dedier au sein du ministere de l'education",
   },
   {
     icon: <MapIcon />,
-    title: "Community",
+    title: "Communaute",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Des professeurs experimentes prets a vous donner le meilleur d'eux meme",
   },
   {
     icon: <PlaneIcon />,
-    title: "Scalability",
+    title: "Lisabiliter",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Les cours sous formes pdf pour une meilleur lisibiliter",
   },
   {
     icon: <GiftIcon />,
-    title: "Gamification",
+    title: "Favorisation",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum quas provident cum",
+      "Stocker vos cours les plus utiles pour y acceder en quelques cliques",
   },
 ];
 
@@ -41,18 +41,14 @@ export const HowItWorks = () => {
       className="container text-center py-24 sm:py-32"
     >
       <h2 className="text-3xl md:text-4xl font-bold ">
-        How It{" "}
+        Comment{" "}
         <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
-          Works{" "}
+          ca{" "}
         </span>
-        Step-by-Step Guide
+        marche ?
       </h2>
-      <p className="md:w-3/4 mx-auto mt-4 mb-8 text-xl text-muted-foreground">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis
-        dolor pariatur sit!
-      </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 mt-6 lg:grid-cols-4 gap-8">
         {features.map(({ icon, title, description }: FeatureProps) => (
           <Card
             key={title}

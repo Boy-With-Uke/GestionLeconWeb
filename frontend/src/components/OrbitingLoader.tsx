@@ -6,7 +6,7 @@ export default function OrbitingLoader() {
       <motion.div
         className="flex"
         animate={{ rotate: 360 }}
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
       >
         <motion.div
           className="mx-1 h-4 w-4 rounded-full bg-primary"

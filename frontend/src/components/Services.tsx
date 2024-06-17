@@ -10,21 +10,21 @@ interface ServiceProps {
 
 const serviceList: ServiceProps[] = [
   {
-    title: "Code Collaboration",
+    title: "Transparence",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "Projet opensource, ouvert aux ameliorations et a l'ajout de colaborateurs",
     icon: <ChartIcon />,
   },
   {
-    title: "Project Management",
+    title: "Flexibilité",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "E-hanatra est conçu pour être utilisé sur divers appareils, permettant aux utilisateurs d'accéder à la plateforme à tout moment et en tout lieu.",
     icon: <WalletIcon />,
   },
   {
-    title: "Task Automation",
+    title: "Ressources Éducatives Riches et Accessibles",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.",
+      "E-hanatra offre une vaste bibliothèque de ressources éducatives, incluant des vidéos, des documents, et des exercices interactifs. Cela permet aux étudiants d'apprendre à leur propre rythme et d'avoir accès à du matériel supplémentaire pour approfondir leurs connaissances en dehors des heures de cours.",
     icon: <MagnifierIcon />,
   },
 ];
@@ -48,7 +48,7 @@ export const Services = () => {
 
           <div className="flex flex-col gap-8">
             {serviceList.map(({ icon, title, description }: ServiceProps) => (
-              <Card key={title}>
+              <Card key={title} className="dark:bg-slate-900">
                 <CardHeader className="space-y-1 flex md:flex-row justify-start items-start gap-4">
                   <div className="mt-1 bg-primary/20 p-1 rounded-2xl">
                     {icon}
