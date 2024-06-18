@@ -63,6 +63,11 @@ export const userRoutes = new Hono()
         classe: {
           select: {
             nomClasse: true,
+            classeFiliere: {
+              select: {
+                nomFiliere: true,
+              },
+            },
           },
         },
         cours: {

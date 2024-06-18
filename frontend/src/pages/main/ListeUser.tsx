@@ -1,5 +1,6 @@
 import OrbitingLoader from "@/components/OrbitingLoader";
 import Sidebar from "@/components/Sidebar";
+import UserTableContent from "@/components/UserTableContent";
 import Navbar from "@/components/navbar";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
@@ -78,10 +79,15 @@ export const ListeUser = () => {
           <OrbitingLoader />
         </div>
       ) : (
-        <>
-          <Navbar />
+        <div className="flex h-screen overflow-hidden">
           <Sidebar />
-        </>
+          <div className="flex flex-col w-full">
+            <Navbar />
+            <div className="flex-1 flex justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
+              <UserTableContent />
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
