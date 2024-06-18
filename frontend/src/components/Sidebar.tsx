@@ -53,6 +53,7 @@ export default function Sidebar() {
 
   const handleOpen = (value: number) => {
     setOpen(open === value ? 0 : value);
+    setOpen2(0);
   };
 
   const handleOpen2 = (value: number) => {
