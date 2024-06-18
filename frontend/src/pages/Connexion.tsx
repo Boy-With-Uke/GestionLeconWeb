@@ -108,6 +108,11 @@ export default function Connexion() {
 
   function redirection() {
     if (userCookie) {
+      toast({
+        variant: "destructive",
+        title: `Vous etes deja connecter`,
+        description: "Veuillez d'abord vous deconnecter",
+      });
       navigate("/");
     }
   }

@@ -47,7 +47,7 @@ const formSchema = z
 export default function Inscription() {
   const { toast } = useToast();
   const navigate = useNavigate();
-   const userCookie = Cookies.get("user");
+  const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedFiliere, setSelectedFiliere] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -121,15 +121,20 @@ export default function Inscription() {
     return () => clearTimeout(timer);
   }, []);
 
-    function redirection() {
-      if (userCookie) {
-        navigate("/");
-      }
+  function redirection() {
+    if (userCookie) {
+      toast({
+        variant: "destructive",
+        title: `Vous avez deja un compte`,
+        description: "Veuillez d'abord vous deconnecter",
+      });
+      navigate("/");
     }
+  }
 
-    useEffect(() => {
-      redirection();
-    }, []);
+  useEffect(() => {
+    redirection();
+  }, []);
   return (
     <>
       {isLoading ? (
@@ -143,11 +148,11 @@ export default function Inscription() {
         </div>
       ) : (
         <>
-          <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
+          <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-slate-950">
             <Navbar />
-            <div className="bg-white p-8 rounded-lg shadow-xl drop-shadow-xl shadow-black/10 w-full max-w-4xl dark:bg-slate-900 dark:shadow-primary">
+            <div className="p-8 w-full max-w-4xl bg-white rounded-lg shadow-xl drop-shadow-xl shadow-black/10 dark:bg-slate-900 dark:shadow-primary">
               <div>
-                <h2 className="text-2xl font-bold mb-4 text-center">
+                <h2 className="mb-4 text-2xl font-bold text-center">
                   Inscription
                 </h2>
               </div>

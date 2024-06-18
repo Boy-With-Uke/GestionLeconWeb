@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { FacebookIcon, Linkedin } from "lucide-react";
-import kerman from '../assets/Images/kerman.png';
+import kerman from "../assets/Images/kerman.png";
 import { LightBulbIcon } from "./Icons2";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -63,7 +63,7 @@ export const HeroCards = () => {
         </CardHeader>
 
         <CardContent className="pb-2 text-center">
-          <p>Transformer vos reves en choses concretes et ma passion</p>
+          <p>Transformer vos reves en choses concretes est ma passion</p>
         </CardContent>
 
         <CardFooter>
@@ -108,8 +108,6 @@ export const HeroCards = () => {
           </div>
         </CardFooter>
       </Card>
-
-      
 
       {/* Service */}
       <Card className="absolute w-[350px] -right-[10px] bottom-[35px]  drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
