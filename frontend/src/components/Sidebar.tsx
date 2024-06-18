@@ -27,8 +27,6 @@ export default function Sidebar() {
   const [actualUser, setActualUser] = useState<User | null>(null);
   const userCookie = Cookies.get("user");
 
-  
-
   const getActualUser = async () => {
     try {
       const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
@@ -62,7 +60,7 @@ export default function Sidebar() {
   };
 
   return (
-    <Card className="h-[calc(97.5vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 dark:bg-slate-900 dark:text-primary mt-14">
+    <Card className="h-[calc(97.5vh-2rem)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 dark:bg-slate-900 dark:text-white mt-14">
       <div className="w-full bg-slate-900">
         <MiniProfil
           nom={actualUser?.nom || ""}
@@ -82,20 +80,19 @@ export default function Sidebar() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 1}>
+          <ListItem
+            className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+            selected={open === 1}
+          >
             <AccordionHeader
               onClick={() => handleOpen(1)}
-              className="p-3 border-b-0"
+              className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
             >
               <ListItemPrefix>
                 {open === 1 ? (
-                  <>
-                    <BookOpenText className="w-5 h-5" />
-                  </>
+                  <BookOpenText className="w-5 h-5" />
                 ) : (
-                  <>
-                    <Book className="w-5 h-5" />
-                  </>
+                  <Book className="w-5 h-5" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -105,14 +102,14 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                 <ListItemPrefix>
                   <AlignJustify strokeWidth={3} className="w-5 h-3" />
                 </ListItemPrefix>
                 Liste Filiere
               </ListItem>
               {actualUser?.niveauAccess === "ADMIN" ? (
-                <ListItem>
+                <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
                     <CirclePlus strokeWidth={3} className="w-5 h-3" />
                   </ListItemPrefix>
@@ -133,20 +130,19 @@ export default function Sidebar() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 2}>
+          <ListItem
+            className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+            selected={open === 2}
+          >
             <AccordionHeader
               onClick={() => handleOpen(2)}
-              className="p-3 border-b-0"
+              className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
             >
               <ListItemPrefix>
                 {open === 2 ? (
-                  <>
-                    <BookOpenText className="w-5 h-5" />
-                  </>
+                  <BookOpenText className="w-5 h-5" />
                 ) : (
-                  <>
-                    <Book className="w-5 h-5" />
-                  </>
+                  <Book className="w-5 h-5" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -156,14 +152,14 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                 <ListItemPrefix>
                   <AlignJustify strokeWidth={3} className="w-5 h-3" />
                 </ListItemPrefix>
                 Liste Classe
               </ListItem>
               {actualUser?.niveauAccess === "ADMIN" ? (
-                <ListItem>
+                <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
                     <CirclePlus strokeWidth={3} className="w-5 h-3" />
                   </ListItemPrefix>
@@ -184,20 +180,19 @@ export default function Sidebar() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 3}>
+          <ListItem
+            className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+            selected={open === 3}
+          >
             <AccordionHeader
               onClick={() => handleOpen(3)}
-              className="p-3 border-b-0"
+              className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
             >
               <ListItemPrefix>
                 {open === 3 ? (
-                  <>
-                    <BookOpenText className="w-5 h-5" />
-                  </>
+                  <BookOpenText className="w-5 h-5" />
                 ) : (
-                  <>
-                    <Book className="w-5 h-5" />
-                  </>
+                  <Book className="w-5 h-5" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -207,14 +202,14 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                 <ListItemPrefix>
                   <AlignJustify strokeWidth={3} className="w-5 h-3" />
                 </ListItemPrefix>
                 Liste Matiere
               </ListItem>
               {actualUser?.niveauAccess === "ADMIN" ? (
-                <ListItem>
+                <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
                     <CirclePlus strokeWidth={3} className="w-5 h-3" />
                   </ListItemPrefix>
@@ -235,20 +230,19 @@ export default function Sidebar() {
             />
           }
         >
-          <ListItem className="p-0" selected={open === 4}>
+          <ListItem
+            className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+            selected={open === 4}
+          >
             <AccordionHeader
               onClick={() => handleOpen(4)}
-              className="p-3 border-b-0"
+              className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
             >
               <ListItemPrefix>
                 {open === 4 ? (
-                  <>
-                    <BookOpenText className="w-5 h-5" />
-                  </>
+                  <BookOpenText className="w-5 h-5" />
                 ) : (
-                  <>
-                    <Book className="w-5 h-5" />
-                  </>
+                  <Book className="w-5 h-5" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -258,7 +252,7 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem>
+              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                 <Accordion
                   open={open2 === 1}
                   icon={
@@ -270,20 +264,19 @@ export default function Sidebar() {
                     />
                   }
                 >
-                  <ListItem className="p-0" selected={open2 === 1}>
+                  <ListItem
+                    className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+                    selected={open2 === 1}
+                  >
                     <AccordionHeader
                       onClick={() => handleOpen2(1)}
-                      className="p-3 border-b-0"
+                      className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
                     >
                       <ListItemPrefix>
                         {open2 === 1 ? (
-                          <>
-                            <BookOpenText className="w-5 h-5" />
-                          </>
+                          <BookOpenText className="w-5 h-5" />
                         ) : (
-                          <>
-                            <Book className="w-5 h-5" />
-                          </>
+                          <Book className="w-5 h-5" />
                         )}
                       </ListItemPrefix>
                       <Typography
@@ -296,7 +289,7 @@ export default function Sidebar() {
                   </ListItem>
                   <AccordionBody className="py-1">
                     <List className="p-0">
-                      <ListItem>
+                      <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                         <ListItemPrefix>
                           <AlignJustify strokeWidth={3} className="w-5 h-3" />
                         </ListItemPrefix>
@@ -304,7 +297,7 @@ export default function Sidebar() {
                       </ListItem>
                       {actualUser?.niveauAccess === "ADMIN" ||
                       actualUser?.niveauAccess === "ENSEIGNANT" ? (
-                        <ListItem>
+                        <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                           <ListItemPrefix>
                             <CirclePlus strokeWidth={3} className="w-5 h-3" />
                           </ListItemPrefix>
@@ -315,7 +308,7 @@ export default function Sidebar() {
                   </AccordionBody>
                 </Accordion>
               </ListItem>
-              <ListItem>
+              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                 <Accordion
                   open={open2 === 2}
                   icon={
@@ -327,20 +320,19 @@ export default function Sidebar() {
                     />
                   }
                 >
-                  <ListItem className="p-0" selected={open2 === 2}>
+                  <ListItem
+                    className="p-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
+                    selected={open2 === 2}
+                  >
                     <AccordionHeader
                       onClick={() => handleOpen2(2)}
-                      className="p-3 border-b-0"
+                      className="p-3 border-b-0 hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white"
                     >
                       <ListItemPrefix>
                         {open2 === 2 ? (
-                          <>
-                            <BookOpenText className="w-5 h-5" />
-                          </>
+                          <BookOpenText className="w-5 h-5" />
                         ) : (
-                          <>
-                            <Book className="w-5 h-5" />
-                          </>
+                          <Book className="w-5 h-5" />
                         )}
                       </ListItemPrefix>
                       <Typography
@@ -353,7 +345,7 @@ export default function Sidebar() {
                   </ListItem>
                   <AccordionBody className="py-1">
                     <List className="p-0">
-                      <ListItem>
+                      <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                         <ListItemPrefix>
                           <AlignJustify strokeWidth={3} className="w-5 h-3" />
                         </ListItemPrefix>
@@ -361,7 +353,7 @@ export default function Sidebar() {
                       </ListItem>
                       {actualUser?.niveauAccess === "ADMIN" ||
                       actualUser?.niveauAccess === "ENSEIGNANT" ? (
-                        <ListItem>
+                        <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                           <ListItemPrefix>
                             <CirclePlus strokeWidth={3} className="w-5 h-3" />
                           </ListItemPrefix>
@@ -376,7 +368,7 @@ export default function Sidebar() {
           </AccordionBody>
         </Accordion>
         {actualUser?.niveauAccess === "ADMIN" ? (
-          <ListItem>
+          <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
             <ListItemPrefix>
               <UserCircleIcon className="w-5 h-5" />
             </ListItemPrefix>
