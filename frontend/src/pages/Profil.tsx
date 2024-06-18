@@ -1,19 +1,19 @@
-import Navbar from "@/components/navbar";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import { useEffect, useState } from "react";
 import { Footer } from "@/components/Footer";
+import OrbitingLoader from "@/components/OrbitingLoader";
+import Navbar from "@/components/navbar";
+import { CardContainer, CardItem } from "@/components/ui/3d-card";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../assets/css/fonts.css";
-import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 export default function Profil() {
   type User = {
     id_user: string;
@@ -29,6 +29,7 @@ export default function Profil() {
   const [userFiliere, setUserFiliere] = useState("");
   const [userClasse, setUserClasse] = useState("");
   const [favorisCount, setFavorisCount] = useState(0);
+  const [status, setStatus] = useState("");
 
   const navigate = useNavigate();
   // 1. Define your form
@@ -51,6 +52,11 @@ export default function Profil() {
         setUserClasse(data.user.classe.nomClasse);
         setUserFiliere(data.user.classe.classeFiliere.nomFiliere);
         setFavorisCount(data.coursCount);
+        const statusU = data.user.niveauAccess;
+        const status = statusU.toLowerCase()
+        const statusToUper = status.charAt(0).toUpperCase() + status.slice(1);
+        setStatus(statusToUper);
+        console.log(statusToUper)
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -133,6 +139,17 @@ export default function Profil() {
                     </p>
                     <p className="mt-8 text-2xl font-bold text-center text-primary">
                       {favorisCount}
+                    </p>
+                  </div>
+                  <div className="flex flex-col text-center">
+                    <p
+                      className="text-3xl text-center"
+                      style={{ fontFamily: "Asquire" }}
+                    >
+                      Status:
+                    </p>
+                    <p className="mt-8 text-2xl font-bold text-center text-primary">
+                      {status}
                     </p>
                   </div>
                 </CardContent>
