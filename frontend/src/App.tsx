@@ -5,6 +5,7 @@ import Test from "./pages/Test";
 import Inscription from "./pages/Inscription";
 import Acceuil from "./pages/Acceuil";
 import Profil from "./pages/Profil";
+import Test2 from "./pages/Test2";
 import "./App.css";
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/Connexion" element={<Connexion />} />
           <Route path="/Inscription" element={<Inscription />} />
           <Route path="/Test" element={<Test />} />
+          <Route path="/Test2" element={<Test2 />} />
           <Route path="/Profil" element={<Profil />} />
         </Routes>
       </Router>

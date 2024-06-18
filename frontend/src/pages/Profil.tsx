@@ -13,7 +13,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import "../assets/css/fonts.css";
-
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 export default function Profil() {
   type User = {
     id_user: string;
@@ -84,69 +84,73 @@ export default function Profil() {
       ) : (
         <>
           <Navbar />
-          <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-950">
-            <Card className=" top-4 w-l flex flex-col justify-center items-center shadow-xl  shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
-              <CardHeader className="mt-8 flex justify-center items-center pb-2">
-                <img
-                  src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${actualUser?.email}${actualUser?.nom}`}
-                  alt="user avatar"
-                  className="absolute grayscale-[0%] top-72 rounded-full w-24 h-24 aspect-square object-cover"
-                />
-                <CardTitle className="text-center">{`${actualUser?.nom} ${actualUser?.prenom}`}</CardTitle>
-                <CardDescription className="font-normal text-primary">
-                  {actualUser?.email}
-                </CardDescription>
-              </CardHeader>
+          <div className="flex justify-center items-center min-h-screen bg-slate-100 dark:bg-slate-950">
+            <CardContainer>
+              <Card className="flex top-4 flex-col justify-center items-center bg-white shadow-xl w-l shadow-black/10 dark:shadow-primary dark:bg-slate-900">
+                <CardItem translateZ="100" className="mt-4 w-full">
+                  <CardHeader className="flex justify-center items-center pb-2 mt-8">
+                    <img
+                      src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${actualUser?.email}${actualUser?.nom}`}
+                      alt="user avatar"
+                      className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
+                    />
+                    <CardTitle className="text-center">{`${actualUser?.nom} ${actualUser?.prenom}`}</CardTitle>
+                    <CardDescription className="font-normal text-primary">
+                      {actualUser?.email}
+                    </CardDescription>
+                  </CardHeader>
+                </CardItem>
 
-              <CardContent className="flex flex-row gap-x-12 items-center text-center">
-                <div className="flex flex-col text-center">
-                  <p
-                    className="text-3xl text-center"
-                    style={{ fontFamily: "Asquire" }}
-                  >
-                    Filiere:
-                  </p>
-                  <p className="mt-8 text-2xl font-bold text-primary text-center">
-                    {userFiliere}
-                  </p>
-                </div>
-                <div className="flex flex-col text-center">
-                  <p
-                    className="text-3xl text-center"
-                    style={{ fontFamily: "Asquire" }}
-                  >
-                    Classe:
-                  </p>
-                  <p className="mt-8 text-2xl font-bold text-primary text-center">
-                    {userClasse}
-                  </p>
-                </div>
-                <div className="flex flex-col text-center">
-                  <p
-                    className="text-3xl text-center"
-                    style={{ fontFamily: "Asquire" }}
-                  >
-                    Favoris:
-                  </p>
-                  <p className="mt-8 text-2xl text-center font-bold text-primary">
-                    {favorisCount}
-                  </p>
-                </div>
-              </CardContent>
+                <CardContent className="flex flex-row gap-x-12 items-center text-center">
+                  <div className="flex flex-col text-center">
+                    <p
+                      className="text-3xl text-center"
+                      style={{ fontFamily: "Asquire" }}
+                    >
+                      Filiere:
+                    </p>
+                    <p className="mt-8 text-2xl font-bold text-center text-primary">
+                      {userFiliere}
+                    </p>
+                  </div>
+                  <div className="flex flex-col text-center">
+                    <p
+                      className="text-3xl text-center"
+                      style={{ fontFamily: "Asquire" }}
+                    >
+                      Classe:
+                    </p>
+                    <p className="mt-8 text-2xl font-bold text-center text-primary">
+                      {userClasse}
+                    </p>
+                  </div>
+                  <div className="flex flex-col text-center">
+                    <p
+                      className="text-3xl text-center"
+                      style={{ fontFamily: "Asquire" }}
+                    >
+                      Favoris:
+                    </p>
+                    <p className="mt-8 text-2xl font-bold text-center text-primary">
+                      {favorisCount}
+                    </p>
+                  </div>
+                </CardContent>
 
-              <CardFooter>
-                <button
-                  onClick={() => {
-                    Cookies.remove("user");
-                    navigate("/");
-                  }}
-                  type="button"
-                  className="bg-primary text-white font-bold py-2 px-4 rounded-full"
-                >
-                  Déconnexion
-                </button>
-              </CardFooter>
-            </Card>
+                <CardFooter>
+                  <button
+                    onClick={() => {
+                      Cookies.remove("user");
+                      navigate("/");
+                    }}
+                    type="button"
+                    className="px-4 py-2 font-bold text-white rounded-full bg-primary"
+                  >
+                    Déconnexion
+                  </button>
+                </CardFooter>
+              </Card>
+            </CardContainer>
           </div>
 
           <Footer />
