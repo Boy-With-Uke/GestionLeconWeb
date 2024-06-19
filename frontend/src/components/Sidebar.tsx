@@ -158,7 +158,7 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <Link to={"/ListeClasse"}>
+              <Link to={"/ListeClasseFiliere"}>
                 <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
                     <AlignJustify strokeWidth={3} className="w-5 h-3" />

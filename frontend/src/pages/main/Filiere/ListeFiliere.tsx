@@ -26,6 +26,7 @@ export default function ListeFiliere() {
   type Filiere = {
     id_filiere: number;
     nomFiliere: string;
+    nombreClasse: number;
   };
   type User = {
     id_user: number;
@@ -85,9 +86,13 @@ export default function ListeFiliere() {
       const req = await fetch(`http://localhost:5173/api/filiere`);
 
       const data = await req.json();
-      const filieeres: Filiere[] = data.filieres;
-      console.log(filieeres);
-      setFilieres(filieeres);
+      const filieres: Filiere[] = data.filieres.map((filiere: any) => ({
+        id_filiere: filiere.id_filiere,
+        nomFiliere: filiere.nomFiliere,
+        nombreClasse: filiere.classes.length,
+      }));
+      console.log(filieres);
+      setFilieres(filieres);
     } catch (error) {
       console.error("Error fetching filieres data:", error);
     }
@@ -122,6 +127,9 @@ export default function ListeFiliere() {
       setCurrentPage(pageNumber);
     }
   };
+   const handleCardClick = (filiereName: string) => {
+     navigate(`/ListeClasseFiliere/${filiereName}`);
+   };
 
   return (
     <>
@@ -144,7 +152,8 @@ export default function ListeFiliere() {
                 {currentFilieres.map((filiere) => (
                   <Card
                     key={filiere.id_filiere}
-                    className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900"
+                    onClick={() => handleCardClick(filiere.nomFiliere)}
+                    className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
                     style={{ width: "200px" }} // Définir une largeur fixe pour les cartes
                   >
                     <CardHeader className="flex flex-row gap-4 items-center pb-2">
@@ -154,7 +163,9 @@ export default function ListeFiliere() {
                             ? "Aucune personne connectée"
                             : filiere.nomFiliere}
                         </CardTitle>
-                        <CardDescription>{filiere.id_filiere}</CardDescription>
+                        <CardDescription>
+                          Nombre de Classe: {filiere.nombreClasse}
+                        </CardDescription>
                       </div>
                     </CardHeader>
                   </Card>
@@ -182,10 +193,7 @@ export default function ListeFiliere() {
                     )
                   )}
                   <PaginationItem>
-                    <PaginationNext
-                      onClick={() => paginate(currentPage + 1)}
-                      
-                    />
+                    <PaginationNext onClick={() => paginate(currentPage + 1)} />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>

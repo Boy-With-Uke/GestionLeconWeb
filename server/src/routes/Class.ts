@@ -20,6 +20,11 @@ export const classesRoutes = new Hono()
       select: {
         id_classe: true,
         nomClasse: true,
+        classeFiliere:{
+          select:{
+            nomFiliere:true
+          }
+        },
         classeMatiere: {
           select: {
             matieres: {
