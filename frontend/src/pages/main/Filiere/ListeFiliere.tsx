@@ -1,15 +1,34 @@
+"use client";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import Sidebar from "@/components/Sidebar";
-import UserTableContent from "@/components/UserTableContent";
 import Navbar from "@/components/navbar";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const ListeFiliere = () => {
+export default function ListeFiliere() {
+  type Filiere = {
+    id_filiere: number;
+    nomFiliere: string;
+  };
   type User = {
-    id_user: string;
+    id_user: number;
     nom: string;
     prenom: string;
     email: string;
@@ -17,17 +36,22 @@ export const ListeFiliere = () => {
   };
 
   const [actualUser, setActualUser] = useState<User | null>(null);
+  const [filiers, setFilieres] = useState<Filiere[]>([]);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
-  // 1. Define your form
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const filieresPerPage = 6;
+
   const getActualUser = async () => {
     if (!userCookie) {
       toast({
         variant: "destructive",
         title: `Erreur`,
-        description: "Vous devez vous connecter pour acceder a cette ressource",
+        description: "Vous devez vous connecter pour accéder à cette ressource",
       });
       navigate("/");
       return;
@@ -46,13 +70,26 @@ export const ListeFiliere = () => {
           toast({
             variant: "destructive",
             title: `Erreur`,
-            description: ` Ressources indisponibles pour votre niveau d'acces`,
+            description: `Ressources indisponibles pour votre niveau d'accès`,
           });
           navigate("/");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
+    }
+  };
+
+  const getFilieres = async () => {
+    try {
+      const req = await fetch(`http://localhost:5173/api/filiere`);
+
+      const data = await req.json();
+      const filieeres: Filiere[] = data.filieres;
+      console.log(filieeres);
+      setFilieres(filieeres);
+    } catch (error) {
+      console.error("Error fetching filieres data:", error);
     }
   };
 
@@ -63,10 +100,29 @@ export const ListeFiliere = () => {
 
     // Fetch user data
     getActualUser();
+    getFilieres();
 
     // Clear the timer if the component unmounts
     return () => clearTimeout(timer);
   }, []);
+
+  // Calculate start and end indices
+  const startIndex = (currentPage - 1) * filieresPerPage;
+  const endIndex = startIndex + filieresPerPage;
+
+  // Get current filieres
+  const currentFilieres = filiers.slice(startIndex, endIndex);
+
+  // Change page
+  const paginate = (pageNumber: number) => {
+    if (
+      pageNumber >= 1 &&
+      pageNumber <= Math.ceil(filiers.length / filieresPerPage)
+    ) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -83,12 +139,60 @@ export const ListeFiliere = () => {
           <Sidebar />
           <div className="flex flex-col w-full">
             <Navbar />
-            <div className="flex-1 flex justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
-              <UserTableContent />
+            <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {currentFilieres.map((filiere) => (
+                  <Card
+                    key={filiere.id_filiere}
+                    className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900"
+                    style={{ width: "200px" }} // Définir une largeur fixe pour les cartes
+                  >
+                    <CardHeader className="flex flex-row gap-4 items-center pb-2">
+                      <div className="flex flex-col">
+                        <CardTitle className="text-base">
+                          {filiere.nomFiliere === ""
+                            ? "Aucune personne connectée"
+                            : filiere.nomFiliere}
+                        </CardTitle>
+                        <CardDescription>{filiere.id_filiere}</CardDescription>
+                      </div>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => paginate(currentPage - 1)}
+                    />
+                  </PaginationItem>
+                  {Array.from(
+                    { length: Math.ceil(filiers.length / filieresPerPage) },
+                    (_, i) => (
+                      <PaginationItem key={i + 1}>
+                        <PaginationLink
+                          href="#"
+                          onClick={() => paginate(i + 1)}
+                          isActive={i + 1 === currentPage}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    )
+                  )}
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => paginate(currentPage + 1)}
+                      
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           </div>
         </div>
       )}
     </>
   );
-};
+}

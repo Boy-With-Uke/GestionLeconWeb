@@ -11,6 +11,7 @@ import { ListeUser } from "./pages/main/ListeUser";
 import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
 import AjoutClasse from "./pages/main/Classe/AjoutClasse";
 import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
+import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -26,6 +27,7 @@ function App() {
           <Route path="/AjoutFiliere" element={<AjoutFiliere />} />
           <Route path="/AjoutClasse" element={<AjoutClasse />} />
           <Route path="/AjoutMatiere" element={<AjoutMatiere />} />
+          <Route path="/ListeFiliere" element={<ListeFiliere />} />
         </Routes>
       </Router>
     </ThemeProvider>
