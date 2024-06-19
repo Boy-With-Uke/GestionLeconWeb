@@ -20,10 +20,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import FiliereCombo from "@/components/FiliereCombo";
 
 const formSchema = z.object({
-  nomFiliere: z.string().min(5, {
+  nomClasse: z.string().min(5, {
     message: "Le nom de la filiere doit etre au minimum 5 caracteres",
+  }),
+  nomFiliere: z.string().min(1, {
+    message: "Vous devez selectionner le nom de la filiere",
   }),
 });
 export default function AjoutClasse() {
@@ -44,6 +48,7 @@ export default function AjoutClasse() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      nomClasse: "",
       nomFiliere: "",
     },
   });
@@ -83,12 +88,13 @@ export default function AjoutClasse() {
   };
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const req = await fetch(`http://localhost:5173/api/filiere`, {
+      const req = await fetch(`http://localhost:5173/api/classe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          nomClasse: values.nomClasse,
           nomFiliere: values.nomFiliere,
         }),
       });
@@ -99,12 +105,12 @@ export default function AjoutClasse() {
         toast({
           variant: "destructive",
           title: `Erreur`,
-          description: data.message || "Filiere deja existante",
+          description: data.message || "Classe deja existante",
         });
       } else if (req.status === 200) {
         toast({
           title: `Success`,
-          description: data.message || " Nouvelle filiere créé avec succès",
+          description: data.message || " Nouvelle classe créé avec succès",
         });
       } else {
         toast({
@@ -161,10 +167,10 @@ export default function AjoutClasse() {
                     >
                       <FormField
                         control={form.control}
-                        name="nomFiliere"
+                        name="nomClasse"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nom de la filiere</FormLabel>
+                            <FormLabel>Nom de la Classe</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Nom de la nouvelle filiere"
@@ -172,7 +178,26 @@ export default function AjoutClasse() {
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer le nom de la nouvelle filiere.
+                              Veuillez entrer le nom de la nouvelle classe.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="nomFiliere"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <FiliereCombo
+                                onFiliereSelect={(filiere) => {
+                                  field.onChange(filiere);
+                                }}
+                              />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer la filiere de cette classe
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

@@ -104,12 +104,14 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                <ListItemPrefix>
-                  <AlignJustify strokeWidth={3} className="w-5 h-3" />
-                </ListItemPrefix>
-                Liste Filiere
-              </ListItem>
+              <Link to={"/ListeFiliere"}>
+                <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                  <ListItemPrefix>
+                    <AlignJustify strokeWidth={3} className="w-5 h-3" />
+                  </ListItemPrefix>
+                  Liste Filiere
+                </ListItem>
+              </Link>
               {actualUser?.niveauAccess === "ADMIN" ? (
                 <Link to={"/AjoutFiliere"}>
                   <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
@@ -156,19 +158,23 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                <ListItemPrefix>
-                  <AlignJustify strokeWidth={3} className="w-5 h-3" />
-                </ListItemPrefix>
-                Liste Classe
-              </ListItem>
-              {actualUser?.niveauAccess === "ADMIN" ? (
+              <Link to={"/ListeClasse"}>
                 <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
-                    <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                    <AlignJustify strokeWidth={3} className="w-5 h-3" />
                   </ListItemPrefix>
-                  Ajout Classe
+                  Liste Classe
                 </ListItem>
+              </Link>
+              {actualUser?.niveauAccess === "ADMIN" ? (
+                <Link to={"/AjoutClasse"}>
+                  <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                    <ListItemPrefix>
+                      <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                    </ListItemPrefix>
+                    Ajout Classe
+                  </ListItem>
+                </Link>
               ) : null}
             </List>
           </AccordionBody>
@@ -206,19 +212,23 @@ export default function Sidebar() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
-              <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                <ListItemPrefix>
-                  <AlignJustify strokeWidth={3} className="w-5 h-3" />
-                </ListItemPrefix>
-                Liste Matiere
-              </ListItem>
-              {actualUser?.niveauAccess === "ADMIN" ? (
+              <Link to={"/ListeMatiere"}>
                 <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                   <ListItemPrefix>
-                    <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                    <AlignJustify strokeWidth={3} className="w-5 h-3" />
                   </ListItemPrefix>
-                  Ajout Matiere
+                  Liste Matiere
                 </ListItem>
+              </Link>
+              {actualUser?.niveauAccess === "ADMIN" ? (
+                <Link to={"/AjoutMatiere"}>
+                  <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                    <ListItemPrefix>
+                      <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                    </ListItemPrefix>
+                    Ajout Matiere
+                  </ListItem>
+                </Link>
               ) : null}
             </List>
           </AccordionBody>
@@ -293,20 +303,24 @@ export default function Sidebar() {
                   </ListItem>
                   <AccordionBody className="py-1">
                     <List className="p-0">
-                      <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                        <ListItemPrefix>
-                          <AlignJustify strokeWidth={3} className="w-5 h-3" />
-                        </ListItemPrefix>
-                        Liste Lecon
-                      </ListItem>
-                      {actualUser?.niveauAccess === "ADMIN" ||
-                      actualUser?.niveauAccess === "ENSEIGNANT" ? (
+                      <Link to={"/ListeLecon"}>
                         <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                           <ListItemPrefix>
-                            <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                            <AlignJustify strokeWidth={3} className="w-5 h-3" />
                           </ListItemPrefix>
-                          Ajout Lecon
+                          Liste Lecon
                         </ListItem>
+                      </Link>
+                      {actualUser?.niveauAccess === "ADMIN" ||
+                      actualUser?.niveauAccess === "ENSEIGNANT" ? (
+                        <Link to={"/AjoutLecon"}>
+                          <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                            <ListItemPrefix>
+                              <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                            </ListItemPrefix>
+                            Ajout Lecon
+                          </ListItem>
+                        </Link>
                       ) : null}
                     </List>
                   </AccordionBody>
@@ -349,20 +363,24 @@ export default function Sidebar() {
                   </ListItem>
                   <AccordionBody className="py-1">
                     <List className="p-0">
-                      <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                        <ListItemPrefix>
-                          <AlignJustify strokeWidth={3} className="w-5 h-3" />
-                        </ListItemPrefix>
-                        Liste Evaluation
-                      </ListItem>
-                      {actualUser?.niveauAccess === "ADMIN" ||
-                      actualUser?.niveauAccess === "ENSEIGNANT" ? (
+                      <Link to={"/ListeEvaluation"}>
                         <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
                           <ListItemPrefix>
-                            <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                            <AlignJustify strokeWidth={3} className="w-5 h-3" />
                           </ListItemPrefix>
-                          Ajout Evaluation
+                          Liste Evaluation
                         </ListItem>
+                      </Link>
+                      {actualUser?.niveauAccess === "ADMIN" ||
+                      actualUser?.niveauAccess === "ENSEIGNANT" ? (
+                        <Link to={"/AjoutEvaluation"}>
+                          <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                            <ListItemPrefix>
+                              <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                            </ListItemPrefix>
+                            Ajout Evaluation
+                          </ListItem>
+                        </Link>
                       ) : null}
                     </List>
                   </AccordionBody>
