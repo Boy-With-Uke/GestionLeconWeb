@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import {
@@ -13,10 +14,11 @@ import {
 import Cookies from "js-cookie";
 import { AlignJustify, Book, BookOpenText, CirclePlus } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MiniProfil from "./MiniProfil";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   type User = {
     id_user: string;
     nom: string;
@@ -35,7 +37,6 @@ export default function Sidebar() {
         return;
       }
       const data = await res.json();
-      console.log("User data fetched:", data.user);
       const user: User = data.user;
       setActualUser(user);
     } catch (error) {
@@ -110,12 +111,14 @@ export default function Sidebar() {
                 Liste Filiere
               </ListItem>
               {actualUser?.niveauAccess === "ADMIN" ? (
-                <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-                  <ListItemPrefix>
-                    <CirclePlus strokeWidth={3} className="w-5 h-3" />
-                  </ListItemPrefix>
-                  Ajout Filiere
-                </ListItem>
+                <Link to={"/AjoutFiliere"}>
+                  <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+                    <ListItemPrefix>
+                      <CirclePlus strokeWidth={3} className="w-5 h-3" />
+                    </ListItemPrefix>
+                    Ajout Filiere
+                  </ListItem>
+                </Link>
               ) : null}
             </List>
           </AccordionBody>
@@ -369,12 +372,14 @@ export default function Sidebar() {
           </AccordionBody>
         </Accordion>
         {actualUser?.niveauAccess === "ADMIN" ? (
-          <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
-            <ListItemPrefix>
-              <UserCircleIcon className="w-5 h-5" />
-            </ListItemPrefix>
-            Liste des utilisateur
-          </ListItem>
+          <Link to={"/ListeUser"}>
+            <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+              <ListItemPrefix>
+                <UserCircleIcon className="w-5 h-5" />
+              </ListItemPrefix>
+              Liste des utilisateur
+            </ListItem>
+          </Link>
         ) : null}
       </List>
     </Card>

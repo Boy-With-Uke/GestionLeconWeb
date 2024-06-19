@@ -12,7 +12,7 @@ const classSchema = z.object({
 
 const postClassSchema = classSchema
   .omit({ id_classe: true })
-  .extend({ id_filiere: z.number() });
+  .extend({ nomFiliere: z.string() });
 
 export const classesRoutes = new Hono()
   .get("/", async (c) => {
@@ -59,6 +59,16 @@ export const classesRoutes = new Hono()
           nomFiliere: filiere,
         },
       },
+      select: {
+        id_classe: true,
+        nomClasse: true,
+      },
+    });
+    c.status(200);
+    return c.json({ classes });
+  })
+  .get("/names/", async (c) => {
+    const classes = await prisma.classe.findMany({
       select: {
         id_classe: true,
         nomClasse: true,
@@ -123,7 +133,7 @@ export const classesRoutes = new Hono()
       });
       const existingFiliere = await prisma.filiere.findUnique({
         where: {
-          id_filiere: body.id_filiere,
+          nomFiliere: body.nomFiliere,
         },
       });
 
@@ -149,7 +159,7 @@ export const classesRoutes = new Hono()
           nomClasse: body.nomClasse,
           classeFiliere: {
             connect: {
-              id_filiere: body.id_filiere,
+              nomFiliere: body.nomFiliere,
             },
           },
         },

@@ -8,6 +8,8 @@ import Profil from "./pages/Profil";
 import Test from "./pages/Test";
 import Test2 from "./pages/Test2";
 import { ListeUser } from "./pages/main/ListeUser";
+import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
+import AjoutClasse from "./pages/main/Classe/AjoutClasse";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -20,6 +22,8 @@ function App() {
           <Route path="/Test2" element={<Test2 />} />
           <Route path="/Profil" element={<Profil />} />
           <Route path="/ListeUser" element={<ListeUser />} />
+          <Route path="/AjoutFiliere" element={<AjoutFiliere />} />
+          <Route path="/AjoutClasse" element={<AjoutClasse />} />
         </Routes>
       </Router>
     </ThemeProvider>

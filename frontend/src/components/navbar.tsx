@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
 import { CircleUserRound } from "lucide-react";
@@ -31,7 +32,6 @@ export default function Navbar() {
           return;
         }
         const data = await res.json();
-        console.log("User data fetched:", data.user);
         const user: User = data.user;
         setActualUser(user);
       } catch (error) {

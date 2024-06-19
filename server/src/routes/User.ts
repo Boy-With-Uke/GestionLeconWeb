@@ -100,23 +100,23 @@ export const userRoutes = new Hono()
           classe: {
             select: {
               nomClasse: true,
-              classeFiliere:{
-                select:{
-                  nomFiliere:true
-                }
-              }
+              classeFiliere: {
+                select: {
+                  nomFiliere: true,
+                },
+              },
             },
           },
-          cours:{
-            select:{
-              coursId: true
-            }
-          }
+          cours: {
+            select: {
+              coursId: true,
+            },
+          },
         },
       });
-      const coursCount = user?.cours.length
+      const coursCount = user?.cours.length;
       c.status(200);
-      return c.json({ user , coursCount});
+      return c.json({ user, coursCount });
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
@@ -453,7 +453,7 @@ export const userRoutes = new Hono()
           message = `Mise a niveau de l'acces de l'utilisateur en Admin succes`;
           c.status(200);
           return c.json({ message, updatedUser });
-        } else {
+        } else if (fonction === "ENSEIGNANT") {
           const updatedUser = await prisma.user.update({
             where: {
               id_user: userId,
@@ -463,6 +463,18 @@ export const userRoutes = new Hono()
             },
           });
           message = `Mise a niveau de l'acces de l'utilisateur en Enseignant succes`;
+          c.status(200);
+          return c.json({ message, updatedUser });
+        } else {
+          const updatedUser = await prisma.user.update({
+            where: {
+              id_user: userId,
+            },
+            data: {
+              niveauAccess: "USER",
+            },
+          });
+          message = `Mise a niveau de l'acces de l'utilisateur en user succes`;
           c.status(200);
           return c.json({ message, updatedUser });
         }
