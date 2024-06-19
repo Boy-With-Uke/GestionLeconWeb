@@ -1,4 +1,4 @@
-import ClassComboModal from "@/components/ClassComboModal";
+import ClassComboId from "@/components/ClassComboId";
 import EnseignantCombo from "@/components/EnseignantCombo";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +15,8 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 export default function Test() {
-  const [test, setTest] = useState("");
-  const [test2, setTest2] = useState("");
+  const [test, setTest] = useState(0);
+  const [test2, setTest2] = useState(0);
   return (
     <>
       <Dialog>
@@ -49,9 +49,12 @@ export default function Test() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <ClassComboModal onSelect={(classe) => setTest(classe)} />
+      <ClassComboId
+        queryParam="Informatique"
+        onSelect={(classe) => setTest(classe)}
+      />
       <EnseignantCombo onSelect={(enseignant) => setTest2(enseignant)} />
-      <p>{test2}</p>
+      <p>{test}</p>
     </>
   );
 }

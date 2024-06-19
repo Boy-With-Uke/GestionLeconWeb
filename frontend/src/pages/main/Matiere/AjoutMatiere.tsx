@@ -1,5 +1,9 @@
 "use client";
+import ClassComboId from "@/components/ClassComboId";
+import EnseignantCombo from "@/components/EnseignantCombo";
+import FiliereCombo from "@/components/FiliereCombo";
 import OrbitingLoader from "@/components/OrbitingLoader";
+import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,24 +19,25 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
-import Sidebar from "@/components/Sidebar";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import FiliereCombo from "@/components/FiliereCombo";
-import ClassCombo from "@/components/ClassCombo";
 
 const formSchema = z.object({
   nomMatiere: z.string().min(3, {
-    message: "Le nom de la filiere doit etre au minimum 3 caracteres",
+    message: "Le nom de la matiere doit etre au minimum 3 caracteres",
   }),
-  nomClasse: z.string().min(5, {
-    message: "Le nom de la filiere doit etre au minimum 5 caracteres",
+  description: z.string().min(5, {
+    message: "La description de la matiere doit etre au minimum 3 caracteres",
+  }),
+  classeId: z.number().min(1, {
+    message: "Veillez selectioner une classe",
   }),
   nomFiliere: z.string().min(1, {
     message: "Vous devez selectionner le nom de la filiere",
   }),
+  idProf: z.number().min(1, { message: "Veillez selectioner le professeur" }),
 });
 export default function AjoutMatiere() {
   type User = {
@@ -53,9 +58,11 @@ export default function AjoutMatiere() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        nomMatiere:'',
-      nomClasse: "",
+      nomMatiere: "",
+      description: "",
+      classeId: 0,
       nomFiliere: "",
+      idProf: 0,
     },
   });
   // 1. Define your form
@@ -94,14 +101,16 @@ export default function AjoutMatiere() {
   };
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const req = await fetch(`http://localhost:5173/api/classe`, {
+      const req = await fetch(`http://localhost:5173/api/matiere`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nomClasse: values.nomClasse,
-          nomFiliere: values.nomFiliere,
+          nom: values.nomMatiere,
+          description: values.description,
+          enseignantDelaMatiere: values.idProf,
+          id_classe: values.classeId,
         }),
       });
 
@@ -111,12 +120,12 @@ export default function AjoutMatiere() {
         toast({
           variant: "destructive",
           title: `Erreur`,
-          description: data.message || "Classe deja existante",
+          description: data.message || "Matiere deja existante",
         });
       } else if (req.status === 200) {
         toast({
           title: `Success`,
-          description: data.message || " Nouvelle classe créé avec succès",
+          description: data.message || " Nouvelle Matiere créé avec succès",
         });
       } else {
         toast({
@@ -176,7 +185,6 @@ export default function AjoutMatiere() {
                         name="nomMatiere"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nom de la Matiere</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Nom de la nouvelle filiere"
@@ -185,6 +193,25 @@ export default function AjoutMatiere() {
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
                               Veuillez entrer le nom de la nouvelle Matiere.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="description"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input
+                                placeholder="Description de la nouvelle filiere"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer une description de la nouvelle
+                              Matiere.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -212,17 +239,38 @@ export default function AjoutMatiere() {
                       />
                       <FormField
                         control={form.control}
-                        name="nomClasse"
+                        name="classeId"
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <ClassCombo
+                              <ClassComboId
                                 queryParam={selectedFiliere}
                                 onSelect={(classe) => field.onChange(classe)} // Ajout de la fonction de rappel
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer la classe d'attribution de cette Matiere.
+                              Veuillez entrer la classe d'attribution de cette
+                              Matiere.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="idProf"
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <EnseignantCombo
+                                onSelect={(enseignant) =>
+                                  field.onChange(enseignant)
+                                } // Ajout de la fonction de rappel
+                              />
+                            </FormControl>
+                            <FormDescription className="text-gray-900 dark:text-white">
+                              Veuillez entrer la classe d'attribution de cette
+                              Matiere.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

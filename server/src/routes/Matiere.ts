@@ -35,7 +35,28 @@ const deleteMatiereSchema = matiereSchema.omit({
 });
 export const subjectRoutes = new Hono()
   .get("/", async (c) => {
-    const matieres = await prisma.matiere.findMany({});
+    const matieres = await prisma.matiere.findMany({
+      select: {
+        id_matiere: true,
+        nom: true,
+        description: true,
+        enseignantDelaMatiere: true,
+        classeMatiere: {
+          select: {
+            classes: {
+              select: {
+                nomClasse: true,
+                classeFiliere: {
+                  select: {
+                    nomFiliere: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
     c.status(200);
     return c.json({ Matiere: matieres });
   })
@@ -43,6 +64,26 @@ export const subjectRoutes = new Hono()
     const matiereId = Number.parseInt(c.req.param("id"));
     const matiere = await prisma.matiere.findUnique({
       where: { id_matiere: matiereId },
+      select: {
+        id_matiere: true,
+        nom: true,
+        description: true,
+        enseignantDelaMatiere: true,
+        classeMatiere: {
+          select: {
+            classes: {
+              select: {
+                nomClasse: true,
+                classeFiliere: {
+                  select: {
+                    nomFiliere: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
     c.status(200);
     return c.json({ matiere });
@@ -61,6 +102,17 @@ export const subjectRoutes = new Hono()
           niveauAccess: "ENSEIGNANT",
         },
       });
+      const existingMatiere = await prisma.matiere.findUnique({
+        where: {
+          nom: body.nom,
+        },
+      });
+      if (!existingMatiere) {
+        c.status(401);
+        return c.json({
+          message: "Matiere deja existante",
+        });
+      }
 
       if (!existingTeacher) {
         c.status(401);

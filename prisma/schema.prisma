@@ -23,7 +23,7 @@ model User {
 
 model Matiere {
   id_matiere            Int                 @unique @default(autoincrement())
-  nom                   String
+  nom                   String @unique
   description           String
   enseignantDelaMatiere Int
   enseignant            User                @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
