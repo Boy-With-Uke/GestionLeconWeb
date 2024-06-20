@@ -2,13 +2,30 @@ import { PrismaClient } from "@prisma/client";
 import { Hono } from "hono";
 import * as fs from "fs";
 import { connect } from "bun";
+import { select } from "@material-tailwind/react";
 const path = require("path");
 
 const prisma = new PrismaClient();
 
 export const LessonRoutes = new Hono()
   .get("/", async (c) => {
-    const lessons = await prisma.lecon.findMany({});
+    const lessons = await prisma.lecon.findMany({
+      select: {
+        id_lecon: true,
+        titre: true,
+        contenue: true,
+        type: true,
+        matiereLesson: {
+          select: {
+            matiere: {
+              select: {
+                nom: true,
+              },
+            },
+          },
+        },
+      },
+    });
     c.status(200);
     return c.json({ lessons });
   })

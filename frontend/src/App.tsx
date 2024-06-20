@@ -17,6 +17,9 @@ import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 import { ListeUser } from "./pages/main/ListeUser";
 import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
 import ListeMatiere from "./pages/main/Matiere/ListeMatiere";
+import ListeCours from "./pages/main/Cours/ListeCours";
+import ListeLecon from "./pages/main/Cours/Lecon/ListeLecon";
+import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEaluations";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -43,6 +46,10 @@ function App() {
           <Route path="/ListeMatiere" element={<ListeMatiere />} />
           <Route path="/AjoutLecon" element={<AjoutLecon />} />
           <Route path="/AjoutEvaluation" element={<AjoutEvaluation />} />
+          <Route path="/ListeCours/:subjectName" element={<ListeCours />} />
+          <Route path="/ListeCours/" element={<ListeCours />} />
+          <Route path="/ListeLecon/" element={<ListeLecon />} />
+          <Route path="/ListeEvaluation/" element={<ListeEvaluation />} />
 
           <Route path="/filiere/:filiereName" element={<FiliereDetails />} />
         </Routes>

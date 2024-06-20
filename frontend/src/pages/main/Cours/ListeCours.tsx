@@ -21,29 +21,25 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function ListeMatiere() {
-  const { classeName } = useParams<{ classeName?: string }>();
+export default function ListeCours() {
+  const { subjectName: subjectName } = useParams<{ subjectName?: string }>();
 
-  type enseignant = {
+  type matiere = {
     nom: string;
-    prenom: string;
   };
 
-  type Matiere = {
-    id_matiere: number;
-    nom: string;
-    description: string;
-    enseignant: enseignant;
-    lecon: number;
-    classMatiere: classeMatiere;
+  type matiereLesson = {
+    matiere: matiere;
   };
 
-  type classeMatiere = {
-    classes: classes;
-  };
-  type classes = {
-    nomClasse: string;
-  };
+type Lesson = {
+  id_lecon: number;
+  titre: string;
+  contenue: string;
+  type: string;
+  matiereLesson: string[]; // Changer ici pour string[]
+};
+
   type User = {
     id_user: number;
     nom: string;
@@ -53,7 +49,7 @@ export default function ListeMatiere() {
   };
 
   const [actualUser, setActualUser] = useState<User | null>(null);
-  const [matieres, setMatieres] = useState<Matiere[]>([]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -61,7 +57,7 @@ export default function ListeMatiere() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const MatieresPerPage = 6;
+  const lessonsPerPage = 6;
 
   const getActualUser = async () => {
     if (!userCookie) {
@@ -96,59 +92,63 @@ export default function ListeMatiere() {
     }
   };
 
-  const getClasses = async () => {
-    try {
-      const req = await fetch(`http://localhost:5173/api/matiere`);
-      const data = await req.json();
+const getLessons = async () => {
+  try {
+    const req = await fetch(`http://localhost:5173/api/lesson`);
+    const data = await req.json();
 
-      let matieres: Matiere[] = data.Matiere.map((matiere: any) => ({
-        id_matiere: matiere.id_matiere,
-        nom: matiere.nom,
-        description: matiere.description,
-        enseignant: matiere.enseignant,
-        lecon: matiere.lecon.length,
-      }));
+    let lessons: Lesson[] = data.lessons.map((lesson: any) => {
+      const matiereNames = lesson.matiereLesson.map(
+        (ml: any) => ml.matiere.nom
+      );
+      return {
+        id_lecon: lesson.id_lecon,
+        titre: lesson.titre,
+        contenue: lesson.contenue,
+        type: lesson.type,
+        matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
+      };
+    });
 
-      if (classeName) {
-        matieres = matieres.filter(
-          (matiere) => matiere.classMatiere.classes.nomClasse === classeName
-        );
-      }
-
-      setMatieres(matieres);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Error fetching classes data:", error);
+    if (subjectName) {
+      lessons = lessons.filter((lesson) =>
+        lesson.matiereLesson.includes(subjectName)
+      );
     }
-  };
 
+    setLessons(lessons);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  } catch (error) {
+    console.error("Error fetching classes data:", error);
+  }
+};
   useEffect(() => {
     // Fetch user data
     getActualUser();
-    getClasses();
-  }, [classeName]);
+    getLessons();
+  }, [subjectName]);
 
   // Calculate start and end indices
-  const startIndex = (currentPage - 1) * MatieresPerPage;
-  const endIndex = startIndex + MatieresPerPage;
+  const startIndex = (currentPage - 1) * lessonsPerPage;
+  const endIndex = startIndex + lessonsPerPage;
 
   // Get current filieres
-  const currentMatieres = matieres.slice(startIndex, endIndex);
+  const currentLessons = lessons.slice(startIndex, endIndex);
 
   // Change page
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&
-      pageNumber <= Math.ceil(matieres.length / MatieresPerPage)
+      pageNumber <= Math.ceil(lessons.length / lessonsPerPage)
     ) {
       setCurrentPage(pageNumber);
     }
   };
 
-  const handleCardClick = (filiereName: string) => {
-    navigate(`/ListeCours/${filiereName}`);
+  const handleCardClick = (classeName: string) => {
+    navigate(`/ListeMatiere/${classeName}`);
   };
 
   return (
@@ -168,29 +168,29 @@ export default function ListeMatiere() {
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
-              {matieres.length === 0 ? (
+              {lessons.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore de classe !!!
+                  Pas encore de Lessons !!!
                 </p>
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {currentMatieres.map((matiere) => (
+                    {currentLessons.map((lesson) => (
                       <Card
-                        key={matiere.id_matiere}
-                        onClick={() => handleCardClick(matiere.nom)}
+                        key={lesson.id_lecon}
+                        onClick={() => handleCardClick(lesson.titre)}
                         className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
-                        style={{ width: "200px" }}
+                        style={{ width: "250px" }}
                       >
                         <CardHeader className="flex flex-row gap-4 items-center pb-2">
                           <div className="flex flex-col">
                             <CardTitle className="text-base">
-                              {matiere.nom === ""
+                              {lesson.titre === ""
                                 ? "Aucune personne connectée"
-                                : matiere.nom}
+                                : lesson.titre}
                             </CardTitle>
                             <CardDescription>
-                              Nombre de Lecons+Evaluations: {matiere.lecon}  
+                              Type de cours: {lesson.type}
                             </CardDescription>
                           </div>
                         </CardHeader>
@@ -205,9 +205,7 @@ export default function ListeMatiere() {
                         />
                       </PaginationItem>
                       {Array.from(
-                        {
-                          length: Math.ceil(matieres.length / MatieresPerPage),
-                        },
+                        { length: Math.ceil(lessons.length / lessonsPerPage) },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
                             <PaginationLink
