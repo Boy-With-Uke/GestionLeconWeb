@@ -69,16 +69,7 @@ export const userRoutes = new Hono()
               },
             },
           },
-        },
-        cours: {
-          select: {
-            courses: {
-              select: {
-                titre: true,
-              },
-            },
-          },
-        },
+        }
       },
     });
 
@@ -107,16 +98,10 @@ export const userRoutes = new Hono()
               },
             },
           },
-          cours: {
-            select: {
-              coursId: true,
-            },
-          },
         },
       });
-      const coursCount = user?.cours.length;
       c.status(200);
-      return c.json({ user, coursCount });
+      return c.json({ user });
     } catch (error) {
       c.status(500);
       return c.json({ Error: error });
@@ -192,102 +177,102 @@ export const userRoutes = new Hono()
       return c.json({ Error: error });
     }
   })
-  .post("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
-    const userId = Number.parseInt(c.req.param("id"));
-    const body = await c.req.valid("json");
+  // .post("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
+  //   const userId = Number.parseInt(c.req.param("id"));
+  //   const body = await c.req.valid("json");
 
-    try {
-      // Vérifier si l'email existe déjà
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          id_user: userId,
-        },
-      });
-      const existingCourses = await prisma.cours.findUnique({
-        where: {
-          id_cours: body.id_cours,
-        },
-      });
+  //   try {
+  //     // Vérifier si l'email existe déjà
+  //     const existingUser = await prisma.user.findUnique({
+  //       where: {
+  //         id_user: userId,
+  //       },
+  //     });
+  //     const existingCourses = await prisma.cours.findUnique({
+  //       where: {
+  //         id_cours: body.id_cours,
+  //       },
+  //     });
 
-      if (!existingUser) {
-        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-        c.status(401);
-        return c.json({
-          message: "L'utilisateur n'existe pas",
-        });
-      }
-      if (!existingCourses) {
-        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-        c.status(401);
-        return c.json({
-          message: "Le cours n'existe pas",
-        });
-      }
+  //     if (!existingUser) {
+  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+  //       c.status(401);
+  //       return c.json({
+  //         message: "L'utilisateur n'existe pas",
+  //       });
+  //     }
+  //     if (!existingCourses) {
+  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+  //       c.status(401);
+  //       return c.json({
+  //         message: "Le cours n'existe pas",
+  //       });
+  //     }
 
-      // Créer un nouvel utilisateur
-      const newLink = await prisma.usersFav.create({
-        data: {
-          user: { connect: { id_user: existingUser.id_user } },
-          courses: { connect: { id_cours: existingCourses.id_cours } },
-        },
-      });
+  //     // Créer un nouvel utilisateur
+  //     const newLink = await prisma.usersFav.create({
+  //       data: {
+  //         user: { connect: { id_user: existingUser.id_user } },
+  //         courses: { connect: { id_cours: existingCourses.id_cours } },
+  //       },
+  //     });
 
-      let message = "Nouvel favoris créé avec succès";
-      c.status(200);
-      return c.json({ message, newLink });
-    } catch (error) {
-      c.status(500);
-      return c.json({ Error: error });
-    }
-  })
-  .delete("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
-    const userId = Number.parseInt(c.req.param("id"));
-    const body = await c.req.valid("json");
+  //     let message = "Nouvel favoris créé avec succès";
+  //     c.status(200);
+  //     return c.json({ message, newLink });
+  //   } catch (error) {
+  //     c.status(500);
+  //     return c.json({ Error: error });
+  //   }
+  // })
+  // .delete("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
+  //   const userId = Number.parseInt(c.req.param("id"));
+  //   const body = await c.req.valid("json");
 
-    try {
-      // Vérifier si l'email existe déjà
-      const existingUser = await prisma.user.findUnique({
-        where: {
-          id_user: userId,
-        },
-      });
-      const existingCourses = await prisma.cours.findUnique({
-        where: {
-          id_cours: body.id_cours,
-        },
-      });
+  //   try {
+  //     // Vérifier si l'email existe déjà
+  //     const existingUser = await prisma.user.findUnique({
+  //       where: {
+  //         id_user: userId,
+  //       },
+  //     });
+  //     const existingCourses = await prisma.cours.findUnique({
+  //       where: {
+  //         id_cours: body.id_cours,
+  //       },
+  //     });
 
-      if (!existingUser) {
-        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-        c.status(401);
-        return c.json({
-          message: "L'utilisateur n'existe pas",
-        });
-      }
-      if (!existingCourses) {
-        // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-        c.status(401);
-        return c.json({
-          message: "Le cours n'existe pas",
-        });
-      }
+  //     if (!existingUser) {
+  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+  //       c.status(401);
+  //       return c.json({
+  //         message: "L'utilisateur n'existe pas",
+  //       });
+  //     }
+  //     if (!existingCourses) {
+  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
+  //       c.status(401);
+  //       return c.json({
+  //         message: "Le cours n'existe pas",
+  //       });
+  //     }
 
-      // Créer un nouvel utilisateur
-      const newLink = await prisma.usersFav.deleteMany({
-        where: {
-          userId: existingUser.id_user,
-          coursId: existingCourses.id_cours,
-        },
-      });
+  //     // Créer un nouvel utilisateur
+  //     const newLink = await prisma.usersFav.deleteMany({
+  //       where: {
+  //         userId: existingUser.id_user,
+  //         coursId: existingCourses.id_cours,
+  //       },
+  //     });
 
-      let message = "Nouvel favoris créé avec succès";
-      c.status(200);
-      return c.json({ message, newLink });
-    } catch (error) {
-      c.status(500);
-      return c.json({ Error: error });
-    }
-  })
+  //     let message = "Nouvel favoris créé avec succès";
+  //     c.status(200);
+  //     return c.json({ message, newLink });
+  //   } catch (error) {
+  //     c.status(500);
+  //     return c.json({ Error: error });
+  //   }
+  // })
 
   .delete("/:id{[0-9]+}", async (c) => {
     const userId = Number.parseInt(c.req.param("id"));

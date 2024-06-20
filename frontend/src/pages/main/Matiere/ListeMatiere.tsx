@@ -21,20 +21,30 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function ListeClasseFiliere() {
-  const { filiereName } = useParams<{ filiereName?: string }>();
+export default function ListeMatiere() {
+  const { classeName } = useParams<{ classeName?: string }>();
 
-  type ClasseFiliere = {
-    nomFiliere: string;
+  type enseignant = {
+    nom: string;
+    prenom: string;
   };
 
-  type Classe = {
-    id_classe: number;
+  type Matiere = {
+    id_matiere: number;
+    nom: string;
+    description: string;
+    enseignant: enseignant;
+    lecon: number;
+    evaluations: number;
+    classMatiere: classeMatiere;
+  };
+
+  type classeMatiere = {
+    classes: classes;
+  };
+  type classes = {
     nomClasse: string;
-    classeMatiere: number;
-    classeFiliere: ClasseFiliere;
   };
-
   type User = {
     id_user: number;
     nom: string;
@@ -44,7 +54,7 @@ export default function ListeClasseFiliere() {
   };
 
   const [actualUser, setActualUser] = useState<User | null>(null);
-  const [classes, setClasses] = useState<Classe[]>([]);
+  const [matieres, setMatieres] = useState<Matiere[]>([]);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
@@ -52,7 +62,7 @@ export default function ListeClasseFiliere() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const filieresPerPage = 6;
+  const MatieresPerPage = 6;
 
   const getActualUser = async () => {
     if (!userCookie) {
@@ -89,23 +99,25 @@ export default function ListeClasseFiliere() {
 
   const getClasses = async () => {
     try {
-      const req = await fetch(`http://localhost:5173/api/classe`);
+      const req = await fetch(`http://localhost:5173/api/matiere`);
       const data = await req.json();
 
-      let classes: Classe[] = data.classes.map((classe: any) => ({
-        id_classe: classe.id_classe,
-        nomClasse: classe.nomClasse,
-        classeMatiere: classe.classeMatiere.length,
-        classeFiliere: classe.classeFiliere,
+      let matieres: Matiere[] = data.Matiere.map((matiere: any) => ({
+        id_matiere: matiere.id_matiere,
+        nom: matiere.nom,
+        description: matiere.description,
+        enseignant: matiere.enseignant,
+        lecon: matiere.lecon.length,
+        evaluations: matiere.evaluations.length,
       }));
 
-      if (filiereName) {
-        classes = classes.filter(
-          (classe) => classe.classeFiliere.nomFiliere === filiereName
+      if (classeName) {
+        matieres = matieres.filter(
+          (matiere) => matiere.classMatiere.classes.nomClasse === classeName
         );
       }
 
-      setClasses(classes);
+      setMatieres(matieres);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -118,27 +130,27 @@ export default function ListeClasseFiliere() {
     // Fetch user data
     getActualUser();
     getClasses();
-  }, [filiereName]);
+  }, [classeName]);
 
   // Calculate start and end indices
-  const startIndex = (currentPage - 1) * filieresPerPage;
-  const endIndex = startIndex + filieresPerPage;
+  const startIndex = (currentPage - 1) * MatieresPerPage;
+  const endIndex = startIndex + MatieresPerPage;
 
   // Get current filieres
-  const currentFilieres = classes.slice(startIndex, endIndex);
+  const currentMatieres = matieres.slice(startIndex, endIndex);
 
   // Change page
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&
-      pageNumber <= Math.ceil(classes.length / filieresPerPage)
+      pageNumber <= Math.ceil(matieres.length / MatieresPerPage)
     ) {
       setCurrentPage(pageNumber);
     }
   };
 
-  const handleCardClick = (classeName: string) => {
-    navigate(`/ListeMatiere/${classeName}`);
+  const handleCardClick = (filiereName: string) => {
+    navigate(`/filiere/${filiereName}`);
   };
 
   return (
@@ -158,29 +170,30 @@ export default function ListeClasseFiliere() {
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
-              {classes.length === 0 ? (
+              {matieres.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
                   Pas encore de classe !!!
                 </p>
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {currentFilieres.map((filiere) => (
+                    {currentMatieres.map((matiere) => (
                       <Card
-                        key={filiere.id_classe}
-                        onClick={() => handleCardClick(filiere.nomClasse)}
+                        key={matiere.id_matiere}
+                        onClick={() => handleCardClick(matiere.nom)}
                         className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
                         style={{ width: "200px" }}
                       >
                         <CardHeader className="flex flex-row gap-4 items-center pb-2">
                           <div className="flex flex-col">
                             <CardTitle className="text-base">
-                              {filiere.nomClasse === ""
+                              {matiere.nom === ""
                                 ? "Aucune personne connectée"
-                                : filiere.nomClasse}
+                                : matiere.nom}
                             </CardTitle>
                             <CardDescription>
-                              Nombre de Matiere: {filiere.classeMatiere}
+                              Nombre de Lecons: {matiere.lecon}  
+                              Nombre d'Evaluations: {matiere.evaluations}
                             </CardDescription>
                           </div>
                         </CardHeader>
@@ -195,7 +208,9 @@ export default function ListeClasseFiliere() {
                         />
                       </PaginationItem>
                       {Array.from(
-                        { length: Math.ceil(classes.length / filieresPerPage) },
+                        {
+                          length: Math.ceil(matieres.length / MatieresPerPage),
+                        },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
                             <PaginationLink

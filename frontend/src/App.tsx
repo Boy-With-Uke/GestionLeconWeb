@@ -3,17 +3,18 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Acceuil from "./pages/Acceuil";
 import Connexion from "./pages/Connexion";
+import FiliereDetails from "./pages/FilieresDetails";
 import Inscription from "./pages/Inscription";
 import Profil from "./pages/Profil";
 import Test from "./pages/Test";
 import Test2 from "./pages/Test2";
-import { ListeUser } from "./pages/main/ListeUser";
-import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
 import AjoutClasse from "./pages/main/Classe/AjoutClasse";
-import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
-import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
-import FiliereDetails from "./pages/FilieresDetails";
 import ListeClasseFiliere from "./pages/main/Classe/ListeClasseFiliere";
+import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
+import { ListeUser } from "./pages/main/ListeUser";
+import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
+import ListeMatiere from "./pages/main/Matiere/ListeMatiere";
+import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -30,11 +31,14 @@ function App() {
           <Route path="/AjoutClasse" element={<AjoutClasse />} />
           <Route path="/AjoutMatiere" element={<AjoutMatiere />} />
           <Route path="/ListeFiliere" element={<ListeFiliere />} />
+
           <Route path="/ListeClasseFiliere" element={<ListeClasseFiliere />} />
           <Route
             path="/ListeClasseFiliere/:filiereName"
             element={<ListeClasseFiliere />}
           />
+          <Route path="/ListeMatiere/:className" element={<ListeMatiere />} />
+          <Route path="/ListeMatiere" element={<ListeMatiere />} />
 
           <Route path="/filiere/:filiereName" element={<FiliereDetails />} />
         </Routes>

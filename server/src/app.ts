@@ -7,6 +7,7 @@ import { subjectRoutes } from "./routes/Matiere";
 import { coursesRoutes } from "./routes/Cours";
 import { filieresRoutes } from "./routes/Filiere";
 import { statRoutes } from "./routes/Stat";
+import { LessonRoutes } from "./routes/Lecon";
 const app = new Hono();
 
 app.use("*", logger());
@@ -18,7 +19,8 @@ app
   .route("/matiere", subjectRoutes)
   .route("/cours", coursesRoutes)
   .route("/filiere", filieresRoutes)
-  .route("/stat", statRoutes);
+  .route("/stat", statRoutes)
+  .route("/lesson", LessonRoutes);
 
 app.use("/static/*", serveStatic({ root: "./frontend/dist" }));
 app.get("*", serveStatic({ path: "frontend/dist/index.html" }));

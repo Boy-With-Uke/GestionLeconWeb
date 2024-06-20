@@ -40,7 +40,31 @@ export const subjectRoutes = new Hono()
         id_matiere: true,
         nom: true,
         description: true,
-        enseignantDelaMatiere: true,
+        enseignant: {
+          select: {
+            nom: true,
+            prenom: true,
+          },
+        },
+        lecon: {
+          select: {
+            lessons: {
+              select: {
+                titre: true,
+              },
+            },
+          },
+        },
+
+        evaluations: {
+          select: {
+            evaluations: {
+              select: {
+                titre: true,
+              },
+            },
+          },
+        },
         classeMatiere: {
           select: {
             classes: {
@@ -107,7 +131,7 @@ export const subjectRoutes = new Hono()
           nom: body.nom,
         },
       });
-      if (!existingMatiere) {
+      if (existingMatiere) {
         c.status(401);
         return c.json({
           message: "Matiere deja existante",
