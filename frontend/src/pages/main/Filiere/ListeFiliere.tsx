@@ -66,15 +66,7 @@ export default function ListeFiliere() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
-        console.log(actualUser);
-        if (data.user.niveauAccess !== "ADMIN") {
-          toast({
-            variant: "destructive",
-            title: `Erreur`,
-            description: `Ressources indisponibles pour votre niveau d'accès`,
-          });
-          navigate("/");
-        }
+       
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
