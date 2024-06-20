@@ -51,6 +51,7 @@ export const subjectRoutes = new Hono()
             lessons: {
               select: {
                 titre: true,
+                type:true
               },
             },
           },
@@ -102,6 +103,17 @@ export const subjectRoutes = new Hono()
     c.status(200);
     return c.json({ matiere });
   })
+  .get("/names", async (c) => {
+    const matieres = await prisma.matiere.findMany({
+      select: {
+        id_matiere:true,
+        nom: true,
+      },
+    });
+    c.status(200);
+    return c.json({matieres})
+  })
+
   .post("/", zValidator("json", postMatiereSchema), async (c) => {
     const body = await c.req.valid("json");
     try {

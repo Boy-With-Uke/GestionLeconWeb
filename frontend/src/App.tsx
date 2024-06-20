@@ -10,11 +10,13 @@ import Test from "./pages/Test";
 import Test2 from "./pages/Test2";
 import AjoutClasse from "./pages/main/Classe/AjoutClasse";
 import ListeClasseFiliere from "./pages/main/Classe/ListeClasseFiliere";
+import AjoutEvaluation from "./pages/main/Cours/Evaluations/AjoutEvaluations";
+import AjoutLecon from "./pages/main/Cours/Lecon/AjoutLecon";
 import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
+import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 import { ListeUser } from "./pages/main/ListeUser";
 import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
 import ListeMatiere from "./pages/main/Matiere/ListeMatiere";
-import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -39,6 +41,8 @@ function App() {
           />
           <Route path="/ListeMatiere/:className" element={<ListeMatiere />} />
           <Route path="/ListeMatiere" element={<ListeMatiere />} />
+          <Route path="/AjoutLecon" element={<AjoutLecon />} />
+          <Route path="/AjoutEvaluation" element={<AjoutEvaluation />} />
 
           <Route path="/filiere/:filiereName" element={<FiliereDetails />} />
         </Routes>

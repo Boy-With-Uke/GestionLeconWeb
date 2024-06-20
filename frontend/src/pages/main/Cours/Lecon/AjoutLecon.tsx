@@ -1,7 +1,5 @@
 "use client";
-import ClassComboId from "@/components/ClassComboId";
-import EnseignantCombo from "@/components/EnseignantCombo";
-import FiliereCombo from "@/components/FiliereCombo";
+import MatiereCombo from "@/components/MatiereCombo";
 import OrbitingLoader from "@/components/OrbitingLoader";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/navbar";
@@ -12,7 +10,6 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -25,21 +22,20 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
 const formSchema = z.object({
-  nomMatiere: z.string().min(3, {
-    message: "Le nom de la matiere doit etre au minimum 3 caracteres",
+  titre: z.string().min(3, {
+    message: "Le titre de la leçon doit être au minimum 3 caractères",
   }),
-  description: z.string().min(5, {
-    message: "La description de la matiere doit etre au minimum 3 caracteres",
+  matiere: z.number().min(1, {
+    message: "Vous devez choisir une matiere",
   }),
-  classeId: z.number().min(1, {
-    message: "Veillez selectioner une classe",
-  }),
-  nomFiliere: z.string().min(1, {
-    message: "Vous devez selectionner le nom de la filiere",
-  }),
-  idProf: z.number().min(1, { message: "Veillez selectioner le professeur" }),
+  file: z
+    .instanceof(FileList)
+    .refine((files) => files.length === 1, "Veuillez télécharger un fichier"),
 });
-export default function AjoutMatiere() {
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
+export default function AjoutLecon() {
   type User = {
     id_user: string;
     nom: string;
@@ -53,25 +49,28 @@ export default function AjoutMatiere() {
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [selectedFiliere, setSelectedFiliere] = useState("");
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nomMatiere: "",
-      description: "",
-      classeId: 0,
-      nomFiliere: "",
-      idProf: 0,
+      titre: "",
+      matiere: 0,
+      file: {} as FileList, // Initialiser le champ du fichier
     },
   });
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files;
+    form.setValue("file", file || ({} as FileList));
+  };
+
   // 1. Define your form
   const getActualUser = async () => {
     if (!userCookie) {
       toast({
         variant: "destructive",
         title: `Erreur`,
-        description: "Vous devez vous connecter pour acceder a cette ressource",
+        description: "Vous devez vous connecter pour accéder à cette ressource",
       });
       navigate("/");
       return;
@@ -90,7 +89,7 @@ export default function AjoutMatiere() {
           toast({
             variant: "destructive",
             title: `Erreur`,
-            description: ` Ressources indisponibles pour votre niveau d'acces`,
+            description: `Ressources indisponibles pour votre niveau d'accès`,
           });
           navigate("/");
         }
@@ -99,19 +98,37 @@ export default function AjoutMatiere() {
       }
     }
   };
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+  const onSubmit = async (values: FormSchemaType) => {
+    const allowedExtensions = ["pdf"];
+    const fileExtension = values.file[0].name.split(".").pop()?.toLowerCase();
+
+    if (
+      fileExtension === undefined ||
+      !allowedExtensions.includes(fileExtension)
+    ) {
+      toast({
+        variant: "destructive",
+        title: `Erreur`,
+        description: `Extension de fichier non valide`,
+      });
+      return;
+    }
+    const actualDate = new Date();
+    const isoString = actualDate.toISOString();
+    const yearMonthDayHourMinSec = isoString.substring(0, 19).replace("T", "_");
+    const fileName = `Lesson-${values.titre}-${yearMonthDayHourMinSec}.${fileExtension}`;
+    const formData = new FormData();
+    formData.append("file", values.file[0]);
+    formData.append("filename", fileName);
+    formData.append("titre", values.titre);
+    formData.append("matiere", values.matiere.toString());
+    formData.append("type", "LESSON");
+
     try {
-      const req = await fetch(`http://localhost:5173/api/matiere`, {
+      const req = await fetch(`http://localhost:5173/api/lesson`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nom: values.nomMatiere,
-          description: values.description,
-          enseignantDelaMatiere: values.idProf,
-          id_classe: values.classeId,
-        }),
+        body: formData,
       });
 
       const data = await req.json();
@@ -120,12 +137,12 @@ export default function AjoutMatiere() {
         toast({
           variant: "destructive",
           title: `Erreur`,
-          description: data.message || "Matiere deja existante",
+          description: data.message || "Lecon déjà existante",
         });
       } else if (req.status === 200) {
         toast({
-          title: `Success`,
-          description: data.message || " Nouvelle Matiere créé avec succès",
+          title: `Succès`,
+          description: data.message || "Nouvelle lecon créée avec succès",
         });
       } else {
         toast({
@@ -145,6 +162,7 @@ export default function AjoutMatiere() {
     }
     console.log(values);
   };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -156,6 +174,7 @@ export default function AjoutMatiere() {
     // Clear the timer if the component unmounts
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <>
       {isLoading ? (
@@ -182,99 +201,58 @@ export default function AjoutMatiere() {
                     >
                       <FormField
                         control={form.control}
-                        name="nomMatiere"
+                        name="titre"
                         render={({ field }) => (
                           <FormItem>
                             <FormControl>
                               <Input
-                                placeholder="Nom de la nouvelle matiere"
+                                placeholder="Nom de la nouvelle leçon"
                                 {...field}
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer le nom de la nouvelle Matiere.
+                              Veuillez entrer le nom de la leçon.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
                       <FormField
                         control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <Input
-                                placeholder="Description de la nouvelle filiere"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer une description de la nouvelle Matiere.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="nomFiliere"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <FiliereCombo
-                                onFiliereSelect={(filiere) => {
-                                  field.onChange(filiere);
-                                  setSelectedFiliere(filiere);
-                                }}
-                              />
-                            </FormControl>
-                            <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer la filiere de cette Matiere.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="classeId"
+                        name="matiere"
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <ClassComboId
-                                queryParam={selectedFiliere}
-                                onSelect={(classe) => field.onChange(classe)} // Ajout de la fonction de rappel
-                              />
-                            </FormControl>
-                            <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer la classe d'attribution de cette
-                              Matiere.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="idProf"
-                        render={({ field }) => (
-                          <FormItem className="flex-1">
-                            <FormControl>
-                              <EnseignantCombo
-                                onSelect={(enseignant) =>
-                                  field.onChange(enseignant)
+                              <MatiereCombo
+                                onSelect={(matiereId) =>
+                                  field.onChange(matiereId)
                                 } // Ajout de la fonction de rappel
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
                               Veuillez entrer la classe d'attribution de cette
-                              Matiere.
+                              Matière.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            onChange={handleFileChange}
+                            accept=".pdf"
+                          />
+                        </FormControl>
+                        <FormDescription className="text-gray-900 dark:text-white">
+                          Veuillez télécharger le fichier de la leçon.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+
                       <Button type="submit" className="w-full">
                         Valider
                       </Button>

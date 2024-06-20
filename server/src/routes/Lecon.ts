@@ -32,21 +32,37 @@ export const LessonRoutes = new Hono()
           id_matiere: parseInt(matiere as string),
         },
       });
-      if(!existingMatiere){
+      if (!existingMatiere) {
         c.status(401);
         return c.json({
           message: "Matiere non existante",
         });
       }
 
-      const existingLesson = await prisma.lecon.findUnique({where:{
-        titre: titre
-      }})
+      let existingLessonOrEva;
+      if (type === "LESSON") {
+        existingLessonOrEva = await prisma.lecon.findFirst({
+          where: {
+            titre: titre,
+            type: "LESSON",
+          },
+        });
+      } else if (type === "EVALUATION") {
+        existingLessonOrEva = await prisma.lecon.findFirst({
+          where: {
+            titre: titre,
+            type: "EVALUATION",
+          },
+        });
+      }
 
-      if(existingLesson){
+      if (existingLessonOrEva) {
         c.status(401);
         return c.json({
-          message: "Lecon existe déjà",
+          message:
+            type === "LESSON"
+              ? "Leçon déjà existante"
+              : "Évaluation déjà existante",
         });
       }
 
@@ -74,7 +90,10 @@ export const LessonRoutes = new Hono()
 
       c.status(200);
       return c.json({
-        message: "Nouvelle lecon ajouter avec success",
+        message:
+          type === "LESSON"
+            ? "Nouvelle lecon ajouter avec succes"
+            : "Nouvelle evaluations ajouter avec succes",
         newLesson,
       });
     } catch (error) {

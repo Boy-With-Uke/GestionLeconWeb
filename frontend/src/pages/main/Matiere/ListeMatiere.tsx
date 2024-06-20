@@ -190,7 +190,7 @@ export default function ListeMatiere() {
                                 : matiere.nom}
                             </CardTitle>
                             <CardDescription>
-                              Nombre de Lecons: {matiere.lecon}  
+                              Nombre de Lecons+Evaluations: {matiere.lecon}  
                             </CardDescription>
                           </div>
                         </CardHeader>

@@ -1,5 +1,6 @@
 import ClassComboId from "@/components/ClassComboId";
 import EnseignantCombo from "@/components/EnseignantCombo";
+import MatiereCombo from "@/components/MatiereCombo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -53,8 +54,8 @@ export default function Test() {
         queryParam="Informatique"
         onSelect={(classe) => setTest(classe)}
       />
-      <EnseignantCombo onSelect={(enseignant) => setTest2(enseignant)} />
-      <p>{test}</p>
+      <MatiereCombo onSelect={(matiereId) => setTest2(matiereId)} />
+      <p>{test2}</p>
     </>
   );
 }

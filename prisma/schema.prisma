@@ -59,7 +59,7 @@ model Classe {
 
 model Lecon {
   id_lecon              Int                     @unique @default(autoincrement())
-  titre                 String                  @unique
+  titre                 String
   contenue              String
   type                  String                  @default("LESSON")
   utilisateurquiSuivent usersFavLecon[]
