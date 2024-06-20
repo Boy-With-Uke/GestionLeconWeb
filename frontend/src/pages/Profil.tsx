@@ -96,7 +96,7 @@ export default function Profil() {
                 <CardItem translateZ="100" className="mt-4 w-full">
                   <CardHeader className="flex justify-center items-center pb-2 mt-8">
                     <img
-                      src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${actualUser?.email}${actualUser?.nom}`}
+                      src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${actualUser?.email}${actualUser?.nom}`}
                       alt="user avatar"
                       className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
                     />

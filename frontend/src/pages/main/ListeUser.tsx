@@ -30,7 +30,6 @@ export const ListeUser = () => {
         description: "Vous devez vous connecter pour acceder a cette ressource",
       });
       navigate("/");
-      return;
     } else {
       try {
         const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);

@@ -23,7 +23,7 @@ export default function MiniProfil({ nom, prenom, email }: MiniProfilProps) {
           <Avatar>
             <AvatarImage
               alt=""
-              src={`https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${email}${nom}`}
+              src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${email}${nom}`}
             />
             <AvatarFallback>Profil</AvatarFallback>
           </Avatar>
