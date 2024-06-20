@@ -55,16 +55,6 @@ export const subjectRoutes = new Hono()
             },
           },
         },
-
-        evaluations: {
-          select: {
-            evaluations: {
-              select: {
-                titre: true,
-              },
-            },
-          },
-        },
         classeMatiere: {
           select: {
             classes: {

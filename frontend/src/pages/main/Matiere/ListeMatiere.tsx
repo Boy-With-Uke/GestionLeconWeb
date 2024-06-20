@@ -35,7 +35,6 @@ export default function ListeMatiere() {
     description: string;
     enseignant: enseignant;
     lecon: number;
-    evaluations: number;
     classMatiere: classeMatiere;
   };
 
@@ -108,7 +107,6 @@ export default function ListeMatiere() {
         description: matiere.description,
         enseignant: matiere.enseignant,
         lecon: matiere.lecon.length,
-        evaluations: matiere.evaluations.length,
       }));
 
       if (classeName) {
@@ -193,7 +191,6 @@ export default function ListeMatiere() {
                             </CardTitle>
                             <CardDescription>
                               Nombre de Lecons: {matiere.lecon}  
-                              Nombre d'Evaluations: {matiere.evaluations}
                             </CardDescription>
                           </div>
                         </CardHeader>

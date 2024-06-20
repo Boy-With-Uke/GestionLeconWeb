@@ -8,33 +8,31 @@ datasource db {
 }
 
 model User {
-  id_user           Int                 @unique @default(autoincrement())
+  id_user           Int             @unique @default(autoincrement())
   nom               String
   prenom            String
-  email             String              @unique
+  email             String          @unique
   motDePasse        String
   classeUtilisateur Int
-  classe            Classe?             @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
+  classe            Classe?         @relation(fields: [classeUtilisateur], references: [id_classe], onDelete: Cascade, onUpdate: Cascade)
   coursUtilisateur  Int?
-  niveauAccess      Role                @default(USER)
+  niveauAccess      Role            @default(USER)
   lessons           usersFavLecon[]
-  evaluations       usersFavEvalution[]
   Matiere           Matiere[]
 }
 
 model Matiere {
-  id_matiere            Int                          @unique @default(autoincrement())
-  nom                   String                       @unique
+  id_matiere            Int                     @unique @default(autoincrement())
+  nom                   String                  @unique
   description           String
   enseignantDelaMatiere Int
-  enseignant            User                         @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
+  enseignant            User                    @relation(fields: [enseignantDelaMatiere], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
   classeMatiere         matiereDeLaClasse[]
-  evaluations           matiereContenantEvaluation[]
   lecon                 matiereContenantLecon[]
 }
 
 model matiereContenantLecon {
-  courses    Matiere  @relation(fields: [matieresId], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
+  matiere    Matiere  @relation(fields: [matieresId], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
   matieresId Int
   lessons    Lecon    @relation(fields: [lessonId], references: [id_lecon], onDelete: Cascade, onUpdate: Cascade)
   lessonId   Int
@@ -42,17 +40,6 @@ model matiereContenantLecon {
 
   @@unique([matieresId, lessonId])
   @@map("matiereContenantLecon")
-}
-
-model matiereContenantEvaluation {
-  courses       Matiere    @relation(fields: [matieresId], references: [id_matiere], onDelete: Cascade, onUpdate: Cascade)
-  matieresId    Int
-  evaluations   Evaluation @relation(fields: [evaluationsId], references: [id_evaluation])
-  evaluationsId Int
-  assignedAt    DateTime   @default(now())
-
-  @@unique([matieresId, evaluationsId])
-  @@map("matiereContenantEvaluation")
 }
 
 model Filiere {
@@ -70,20 +57,11 @@ model Classe {
   classeFiliere Filiere             @relation(fields: [filiere], references: [id_filiere], onDelete: Cascade, onUpdate: Cascade)
 }
 
-model Evaluation {
-  id_evaluation         Int                          @unique @default(autoincrement())
-  titre                 String
-  description           String
-  typeEvaluation        Type                         @default(Controle)
-  dateLimite            DateTime
-  utilisateurquiSuivent usersFavEvalution[]
-  coursEvaluation       matiereContenantEvaluation[]
-}
-
 model Lecon {
   id_lecon              Int                     @unique @default(autoincrement())
-  titre                 String
+  titre                 String                  @unique
   contenue              String
+  type                  String                  @default("LESSON")
   utilisateurquiSuivent usersFavLecon[]
   matiereLesson         matiereContenantLecon[]
 }
@@ -108,18 +86,6 @@ model usersFavLecon {
 
   @@unique([userId, lessonId])
   @@map("usersFavLecon")
-}
-
-model usersFavEvalution {
-  evaluations  Evaluation @relation(fields: [evaluationId], references: [id_evaluation], onDelete: Cascade, onUpdate: Cascade)
-  evaluationId Int
-  user         User       @relation(fields: [userId], references: [id_user], onDelete: Cascade, onUpdate: Cascade)
-  userId       Int
-
-  assignedAt DateTime @default(now())
-
-  @@unique([userId, evaluationId])
-  @@map("usersFavEvalution")
 }
 
 enum Type {
