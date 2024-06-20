@@ -32,13 +32,13 @@ export default function ListeCours() {
     matiere: matiere;
   };
 
-type Lesson = {
-  id_lecon: number;
-  titre: string;
-  contenue: string;
-  type: string;
-  matiereLesson: string[]; // Changer ici pour string[]
-};
+  type Lesson = {
+    id_lecon: number;
+    titre: string;
+    contenue: string;
+    type: string;
+    matiereLesson: string[]; // Changer ici pour string[]
+  };
 
   type User = {
     id_user: number;
@@ -92,38 +92,38 @@ type Lesson = {
     }
   };
 
-const getLessons = async () => {
-  try {
-    const req = await fetch(`http://localhost:5173/api/lesson`);
-    const data = await req.json();
+  const getLessons = async () => {
+    try {
+      const req = await fetch(`http://localhost:5173/api/lesson`);
+      const data = await req.json();
 
-    let lessons: Lesson[] = data.lessons.map((lesson: any) => {
-      const matiereNames = lesson.matiereLesson.map(
-        (ml: any) => ml.matiere.nom
-      );
-      return {
-        id_lecon: lesson.id_lecon,
-        titre: lesson.titre,
-        contenue: lesson.contenue,
-        type: lesson.type,
-        matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
-      };
-    });
+      let lessons: Lesson[] = data.lessons.map((lesson: any) => {
+        const matiereNames = lesson.matiereLesson.map(
+          (ml: any) => ml.matiere.nom
+        );
+        return {
+          id_lecon: lesson.id_lecon,
+          titre: lesson.titre,
+          contenue: lesson.contenue,
+          type: lesson.type,
+          matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
+        };
+      });
 
-    if (subjectName) {
-      lessons = lessons.filter((lesson) =>
-        lesson.matiereLesson.includes(subjectName)
-      );
+      if (subjectName) {
+        lessons = lessons.filter((lesson) =>
+          lesson.matiereLesson.includes(subjectName)
+        );
+      }
+
+      setLessons(lessons);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error fetching classes data:", error);
     }
-
-    setLessons(lessons);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  } catch (error) {
-    console.error("Error fetching classes data:", error);
-  }
-};
+  };
   useEffect(() => {
     // Fetch user data
     getActualUser();
@@ -147,10 +147,9 @@ const getLessons = async () => {
     }
   };
 
-  const handleCardClick = (classeName: string) => {
-    navigate(`/ListeMatiere/${classeName}`);
+  const handleCardClick = (id: number) => {
+    navigate(`/View/${id}`);
   };
-
   return (
     <>
       {isLoading ? (
@@ -178,7 +177,7 @@ const getLessons = async () => {
                     {currentLessons.map((lesson) => (
                       <Card
                         key={lesson.id_lecon}
-                        onClick={() => handleCardClick(lesson.titre)}
+                        onClick={() => handleCardClick(lesson.id_lecon)}
                         className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
                         style={{ width: "250px" }}
                       >

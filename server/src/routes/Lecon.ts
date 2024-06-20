@@ -29,6 +29,31 @@ export const LessonRoutes = new Hono()
     c.status(200);
     return c.json({ lessons });
   })
+  .get("/:id", async (c) => {
+    const id = parseInt(c.req.param("id"));
+    const lessons = await prisma.lecon.findUnique({
+      where: {
+        id_lecon: id,
+      },
+      select: {
+        id_lecon: true,
+        titre: true,
+        contenue: true,
+        type: true,
+        matiereLesson: {
+          select: {
+            matiere: {
+              select: {
+                nom: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    c.status(200);
+    return c.json({ lessons });
+  })
   .post("/", async (c) => {
     const data = await c.req.formData();
     const file = data.get("file");

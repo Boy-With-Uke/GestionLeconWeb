@@ -139,8 +139,8 @@ export default function ListeEvaluation() {
     }
   };
 
-  const handleCardClick = (classeName: string) => {
-    navigate(`/ListeMatiere/${classeName}`);
+  const handleCardClick = (id: number) => {
+    navigate(`/View/${id}`);
   };
 
   return (
@@ -170,7 +170,7 @@ export default function ListeEvaluation() {
                     {currentLessons.map((lesson) => (
                       <Card
                         key={lesson.id_lecon}
-                        onClick={() => handleCardClick(lesson.titre)}
+                        onClick={() => handleCardClick(lesson.id_lecon)}
                         className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
                         style={{ width: "250px" }}
                       >
