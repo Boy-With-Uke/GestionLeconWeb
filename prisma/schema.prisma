@@ -93,6 +93,11 @@ enum Type {
   Examen
 }
 
+enum Kerman {
+  TINAH
+  KERMAN
+}
+
 enum Role {
   USER
   ENSEIGNANT
