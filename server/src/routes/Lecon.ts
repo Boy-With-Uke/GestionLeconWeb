@@ -14,7 +14,7 @@ export const LessonRoutes = new Hono()
         id_lecon: true,
         titre: true,
         contenue: true,
-        type: true,
+        typeLecon:true,
         matiereLesson: {
           select: {
             matiere: {
@@ -39,7 +39,7 @@ export const LessonRoutes = new Hono()
         id_lecon: true,
         titre: true,
         contenue: true,
-        type: true,
+        typeLecon: true,
         matiereLesson: {
           select: {
             matiere: {
@@ -86,14 +86,14 @@ export const LessonRoutes = new Hono()
         existingLessonOrEva = await prisma.lecon.findFirst({
           where: {
             titre: titre,
-            type: "LESSON",
+            typeLecon: "LESSON",
           },
         });
       } else if (type === "EVALUATION") {
         existingLessonOrEva = await prisma.lecon.findFirst({
           where: {
             titre: titre,
-            type: "EVALUATION",
+            typeLecon: "EVALUATION",
           },
         });
       }
@@ -117,7 +117,7 @@ export const LessonRoutes = new Hono()
         data: {
           titre: titre || "",
           contenue: `/Pdf/Lecon/${fileName}`,
-          type: type || "",
+          typeLecon: type || "",
         },
       });
 

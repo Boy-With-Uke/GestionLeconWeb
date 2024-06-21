@@ -152,7 +152,7 @@ export default function AjoutLecon() {
         });
       }
     } catch (error) {
-      console.error("Erreur lors de la connexion:", error);
+      console.error("Erreur:", error);
       toast({
         variant: "destructive",
         title: `Erreur`,

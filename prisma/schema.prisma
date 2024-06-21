@@ -61,7 +61,7 @@ model Lecon {
   id_lecon              Int                     @unique @default(autoincrement())
   titre                 String
   contenue              String
-  type                  String                  @default("LESSON")
+  typeLecon                  String                  @default("LESSON")
   utilisateurquiSuivent usersFavLecon[]
   matiereLesson         matiereContenantLecon[]
 }
