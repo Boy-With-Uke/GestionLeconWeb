@@ -1,15 +1,15 @@
+import { About } from "@/components/About";
+import { Foire } from "@/components/FAQ";
+import { Features } from "@/components/Features";
+import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/Hero";
+import { HowItWorks } from "@/components/HowItWorks";
+import OrbitingLoader from "@/components/OrbitingLoader";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { Services } from "@/components/Services";
 import Navbar from "@/components/navbar";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Features } from "@/components/Features";
-import { Services } from "@/components/Services";
-import { FAQ } from "@/components/FAQ";
-import { Footer } from "@/components/Footer";
-import { ScrollToTop } from "@/components/ScrollToTop";
 
 export default function Acceuil() {
   type User = {
@@ -80,7 +80,7 @@ export default function Acceuil() {
             <HowItWorks />
             <Features />
             <Services />
-            <FAQ />
+            <Foire />
             <Footer />
             <ScrollToTop />
           </div>
