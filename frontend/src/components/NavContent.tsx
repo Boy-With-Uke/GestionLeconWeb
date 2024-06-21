@@ -74,7 +74,7 @@ export default function NavContent() {
                 <NavigationMenuLink asChild>
                   <a
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-primary to-white dark:from-primary dark:to-dark:bg-slate-900 p-6 no-underline outline-none focus:shadow-md"
-                    href="/"
+                    href="/ListeCours"
                   >
                     <Icons.logo className="h-6 w-6" />
                     <div className="mb-2 mt-4 text-lg font-medium">
