@@ -19,7 +19,7 @@ import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
 import ListeMatiere from "./pages/main/Matiere/ListeMatiere";
 import ListeCours from "./pages/main/Cours/ListeCours";
 import ListeLecon from "./pages/main/Cours/Lecon/ListeLecon";
-import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEaluations";
+import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEvaluations";
 import ViewCours from "./pages/main/Cours/ViewCours";
 function App() {
   return (

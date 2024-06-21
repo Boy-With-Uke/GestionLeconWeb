@@ -22,8 +22,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function ListeLecon() {
-  
-
   type matiere = {
     nom: string;
   };
@@ -37,7 +35,7 @@ export default function ListeLecon() {
     titre: string;
     contenue: string;
     typeLecon: string;
-    matiereLesson: string[]; // Changer ici pour string[]
+    matiereLesson: string[];
   };
 
   type User = {
@@ -78,7 +76,6 @@ export default function ListeLecon() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
-        
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -88,9 +85,14 @@ export default function ListeLecon() {
   const getLessons = async () => {
     try {
       const req = await fetch(`http://localhost:5173/api/lesson`);
+      if (!req.ok) {
+        console.error("Failed to fetch lessons data:", req.statusText);
+        return;
+      }
       const data = await req.json();
+      const res = data.lessons;
 
-      let lessons: Lesson[] = data.lessons.map((lesson: any) => {
+      let lessonsGeted: Lesson[] = res.map((lesson: any) => {
         const matiereNames = lesson.matiereLesson.map(
           (ml: any) => ml.matiere.nom
         );
@@ -99,33 +101,29 @@ export default function ListeLecon() {
           titre: lesson.titre,
           contenue: lesson.contenue,
           typeLecon: lesson.typeLecon,
-          matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
+          matiereLesson: matiereNames,
         };
       });
 
-      setLessons(lessons.filter((lesson) => lesson.typeLecon === "LESSON"));
-      console.log(lessons)
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+      setLessons(
+        lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
+      );
+      setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching classes data:", error);
+      console.error("Error fetching lessons data:", error);
     }
   };
+
   useEffect(() => {
-    // Fetch user data
     getActualUser();
     getLessons();
-  }, []);
+  }, [userCookie]);
 
-  // Calculate start and end indices
   const startIndex = (currentPage - 1) * lessonsPerPage;
   const endIndex = startIndex + lessonsPerPage;
 
-  // Get current filieres
   const currentLessons = lessons.slice(startIndex, endIndex);
 
-  // Change page
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&

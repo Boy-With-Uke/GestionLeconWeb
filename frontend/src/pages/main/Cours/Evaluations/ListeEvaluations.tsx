@@ -19,7 +19,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ListeEvaluation() {
   type matiere = {
@@ -35,7 +35,7 @@ export default function ListeEvaluation() {
     titre: string;
     contenue: string;
     typeLecon: string;
-    matiereLesson: string[]; // Changer ici pour string[]
+    matiereLesson: string[];
   };
 
   type User = {
@@ -76,7 +76,6 @@ export default function ListeEvaluation() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
-     
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -86,9 +85,14 @@ export default function ListeEvaluation() {
   const getLessons = async () => {
     try {
       const req = await fetch(`http://localhost:5173/api/lesson`);
+      if (!req.ok) {
+        console.error("Failed to fetch evaluations data:", req.statusText);
+        return;
+      }
       const data = await req.json();
+      const res = data.lessons;
 
-      let lessons: Lesson[] = data.lessons.map((lesson: any) => {
+      let lessonsGeted: Lesson[] = res.map((lesson: any) => {
         const matiereNames = lesson.matiereLesson.map(
           (ml: any) => ml.matiere.nom
         );
@@ -96,33 +100,30 @@ export default function ListeEvaluation() {
           id_lecon: lesson.id_lecon,
           titre: lesson.titre,
           contenue: lesson.contenue,
-          typtypeLecon: lesson.typeLecon,
-          matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
+          typeLecon: lesson.typeLecon,
+          matiereLesson: matiereNames,
         };
       });
 
-      setLessons(lessons.filter((lesson) => lesson.typeLecon === "EVALUATION"));
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+      setLessons(
+        lessonsGeted.filter((lesson) => lesson.typeLecon === "EVALUATION")
+      );
+      setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching classes data:", error);
+      console.error("Error fetching evaluations data:", error);
     }
   };
+
   useEffect(() => {
-    // Fetch user data
     getActualUser();
     getLessons();
-  }, []);
+  }, [userCookie]);
 
-  // Calculate start and end indices
   const startIndex = (currentPage - 1) * lessonsPerPage;
   const endIndex = startIndex + lessonsPerPage;
 
-  // Get current filieres
   const currentLessons = lessons.slice(startIndex, endIndex);
 
-  // Change page
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&
@@ -155,7 +156,7 @@ export default function ListeEvaluation() {
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
               {lessons.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore de Lessons !!!
+                  Pas encore d'Evaluations !!!
                 </p>
               ) : (
                 <>
