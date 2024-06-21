@@ -59,7 +59,7 @@ export const LessonRoutes = new Hono()
     const file = data.get("file");
     const fileName = data.get("filename") as string;
     const titre = data.get("titre") as string;
-    const type = data.get("type") as string;
+    const type = data.get("typeLecon") as string;
     const matiere = data.get("matiere");
 
     if (!file || !(file instanceof File)) {

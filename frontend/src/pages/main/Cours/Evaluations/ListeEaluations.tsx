@@ -34,7 +34,7 @@ export default function ListeEvaluation() {
     id_lecon: number;
     titre: string;
     contenue: string;
-    type: string;
+    typeLecon: string;
     matiereLesson: string[]; // Changer ici pour string[]
   };
 
@@ -96,12 +96,12 @@ export default function ListeEvaluation() {
           id_lecon: lesson.id_lecon,
           titre: lesson.titre,
           contenue: lesson.contenue,
-          type: lesson.type,
+          typtypeLecon: lesson.typeLecon,
           matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
         };
       });
 
-      setLessons(lessons.filter((lesson) => lesson.type === "EVALUATION"));
+      setLessons(lessons.filter((lesson) => lesson.typeLecon === "EVALUATION"));
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -175,7 +175,7 @@ export default function ListeEvaluation() {
                                 : lesson.titre}
                             </CardTitle>
                             <CardDescription>
-                              Type de cours: {lesson.type}
+                              Type de cours: {lesson.typeLecon}
                             </CardDescription>
                           </div>
                         </CardHeader>

@@ -23,7 +23,7 @@ import { z } from "zod";
 
 const formSchema = z.object({
   titre: z.string().min(3, {
-    message: "Le titre de l'evaluation doit être au minimum 3 caractères",
+    message: "Le titre de la leçon doit être au minimum 3 caractères",
   }),
   matiere: z.number().min(1, {
     message: "Vous devez choisir une matiere",
@@ -117,13 +117,13 @@ export default function AjoutEvaluation() {
     const actualDate = new Date();
     const isoString = actualDate.toISOString();
     const yearMonthDayHourMinSec = isoString.substring(0, 19).replace("T", "_");
-    const fileName = `Evaluation-${values.titre}-${yearMonthDayHourMinSec}.${fileExtension}`;
+    const fileName = `Lesson-${values.titre}-${yearMonthDayHourMinSec}.${fileExtension}`;
     const formData = new FormData();
     formData.append("file", values.file[0]);
     formData.append("filename", fileName);
     formData.append("titre", values.titre);
     formData.append("matiere", values.matiere.toString());
-    formData.append("type", "EVALUATION");
+    formData.append("typeLecon", "EVALUATION");
 
     try {
       const req = await fetch(`http://localhost:5173/api/lesson`, {
@@ -137,12 +137,12 @@ export default function AjoutEvaluation() {
         toast({
           variant: "destructive",
           title: `Erreur`,
-          description: data.message || "Evaluation déjà existante",
+          description: data.message || "Lecon déjà existante",
         });
       } else if (req.status === 200) {
         toast({
           title: `Succès`,
-          description: data.message || "Nouvelle evaluation créée avec succès",
+          description: data.message || "Nouvelle lecon créée avec succès",
         });
       } else {
         toast({
@@ -152,7 +152,7 @@ export default function AjoutEvaluation() {
         });
       }
     } catch (error) {
-      console.error("Erreur lors de la connexion:", error);
+      console.error("Erreur:", error);
       toast({
         variant: "destructive",
         title: `Erreur`,
@@ -206,12 +206,12 @@ export default function AjoutEvaluation() {
                           <FormItem>
                             <FormControl>
                               <Input
-                                placeholder="Nom de la nouvelle Evaluation"
+                                placeholder="Nom de la nouvelle leçon"
                                 {...field}
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer le nom de l'evaluation.
+                              Veuillez entrer le nom de la leçon.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -231,8 +231,8 @@ export default function AjoutEvaluation() {
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer la matieres d'attribution de cette
-                              Evaluations.
+                              Veuillez entrer la classe d'attribution de cette
+                              Matière.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

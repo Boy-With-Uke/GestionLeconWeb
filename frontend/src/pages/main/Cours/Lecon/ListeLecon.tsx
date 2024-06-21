@@ -36,7 +36,7 @@ export default function ListeLecon() {
     id_lecon: number;
     titre: string;
     contenue: string;
-    type: string;
+    typeLecon: string;
     matiereLesson: string[]; // Changer ici pour string[]
   };
 
@@ -98,12 +98,13 @@ export default function ListeLecon() {
           id_lecon: lesson.id_lecon,
           titre: lesson.titre,
           contenue: lesson.contenue,
-          type: lesson.type,
+          typeLecon: lesson.typeLecon,
           matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
         };
       });
 
-      setLessons(lessons.filter((lesson) => lesson.type === "LESSON"));
+      setLessons(lessons.filter((lesson) => lesson.typeLecon === "LESSON"));
+      console.log(lessons)
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -177,7 +178,7 @@ export default function ListeLecon() {
                                 : lesson.titre}
                             </CardTitle>
                             <CardDescription>
-                              Type de cours: {lesson.type}
+                              Type de cours: {lesson.typeLecon}
                             </CardDescription>
                           </div>
                         </CardHeader>

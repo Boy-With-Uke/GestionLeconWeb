@@ -123,7 +123,7 @@ export default function AjoutLecon() {
     formData.append("filename", fileName);
     formData.append("titre", values.titre);
     formData.append("matiere", values.matiere.toString());
-    formData.append("type", "LESSON");
+    formData.append("typeLecon", "LESSON");
 
     try {
       const req = await fetch(`http://localhost:5173/api/lesson`, {

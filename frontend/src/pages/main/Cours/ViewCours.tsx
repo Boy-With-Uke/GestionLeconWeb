@@ -30,7 +30,7 @@ export default function ViewCours() {
     id_lecon: number;
     titre: string;
     contenue: string;
-    type: string;
+    typeLecon: string;
     matiereLesson: matiereLesson[];
   };
 
@@ -94,7 +94,7 @@ export default function ViewCours() {
         id_lecon: lessonData.id_lecon,
         titre: lessonData.titre,
         contenue: lessonData.contenue,
-        type: lessonData.type,
+        typeLecon: lessonData.typeLecon,
         matiereLesson: lessonData.matiereLesson,
       };
 
@@ -163,7 +163,7 @@ export default function ViewCours() {
                         {cours.matiereLesson
                           .map((ml) => ml.matiere.nom)
                           .join(", ")}
-                        , {cours.type.toLocaleLowerCase()}
+                        , {cours.typeLecon.toLocaleLowerCase()}
                       </CardDescription>
                     </div>
                   </div>
