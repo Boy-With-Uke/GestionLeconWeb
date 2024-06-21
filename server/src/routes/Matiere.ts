@@ -51,7 +51,7 @@ export const subjectRoutes = new Hono()
             lessons: {
               select: {
                 titre: true,
-                type:true
+                typeLecon:true
               },
             },
           },
