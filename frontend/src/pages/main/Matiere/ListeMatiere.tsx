@@ -82,7 +82,6 @@ export default function ListeMatiere() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
-     
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -109,6 +108,7 @@ export default function ListeMatiere() {
       }
 
       setMatieres(matieres);
+      console.log(matieres);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -183,7 +183,7 @@ export default function ListeMatiere() {
                                 : matiere.nom}
                             </CardTitle>
                             <CardDescription>
-                              Nombre de Lecons+Evaluations: {matiere.lecon}  
+                              Nombre de Lecons+Evaluations: {matiere.lecon}
                             </CardDescription>
                           </div>
                         </CardHeader>
