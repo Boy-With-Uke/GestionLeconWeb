@@ -14,12 +14,41 @@ export const LessonRoutes = new Hono()
         id_lecon: true,
         titre: true,
         contenue: true,
-        typeLecon:true,
+        typeLecon: true,
         matiereLesson: {
           select: {
             matiere: {
               select: {
                 nom: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    c.status(200);
+    return c.json({ lessons });
+  })
+  .get("/favoris/:id", async (c) => {
+    const id = parseInt(c.req.param("id"));
+    const lessons = await prisma.usersFavLecon.findMany({
+      where: {
+        userId: id,
+      },
+      select: {
+        lessons: {
+          select: {
+            id_lecon: true,
+            titre: true,
+            contenue: true,
+            typeLecon: true,
+            matiereLesson: {
+              select: {
+                matiere: {
+                  select: {
+                    nom: true,
+                  },
+                },
               },
             },
           },

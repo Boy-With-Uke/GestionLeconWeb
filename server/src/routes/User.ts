@@ -28,7 +28,7 @@ const updateteUserSchema = userSchema.omit({
   niveauAccess: true,
 });
 const postUserFav = z.object({
-  id_cours: z.number(),
+  id_lecon: z.number(),
 });
 
 const connexionUserSchema = postUserSchema.omit({
@@ -69,7 +69,28 @@ export const userRoutes = new Hono()
               },
             },
           },
-        }
+        },
+        lessons: {
+          select: {
+            lessons: {
+              select: {
+                id_lecon: true,
+                titre: true,
+                contenue: true,
+                typeLecon: true,
+                matiereLesson: {
+                  select: {
+                    matiere: {
+                      select: {
+                        nom: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
@@ -94,6 +115,27 @@ export const userRoutes = new Hono()
               classeFiliere: {
                 select: {
                   nomFiliere: true,
+                },
+              },
+            },
+          },
+          lessons: {
+            select: {
+              lessons: {
+                select: {
+                  id_lecon: true,
+                  titre: true,
+                  contenue: true,
+                  typeLecon: true,
+                  matiereLesson: {
+                    select: {
+                      matiere: {
+                        select: {
+                          nom: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },
@@ -177,102 +219,75 @@ export const userRoutes = new Hono()
       return c.json({ Error: error });
     }
   })
-  // .post("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
-  //   const userId = Number.parseInt(c.req.param("id"));
-  //   const body = await c.req.valid("json");
+  .post("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
+    const userId = Number.parseInt(c.req.param("id"));
+    const body = await c.req.valid("json");
 
-  //   try {
-  //     // Vérifier si l'email existe déjà
-  //     const existingUser = await prisma.user.findUnique({
-  //       where: {
-  //         id_user: userId,
-  //       },
-  //     });
-  //     const existingCourses = await prisma.cours.findUnique({
-  //       where: {
-  //         id_cours: body.id_cours,
-  //       },
-  //     });
+    try {
+      // Vérifier si l'utilisateur existe
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          id_user: userId,
+        },
+      });
+      // Vérifier si la leçon existe
+      const existingLesson = await prisma.lecon.findUnique({
+        where: {
+          id_lecon: body.id_lecon,
+        },
+      });
 
-  //     if (!existingUser) {
-  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-  //       c.status(401);
-  //       return c.json({
-  //         message: "L'utilisateur n'existe pas",
-  //       });
-  //     }
-  //     if (!existingCourses) {
-  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-  //       c.status(401);
-  //       return c.json({
-  //         message: "Le cours n'existe pas",
-  //       });
-  //     }
+      if (!existingUser || !existingLesson) {
+        c.status(401);
+        return c.json({
+          message: !existingUser
+            ? "L'utilisateur n'existe pas"
+            : "Le cours n'existe pas",
+        });
+      }
 
-  //     // Créer un nouvel utilisateur
-  //     const newLink = await prisma.usersFav.create({
-  //       data: {
-  //         user: { connect: { id_user: existingUser.id_user } },
-  //         courses: { connect: { id_cours: existingCourses.id_cours } },
-  //       },
-  //     });
+      // Vérifier si le lien existe déjà
+      const existingLink = await prisma.usersFavLecon.findUnique({
+        where: {
+          userId_lessonId: {
+            userId: existingUser.id_user,
+            lessonId: existingLesson.id_lecon,
+          },
+        },
+      });
 
-  //     let message = "Nouvel favoris créé avec succès";
-  //     c.status(200);
-  //     return c.json({ message, newLink });
-  //   } catch (error) {
-  //     c.status(500);
-  //     return c.json({ Error: error });
-  //   }
-  // })
-  // .delete("/fav/:id{[0-9]+}", zValidator("json", postUserFav), async (c) => {
-  //   const userId = Number.parseInt(c.req.param("id"));
-  //   const body = await c.req.valid("json");
+      if (existingLink) {
+        // Supprimer le lien si il existe
+        await prisma.usersFavLecon.delete({
+          where: {
+            userId_lessonId: {
+              userId: existingUser.id_user,
+              lessonId: existingLesson.id_lecon,
+            },
+          },
+        });
 
-  //   try {
-  //     // Vérifier si l'email existe déjà
-  //     const existingUser = await prisma.user.findUnique({
-  //       where: {
-  //         id_user: userId,
-  //       },
-  //     });
-  //     const existingCourses = await prisma.cours.findUnique({
-  //       where: {
-  //         id_cours: body.id_cours,
-  //       },
-  //     });
+        let message = "Favori supprimé avec succès";
+        c.status(200);
+        return c.json({ message });
+      } else {
+        // Créer un nouveau lien
+        const newLink = await prisma.usersFavLecon.create({
+          data: {
+            user: { connect: { id_user: existingUser.id_user } },
+            lessons: { connect: { id_lecon: existingLesson.id_lecon } },
+          },
+        });
 
-  //     if (!existingUser) {
-  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-  //       c.status(401);
-  //       return c.json({
-  //         message: "L'utilisateur n'existe pas",
-  //       });
-  //     }
-  //     if (!existingCourses) {
-  //       // Si l'email existe, renvoyer un statut 402 avec un message d'erreur
-  //       c.status(401);
-  //       return c.json({
-  //         message: "Le cours n'existe pas",
-  //       });
-  //     }
-
-  //     // Créer un nouvel utilisateur
-  //     const newLink = await prisma.usersFav.deleteMany({
-  //       where: {
-  //         userId: existingUser.id_user,
-  //         coursId: existingCourses.id_cours,
-  //       },
-  //     });
-
-  //     let message = "Nouvel favoris créé avec succès";
-  //     c.status(200);
-  //     return c.json({ message, newLink });
-  //   } catch (error) {
-  //     c.status(500);
-  //     return c.json({ Error: error });
-  //   }
-  // })
+        let message = "Nouveau favori créé avec succès";
+        c.status(200);
+        return c.json({ message, newLink });
+      }
+    } catch (error) {
+      c.status(500);
+      return c.json({ Error: error });
+    }
+  })
 
   .delete("/:id{[0-9]+}", async (c) => {
     const userId = Number.parseInt(c.req.param("id"));

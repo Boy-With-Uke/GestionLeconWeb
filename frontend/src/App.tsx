@@ -21,6 +21,7 @@ import ListeCours from "./pages/main/Cours/ListeCours";
 import ListeLecon from "./pages/main/Cours/Lecon/ListeLecon";
 import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEvaluations";
 import ViewCours from "./pages/main/Cours/ViewCours";
+import ListeFavoris from "./pages/main/Cours/ListeFavoris";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -51,6 +52,7 @@ function App() {
           <Route path="/ListeCours/" element={<ListeCours />} />
           <Route path="/ListeLecon/" element={<ListeLecon />} />
           <Route path="/ListeEvaluation/" element={<ListeEvaluation />} />
+          <Route path="/ListeFavoris/" element={<ListeFavoris />} />
           <Route path="/View/:coursId" element={<ViewCours />} />
           <Route path="/filiere/:filiereName" element={<FiliereDetails />} />
         </Routes>

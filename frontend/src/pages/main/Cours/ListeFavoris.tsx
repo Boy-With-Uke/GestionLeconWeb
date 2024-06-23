@@ -21,7 +21,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function ListeEvaluationq() {
+export default function ListeFavoris66() {
   type matiere = {
     nom: string;
   };
@@ -84,9 +84,9 @@ export default function ListeEvaluationq() {
 
   const getLessons = async () => {
     try {
-      const req = await fetch(`http://localhost:5173/api/lesson`);
+      const req = await fetch(`http://localhost:5173/api/lesson/favoris/${actualUser?.id_user}`);
       if (!req.ok) {
-        console.error("Failed to fetch evaluations data:", req.statusText);
+        console.error("Failed to fetch lessons data:", req.statusText);
         return;
       }
       const data = await req.json();
@@ -106,11 +106,11 @@ export default function ListeEvaluationq() {
       });
 
       setLessons(
-        lessonsGeted.filter((lesson) => lesson.typeLecon === "EVALUATION")
+        lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
       );
       setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching evaluations data:", error);
+      console.error("Error fetching lessons data:", error);
     }
   };
 
@@ -156,7 +156,7 @@ export default function ListeEvaluationq() {
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
               {lessons.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore d'Evaluations !!!
+                  Pas encore de Lessons !!!
                 </p>
               ) : (
                 <>

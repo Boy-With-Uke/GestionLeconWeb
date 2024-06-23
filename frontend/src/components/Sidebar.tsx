@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import Cookies from "js-cookie";
-import { AlignJustify, Book, BookOpenText, CirclePlus } from "lucide-react";
+import { AlignJustify, Book, BookOpenText, CirclePlus, Heart } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import MiniProfil from "./MiniProfil";
@@ -389,6 +389,14 @@ export default function Sidebar() {
             </List>
           </AccordionBody>
         </Accordion>
+        <Link to={"/ListeFavoris"}>
+          <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
+            <ListItemPrefix>
+              <Heart className="w-5 h-5" />
+            </ListItemPrefix>
+            Liste des vos favors
+          </ListItem>
+        </Link>
         {actualUser?.niveauAccess === "ADMIN" ? (
           <Link to={"/ListeUser"}>
             <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
