@@ -21,31 +21,31 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+type Matiere = {
+  nom: string;
+};
+
+type MatiereLesson = {
+  matiere: Matiere;
+};
+
+type Lesson = {
+  id_lecon: number;
+  titre: string;
+  contenue: string;
+  typeLecon: string;
+  matiereLesson: string[];
+};
+
+type User = {
+  id_user: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  niveauAccess: string;
+};
+
 export default function ListeFavoris66() {
-  type matiere = {
-    nom: string;
-  };
-
-  type matiereLesson = {
-    matiere: matiere;
-  };
-
-  type Lesson = {
-    id_lecon: number;
-    titre: string;
-    contenue: string;
-    typeLecon: string;
-    matiereLesson: string[];
-  };
-
-  type User = {
-    id_user: number;
-    nom: string;
-    prenom: string;
-    email: string;
-    niveauAccess: string;
-  };
-
   const [actualUser, setActualUser] = useState<User | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const userCookie = Cookies.get("user");
@@ -76,47 +76,40 @@ export default function ListeFavoris66() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
+
+        const lessonsContainer = data.user.lessons;
+
+        let lessonsGeted: Lesson[] = lessonsContainer.map(
+          (lessonWrapper: any) => {
+            const lesson = lessonWrapper.lessons;
+            const matiereNames = lesson.matiereLesson.map(
+              (ml: any) => ml.matiere.nom
+            );
+            return {
+              id_lecon: lesson.id_lecon,
+              titre: lesson.titre,
+              contenue: lesson.contenue,
+              typeLecon: lesson.typeLecon,
+              matiereLesson: matiereNames,
+            };
+          }
+        );
+
+        setLessons(
+          lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
+        );
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+        // Indicate that loading is done
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
   };
 
-  const getLessons = async () => {
-    try {
-      const req = await fetch(`http://localhost:5173/api/lesson/favoris/${actualUser?.id_user}`);
-      if (!req.ok) {
-        console.error("Failed to fetch lessons data:", req.statusText);
-        return;
-      }
-      const data = await req.json();
-      const res = data.lessons;
-
-      let lessonsGeted: Lesson[] = res.map((lesson: any) => {
-        const matiereNames = lesson.matiereLesson.map(
-          (ml: any) => ml.matiere.nom
-        );
-        return {
-          id_lecon: lesson.id_lecon,
-          titre: lesson.titre,
-          contenue: lesson.contenue,
-          typeLecon: lesson.typeLecon,
-          matiereLesson: matiereNames,
-        };
-      });
-
-      setLessons(
-        lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
-      );
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching lessons data:", error);
-    }
-  };
-
   useEffect(() => {
     getActualUser();
-    getLessons();
   }, [userCookie]);
 
   const startIndex = (currentPage - 1) * lessonsPerPage;
@@ -156,7 +149,7 @@ export default function ListeFavoris66() {
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
               {lessons.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore de Lessons !!!
+                  Pas encore de Favoris !!!
                 </p>
               ) : (
                 <>

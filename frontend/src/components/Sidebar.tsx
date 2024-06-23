@@ -92,9 +92,9 @@ export default function Sidebar() {
             >
               <ListItemPrefix>
                 {open === 1 ? (
-                  <BookOpenText className="w-5 h-5" />
+                  <BookOpenText className="w-5 h-5 mr-3" />
                 ) : (
-                  <Book className="w-5 h-5" />
+                  <Book className="w-5 h-5 mr-3" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -146,9 +146,9 @@ export default function Sidebar() {
             >
               <ListItemPrefix>
                 {open === 2 ? (
-                  <BookOpenText className="w-5 h-5" />
+                  <BookOpenText className="w-5 h-5 mr-3" />
                 ) : (
-                  <Book className="w-5 h-5" />
+                  <Book className="w-5 h-5 mr-3" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -200,9 +200,9 @@ export default function Sidebar() {
             >
               <ListItemPrefix>
                 {open === 3 ? (
-                  <BookOpenText className="w-5 h-5" />
+                  <BookOpenText className="w-5 h-5 mr-3" />
                 ) : (
-                  <Book className="w-5 h-5" />
+                  <Book className="w-5 h-5 mr-3" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -254,9 +254,9 @@ export default function Sidebar() {
             >
               <ListItemPrefix>
                 {open === 4 ? (
-                  <BookOpenText className="w-5 h-5" />
+                  <BookOpenText className="w-5 h-5 mr-3" />
                 ) : (
-                  <Book className="w-5 h-5" />
+                  <Book className="w-5 h-5 mr-3" />
                 )}
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
@@ -288,9 +288,9 @@ export default function Sidebar() {
                     >
                       <ListItemPrefix>
                         {open2 === 1 ? (
-                          <BookOpenText className="w-5 h-5" />
+                          <BookOpenText className="w-5 h-5 mr-3" />
                         ) : (
-                          <Book className="w-5 h-5" />
+                          <Book className="w-5 h-5 mr-3" />
                         )}
                       </ListItemPrefix>
                       <Typography
@@ -348,9 +348,9 @@ export default function Sidebar() {
                     >
                       <ListItemPrefix>
                         {open2 === 2 ? (
-                          <BookOpenText className="w-5 h-5" />
+                          <BookOpenText className="w-5 h-5 mr-3" />
                         ) : (
-                          <Book className="w-5 h-5" />
+                          <Book className="w-5 h-5 mr-3" />
                         )}
                       </ListItemPrefix>
                       <Typography
@@ -392,16 +392,16 @@ export default function Sidebar() {
         <Link to={"/ListeFavoris"}>
           <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
             <ListItemPrefix>
-              <Heart className="w-5 h-5" />
+              <Heart className="w-5 h-5 mr-3" />
             </ListItemPrefix>
-            Liste des vos favors
+            Liste des vos favoris
           </ListItem>
         </Link>
         {actualUser?.niveauAccess === "ADMIN" ? (
           <Link to={"/ListeUser"}>
             <ListItem className="hover:bg-primary focus:text-primary dark:focus:bg-slate-900 focus:bg-white">
               <ListItemPrefix>
-                <UserCircleIcon className="w-5 h-5" />
+                <UserCircleIcon className="w-5 h-5 mr-3" />
               </ListItemPrefix>
               Liste des utilisateur
             </ListItem>

@@ -108,7 +108,11 @@ export default function ListeEvaluationq() {
       setLessons(
         lessonsGeted.filter((lesson) => lesson.typeLecon === "EVALUATION")
       );
-      setIsLoading(false);
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      // Indicate that loading is done
     } catch (error) {
       console.error("Error fetching evaluations data:", error);
     }

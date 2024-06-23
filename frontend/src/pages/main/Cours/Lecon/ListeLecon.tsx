@@ -108,7 +108,11 @@ export default function ListeLecon() {
       setLessons(
         lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
       );
-      setIsLoading(false);
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      // Indicate that loading is done
     } catch (error) {
       console.error("Error fetching lessons data:", error);
     }

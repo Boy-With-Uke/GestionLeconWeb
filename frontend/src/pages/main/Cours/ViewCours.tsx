@@ -6,17 +6,33 @@ import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import '../../../assets/css/fonts.css';
+import "../../../assets/css/fonts.css";
 // PDF
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 // Icons
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { CardDescription } from "@/components/ui/card";
-import { Heart, HeartFill } from "react-bootstrap-icons"; // Assurez-vous d'importer une icône de cœur appropriée
-
+import { Heart, HeartFill } from "react-bootstrap-icons";
+import "../../../assets/css/animations.css";
 export default function ViewCours() {
   const { coursId: coursId } = useParams<{ coursId?: string }>();
+
+  type Matiere = {
+    nom: string;
+  };
+
+  type MatiereLesson = {
+    matiere: Matiere;
+  };
+
+  type Lessonliste = {
+    id_lecon: number;
+    titre: string;
+    contenue: string;
+    typeLecon: string;
+    matiereLesson: string[];
+  };
 
   type matiere = {
     nom: string;
@@ -40,19 +56,18 @@ export default function ViewCours() {
     prenom: string;
     email: string;
     niveauAccess: string;
+    lessons: Lessonliste[];
   };
 
   const [actualUser, setActualUser] = useState<User | null>(null);
   const [cours, setCours] = useState<Lesson | null>(null);
   const userCookie = Cookies.get("user");
+  const [lessons, setLessons] = useState<Lessonliste[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isFavorite, setIsFavorite] = useState(false);
-
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-  };
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const getActualUser = async () => {
     if (!userCookie) {
@@ -73,9 +88,60 @@ export default function ViewCours() {
         const data = await res.json();
         const user: User = data.user;
         setActualUser(user);
-     
+
+        const lessonsContainer = data.user.lessons;
+
+        let lessonsGeted: Lessonliste[] = lessonsContainer.map(
+          (lessonWrapper: any) => {
+            const lesson = lessonWrapper.lessons;
+            const matiereNames = lesson.matiereLesson.map(
+              (ml: any) => ml.matiere.nom
+            );
+            return {
+              id_lecon: lesson.id_lecon,
+              titre: lesson.titre,
+              contenue: lesson.contenue,
+              typeLecon: lesson.typeLecon,
+              matiereLesson: matiereNames,
+            };
+          }
+        );
+
+        setLessons(
+          lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
+        );
+
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 2000);
+        // Indicate that loading is done// Indicate that loading is done
       } catch (error) {
         console.error("Error fetching user data:", error);
+      }
+    }
+  };
+
+  const setFavorite = async (id: number) => {
+    if (coursId) {
+      try {
+        const req = await fetch(`http://localhost:5173/api/user/fav/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_lecon: parseInt(coursId),
+          }),
+        });
+
+        // Toggle favorite state with animation
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setIsFavorite(!isFavorite);
+          setIsTransitioning(false);
+        }, 300); // Match duration with CSS animation duration
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -142,19 +208,27 @@ export default function ViewCours() {
                         {cours.titre.toUpperCase()}
                       </h1>
                       <button
-                        onClick={toggleFavorite}
+                        onClick={() => setFavorite(actualUser?.id_user ?? 0)}
                         className="flex items-center space-x-2 text-primary"
                       >
                         {isFavorite ? (
-                          <>
+                          <div
+                            className={`${
+                              isTransitioning ? "fade-exit" : "fade-enter"
+                            } flex items-center space-x-2`}
+                          >
                             <HeartFill className="text-primary" />
                             <span>Est déjà dans vos favoris</span>
-                          </>
+                          </div>
                         ) : (
-                          <>
+                          <div
+                            className={`${
+                              isTransitioning ? "fade-exit" : "fade-enter"
+                            } flex items-center space-x-2`}
+                          >
                             <Heart className="text-primary" />
-                            <span>Favoris</span>
-                          </>
+                            <span>Ajouter aux favoris</span>
+                          </div>
                         )}
                       </button>
                     </div>
@@ -168,9 +242,7 @@ export default function ViewCours() {
                     </div>
                   </div>
                   <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-                    <div
-                      className="pl-24 pr-24 pb-7 dark:border-primary h-[90%]"
-                    >
+                    <div className="pl-24 pr-24 pb-7 dark:border-primary h-[90%]">
                       <Viewer fileUrl={cours.contenue} />
                     </div>
                   </Worker>
