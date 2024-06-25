@@ -10,3 +10,15 @@
   font-weight: normal;
   font-style: normal;
 }
+.context-menu-container {
+  position: relative;
+}
+
+.context-menu-content {
+  position: absolute;
+  z-index: 50; /* ou tout autre valeur suffisamment élevée pour être au-dessus des autres éléments */
+  background-color: white; /* Pour rendre le menu contextuel visible */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Pour un effet d'ombre */
+  border-radius: 8px; /* Pour les coins arrondis */
+  padding: 16px; /* Pour l'espacement interne */
+}
