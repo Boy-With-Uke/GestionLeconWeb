@@ -2,11 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import OrbitingLoader from "@/components/OrbitingLoader";
 import Sidebar from "@/components/Sidebar";
+import DeleteForm from "@/components/forms/filiere-delete-form";
 import EditForm from "@/components/forms/filiere-edit-form";
 import IconMenu from "@/components/icon-menu";
+import Navbar from "@/components/navbar";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,23 +23,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Navbar from "@/components/navbar";
-import { useToast } from "@/components/ui/use-toast";
-import Cookies from "js-cookie";
-import "../../../assets/css/fonts.css";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationPrevious,
   PaginationLink,
   PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination";
-import DeleteForm from "@/components/forms/filiere-delete-form";
-import { type Filiere } from "@/types";
-import { type User } from "@/types";
+import { useToast } from "@/components/ui/use-toast";
+import { type Filiere, type User } from "@/types";
+import Cookies from "js-cookie";
+import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../../../assets/css/fonts.css";
 
 function Item({
   filiere,
