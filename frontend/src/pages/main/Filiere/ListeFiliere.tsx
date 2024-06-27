@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
@@ -38,24 +39,39 @@ import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/fonts.css";
+import { getActualUser } from "@/utils/function";
 
 function Item({
   filiere,
   getFilieres,
+  onClick,
 }: {
   filiere: Filiere;
   getFilieres: () => void;
+  onClick: () => void;
 }) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const userCookie = Cookies.get("user");
+  const [actualUser, setActualUser] = useState<User | null>(null);
 
-  const handleEditClick = () => {
+  useEffect(() => {
+    if (userCookie) {
+      getActualUser(userCookie, setActualUser, toast, navigate);
+    }
+  }, []);
+
+  const handleEditClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the click from propagating to the card
     setIsEditOpen(true);
     setMenuOpen(false); // Close the menu
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the click from propagating to the card
     setIsDeleteOpen(true);
     setMenuOpen(false); // Close the menu
   };
@@ -88,6 +104,7 @@ function Item({
       <Card
         className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 relative hover:shadow-xl duration-200 transition-all cursor-pointer"
         style={{ width: "200px" }}
+        onClick={onClick} // Attach the onClick handler here
       >
         <CardHeader className="flex flex-row gap-4 items-center pb-2">
           <div className="flex flex-col">
@@ -102,46 +119,53 @@ function Item({
           </div>
         </CardHeader>
 
-        <div className="absolute right-4 top-4 z-10">
-          <span>
-            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-                >
-                  <MoreVertical className="h-4 w-4" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[160px] z-50">
-                <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
-                  <button
-                    onClick={handleEditClick}
-                    className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
-                  >
-                    <IconMenu
-                      text="Edit"
-                      icon={<SquarePen className="h-4 w-4" />}
-                    />
-                  </button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
-                  <button
-                    onClick={handleDeleteClick}
-                    className="w-full justify-start flex text-red-500 rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
-                  >
-                    <IconMenu
-                      text="Delete"
-                      icon={<Trash2 className="h-4 w-4" />}
-                    />
-                  </button>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </span>
-        </div>
+        {actualUser?.niveauAccess === "ADMIN" ? (
+          <>
+            <div className="absolute right-4 top-4 z-10">
+              <span>
+                <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                      onClick={(e) => e.stopPropagation()} // Prevent click propagation to the card
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[160px] z-50">
+                    <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
+                      <button
+                        onClick={handleEditClick}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                      >
+                        <IconMenu
+                          text="Edit"
+                          icon={<SquarePen className="h-4 w-4" />}
+                        />
+                      </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
+                      <button
+                        onClick={handleDeleteClick}
+                        className="w-full justify-start flex text-red-500 rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                      >
+                        <IconMenu
+                          text="Delete"
+                          icon={<Trash2 className="h-4 w-4" />}
+                        />
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </span>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
       </Card>
     </>
   );
@@ -183,35 +207,9 @@ export default function ListeFiliere() {
         nomFiliere: filiere.nomFiliere,
         nombreClasse: filiere.classes.length,
       }));
-      console.log(filieres);
       setFilieres(filieres);
     } catch (error) {
       console.error("Error fetching filieres data:", error);
-    }
-  };
-
-  const getActualUser = async () => {
-    if (!userCookie) {
-      toast({
-        variant: "destructive",
-        title: `Erreur`,
-        description: "Vous devez vous connecter pour accéder à cette ressource",
-      });
-      navigate("/");
-      return;
-    } else {
-      try {
-        const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
-        if (!res.ok) {
-          console.error("Failed to fetch user data:", res.statusText);
-          return;
-        }
-        const data = await res.json();
-        const user: User = data.user;
-        setActualUser(user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
     }
   };
 
@@ -221,12 +219,17 @@ export default function ListeFiliere() {
     }, 2000);
 
     // Fetch user data
-    getActualUser();
+    if (userCookie) {
+      getActualUser(userCookie, setActualUser, toast, navigate);
+    }
     getFilieres();
 
     // Clear the timer if the component unmounts
     return () => clearTimeout(timer);
   }, []);
+  const handleCardClick = (filiereName: string) => {
+    navigate(`/ListeClasseFiliere/${filiereName}`);
+  };
 
   return (
     <>
@@ -250,6 +253,7 @@ export default function ListeFiliere() {
                   <Item
                     key={filiere.id_filiere}
                     filiere={filiere}
+                    onClick={() => handleCardClick(filiere.nomFiliere)}
                     getFilieres={getFilieres}
                   />
                 ))}
