@@ -208,24 +208,21 @@ export default function ListeFiliere() {
         nombreClasse: filiere.classes.length,
       }));
       setFilieres(filieres);
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
     } catch (error) {
       console.error("Error fetching filieres data:", error);
     }
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
     // Fetch user data
     if (userCookie) {
       getActualUser(userCookie, setActualUser, toast, navigate);
     }
     getFilieres();
-
-    // Clear the timer if the component unmounts
-    return () => clearTimeout(timer);
   }, []);
   const handleCardClick = (filiereName: string) => {
     navigate(`/ListeClasseFiliere/${filiereName}`);
@@ -258,7 +255,7 @@ export default function ListeFiliere() {
                   />
                 ))}
               </div>
-              <Pagination>
+              <Pagination className="mt-10">
                 <PaginationContent>
                   <PaginationItem>
                     <PaginationPrevious

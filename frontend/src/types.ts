@@ -11,3 +11,14 @@ export type User = {
   email: string;
   niveauAccess: string;
 };
+
+export type ClasseFiliere = {
+  nomFiliere: string;
+};
+
+export type Classe = {
+  id_classe: number;
+  nomClasse: string;
+  classeMatiere: number;
+  classeFiliere: ClasseFiliere;
+};
