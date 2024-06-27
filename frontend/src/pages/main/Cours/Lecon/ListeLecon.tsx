@@ -1,7 +1,7 @@
 "use client";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import Navbar from "@/components/main/navbar";
 import {
   Card,
   CardDescription,
@@ -19,7 +19,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ListeLecon() {
   type matiere = {

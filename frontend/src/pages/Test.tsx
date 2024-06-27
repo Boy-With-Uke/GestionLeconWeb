@@ -1,6 +1,5 @@
-import ClassComboId from "@/components/ClassComboId";
-import EnseignantCombo from "@/components/EnseignantCombo";
-import MatiereCombo from "@/components/MatiereCombo";
+import ClassComboId from "@/components/main/ClassComboId";
+import MatiereCombo from "@/components/main/MatiereCombo";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

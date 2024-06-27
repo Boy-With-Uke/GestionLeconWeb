@@ -1,6 +1,6 @@
-import { Footer } from "@/components/Footer";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Navbar from "@/components/navbar";
+import { Footer } from "@/components/main/Footer";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Navbar from "@/components/main/navbar";
 import { CardContainer, CardItem } from "@/components/ui/3d-card";
 import {
   Card,
@@ -53,10 +53,10 @@ export default function Profil() {
         setUserFiliere(data.user.classe.classeFiliere.nomFiliere);
         setFavorisCount(data.coursCount);
         const statusU = data.user.niveauAccess;
-        const status = statusU.toLowerCase()
+        const status = statusU.toLowerCase();
         const statusToUper = status.charAt(0).toUpperCase() + status.slice(1);
         setStatus(statusToUper);
-        console.log(statusToUper)
+        console.log(statusToUper);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

@@ -1,8 +1,8 @@
 "use client";
-import MatiereCombo from "@/components/MatiereCombo";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
+import MatiereCombo from "@/components/main/MatiereCombo";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import Navbar from "@/components/main/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,14 +14,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { type User } from "@/types";
+import { getActualUser } from "@/utils/function";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { type User } from "@/types";
-import { getActualUser } from "@/utils/function";
 
 const formSchema = z.object({
   titre: z.string().min(3, {

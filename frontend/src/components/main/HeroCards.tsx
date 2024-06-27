@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/card";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { FacebookIcon, Linkedin } from "lucide-react";
-import kerman from "../assets/Images/kerman.png";
+import kerman from "@/assets/Images/kerman.png";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LightBulbIcon } from "./Icons2";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export const HeroCards = () => {
   return (

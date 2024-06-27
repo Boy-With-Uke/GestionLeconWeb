@@ -1,13 +1,13 @@
-import { About } from "@/components/About";
-import { Foire } from "@/components/FAQ";
-import { Features } from "@/components/Features";
-import { Footer } from "@/components/Footer";
-import { Hero } from "@/components/Hero";
-import { HowItWorks } from "@/components/HowItWorks";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import { ScrollToTop } from "@/components/ScrollToTop";
-import { Services } from "@/components/Services";
-import Navbar from "@/components/navbar";
+import { About } from "@/components/main/About";
+import { Foire } from "@/components/main/FAQ";
+import { Features } from "@/components/main/Features";
+import { Footer } from "@/components/main/Footer";
+import { Hero } from "@/components/main/Hero";
+import { HowItWorks } from "@/components/main/HowItWorks";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import { ScrollToTop } from "@/components/main/ScrollToTop";
+import { Services } from "@/components/main/Services";
+import Navbar from "@/components/main/navbar";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 

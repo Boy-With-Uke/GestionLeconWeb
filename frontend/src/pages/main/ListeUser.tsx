@@ -1,7 +1,7 @@
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import UserTableContent from "@/components/UserTableContent";
-import Navbar from "@/components/navbar";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import UserTableContent from "@/components/main/UserTableContent";
+import Navbar from "@/components/main/navbar";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";

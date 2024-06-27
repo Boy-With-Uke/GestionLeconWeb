@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/main/theme-provider";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Acceuil from "./pages/Acceuil";
@@ -11,17 +11,17 @@ import Test2 from "./pages/Test2";
 import AjoutClasse from "./pages/main/Classe/AjoutClasse";
 import ListeClasseFiliere from "./pages/main/Classe/ListeClasseFiliere";
 import AjoutEvaluation from "./pages/main/Cours/Evaluations/AjoutEvaluations";
+import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEvaluations";
 import AjoutLecon from "./pages/main/Cours/Lecon/AjoutLecon";
+import ListeLecon from "./pages/main/Cours/Lecon/ListeLecon";
+import ListeCours from "./pages/main/Cours/ListeCours";
+import ListeFavoris from "./pages/main/Cours/ListeFavoris";
+import ViewCours from "./pages/main/Cours/ViewCours";
 import AjoutFiliere from "./pages/main/Filiere/AjoutFiliere";
 import ListeFiliere from "./pages/main/Filiere/ListeFiliere";
 import { ListeUser } from "./pages/main/ListeUser";
 import AjoutMatiere from "./pages/main/Matiere/AjoutMatiere";
 import ListeMatiere from "./pages/main/Matiere/ListeMatiere";
-import ListeCours from "./pages/main/Cours/ListeCours";
-import ListeLecon from "./pages/main/Cours/Lecon/ListeLecon";
-import ListeEvaluation from "./pages/main/Cours/Evaluations/ListeEvaluations";
-import ViewCours from "./pages/main/Cours/ViewCours";
-import ListeFavoris from "./pages/main/Cours/ListeFavoris";
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

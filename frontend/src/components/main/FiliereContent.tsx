@@ -1,35 +1,10 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@radix-ui/react-dialog";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import "@/assets/css/fonts.css";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-  Label,
-} from "@radix-ui/react-context-menu";
-import {
-  Button,
-  DialogFooter,
-  DialogHeader,
-  Input,
-} from "@material-tailwind/react";
-import { useToast } from "@/components/ui/use-toast";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
 import {
   Pagination,
   PaginationContent,
@@ -38,7 +13,29 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import "@/assets/css/fonts.css";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  Button,
+  DialogFooter,
+  DialogHeader,
+  Input,
+} from "@material-tailwind/react";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  Label,
+} from "@radix-ui/react-context-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@radix-ui/react-dialog";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function FiliereContent() {
   type Filiere = {

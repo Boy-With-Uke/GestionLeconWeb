@@ -3,13 +3,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
 import DeleteForm from "@/components/forms/classe-delete-form";
 import EditForm from "@/components/forms/classe-edit-form";
-import IconMenu from "@/components/icon-menu";
-import Navbar from "@/components/navbar";
-import { ResponsiveDialog } from "@/components/responsive-dialog";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import IconMenu from "@/components/main/icon-menu";
+import Navbar from "@/components/main/navbar";
+import { ResponsiveDialog } from "@/components/main/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,

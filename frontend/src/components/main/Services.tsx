@@ -1,6 +1,6 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { MagnifierIcon, WalletIcon, ChartIcon } from "./Icons2";
-import cubeLeg from "../assets/Images/cube-leg.png";
+import cubeLeg from "../../assets/Images/cube-leg.png";
+import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { ChartIcon, MagnifierIcon, WalletIcon } from "./Icons2";
 
 interface ServiceProps {
   title: string;

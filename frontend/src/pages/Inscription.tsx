@@ -1,11 +1,9 @@
 "use client";
-import { useToast } from "@/components/ui/use-toast";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import Navbar from "@/components/navbar";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import ClassCombo from "@/components/main/ClassCombo";
+import FiliereCombo from "@/components/main/FiliereCombo";
+import { Footer } from "@/components/main/Footer";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Navbar from "@/components/main/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,11 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import OrbitingLoader from "@/components/OrbitingLoader";
+import { useToast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { Footer } from "@/components/Footer";
-import FiliereCombo from "@/components/FiliereCombo";
-import ClassCombo from "@/components/ClassCombo";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { z } from "zod";
 
 const formSchema = z
   .object({

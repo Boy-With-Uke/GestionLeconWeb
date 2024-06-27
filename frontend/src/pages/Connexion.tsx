@@ -1,7 +1,7 @@
 "use client";
-import { Footer } from "@/components/Footer";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Navbar from "@/components/navbar";
+import { Footer } from "@/components/main/Footer";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Navbar from "@/components/main/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Form,

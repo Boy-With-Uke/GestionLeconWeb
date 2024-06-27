@@ -1,7 +1,7 @@
 "use client";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import Navbar from "@/components/main/navbar";
 import {
   Card,
   CardDescription,

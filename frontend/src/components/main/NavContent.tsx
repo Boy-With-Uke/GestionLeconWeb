@@ -3,8 +3,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import { cn } from "@/lib/utils";
-import { Icons } from "@/components/icons";
+import { Icons } from "@/components/main/icons";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,25 +13,23 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Liste des lecons",
     href: "/docs/primitives/alert-dialog",
-    description:
-      "Une liste de lecons faites par des enseignants chevronnes",
+    description: "Une liste de lecons faites par des enseignants chevronnes",
   },
   {
     title: "Liste des enseignants",
     href: "/docs/primitives/hover-card",
-    description:
-      "Les enseignants experimentees choisi par nos soins",
+    description: "Les enseignants experimentees choisi par nos soins",
   },
   {
     title: "Liste des matieres",
     href: "/docs/primitives/progress",
-    description:
-      "Les matieres que nos enseignants enseignent",
+    description: "Les matieres que nos enseignants enseignent",
   },
   {
     title: "Liste des evaluations",
@@ -42,8 +39,7 @@ const components: { title: string; href: string; description: string }[] = [
   {
     title: "Liste des cours",
     href: "/docs/primitives/tabs",
-    description:
-      "Les cours de chaque matieres que vous pouvez suivre",
+    description: "Les cours de chaque matieres que vous pouvez suivre",
   },
   {
     title: "Les contributteurs",

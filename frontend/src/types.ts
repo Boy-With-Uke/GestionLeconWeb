@@ -22,3 +22,23 @@ export type Classe = {
   classeMatiere: number;
   classeFiliere: ClasseFiliere;
 };
+export type enseignant = {
+  nom: string;
+  prenom: string;
+};
+
+export type Matiere = {
+  id_matiere: number;
+  nom: string;
+  description: string;
+  enseignant: enseignant;
+  lecon: number;
+  classMatiere: classeMatiere;
+};
+
+export type classeMatiere = {
+  classes: classes;
+};
+export type classes = {
+  nomClasse: string;
+};

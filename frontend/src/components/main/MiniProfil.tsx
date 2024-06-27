@@ -4,8 +4,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useNavigate } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 export type MiniProfilProps = {
   nom: string;
   prenom: string;
@@ -29,7 +29,9 @@ export default function MiniProfil({ nom, prenom, email }: MiniProfilProps) {
           </Avatar>
 
           <div className="flex flex-col">
-            <CardTitle className="text-base">{nom===''? ('Aucune personne connecter'):(`${nom} ${prenom}`)}</CardTitle>
+            <CardTitle className="text-base">
+              {nom === "" ? "Aucune personne connecter" : `${nom} ${prenom}`}
+            </CardTitle>
             <CardDescription>{email}</CardDescription>
           </div>
         </CardHeader>

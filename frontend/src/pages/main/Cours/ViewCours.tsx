@@ -1,7 +1,7 @@
 "use client";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import Navbar from "@/components/main/navbar";
 import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import "../../../assets/css/fonts.css";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 // Icons
-import { ScrollToTop } from "@/components/ScrollToTop";
+import { ScrollToTop } from "@/components/main/ScrollToTop";
 import { CardDescription } from "@/components/ui/card";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import "../../../assets/css/animations.css";

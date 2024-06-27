@@ -1,10 +1,10 @@
 "use client";
-import ClassComboId from "@/components/ClassComboId";
-import EnseignantCombo from "@/components/EnseignantCombo";
-import FiliereCombo from "@/components/FiliereCombo";
-import OrbitingLoader from "@/components/OrbitingLoader";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/navbar";
+import ClassComboId from "@/components/main/ClassComboId";
+import EnseignantCombo from "@/components/main/EnseignantCombo";
+import FiliereCombo from "@/components/main/FiliereCombo";
+import OrbitingLoader from "@/components/main/OrbitingLoader";
+import Sidebar from "@/components/main/Sidebar";
+import Navbar from "@/components/main/navbar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -12,10 +12,11 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { type User } from "@/types";
 import { getActualUser } from "@/utils/function";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
@@ -23,7 +24,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { type User } from "@/types";
 
 const formSchema = z.object({
   nomMatiere: z.string().min(3, {
@@ -41,7 +41,6 @@ const formSchema = z.object({
   idProf: z.number().min(1, { message: "Veillez selectioner le professeur" }),
 });
 export default function AjoutMatiere() {
-
   const [actualUser, setActualUser] = useState<User | null>(null);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
@@ -186,7 +185,8 @@ export default function AjoutMatiere() {
                               />
                             </FormControl>
                             <FormDescription className="text-gray-900 dark:text-white">
-                              Veuillez entrer une description de la nouvelle Matiere.
+                              Veuillez entrer une description de la nouvelle
+                              Matiere.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>

@@ -1,4 +1,4 @@
-import { PEOPLE } from "@/components/consts";
+import { PEOPLE } from "@/components/main/consts";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -18,4 +18,3 @@ export function getInitials(name: string): string {
 export function getPerson(id: string) {
   return PEOPLE.find((person) => person.id === id);
 }
-
