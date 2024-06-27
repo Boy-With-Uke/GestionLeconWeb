@@ -12,7 +12,9 @@ const classSchema = z.object({
 
 const postClassSchema = classSchema
   .omit({ id_classe: true })
-  .extend({ nomClasse: z.string() });
+  .extend({ nomFiliere: z.string() });
+
+const updateClassSchema = classSchema.omit({ id_classe: true });
 
 export const classesRoutes = new Hono()
   .get("/", async (c) => {
@@ -20,10 +22,10 @@ export const classesRoutes = new Hono()
       select: {
         id_classe: true,
         nomClasse: true,
-        classeFiliere:{
-          select:{
-            nomFiliere:true
-          }
+        classeFiliere: {
+          select: {
+            nomFiliere: true,
+          },
         },
         classeMatiere: {
           select: {
@@ -138,7 +140,7 @@ export const classesRoutes = new Hono()
       });
       const existingFiliere = await prisma.filiere.findUnique({
         where: {
-          nomFiliere: body.nomClasse,
+          nomFiliere: body.nomFiliere,
         },
       });
 
@@ -164,7 +166,7 @@ export const classesRoutes = new Hono()
           nomClasse: body.nomClasse,
           classeFiliere: {
             connect: {
-              nomFiliere: body.nomClasse,
+              nomFiliere: body.nomFiliere,
             },
           },
         },
@@ -209,7 +211,7 @@ export const classesRoutes = new Hono()
       return c.json({ Error: error });
     }
   })
-  .put("/:id{[0-9]+}", zValidator("json", postClassSchema), async (c) => {
+  .put("/:id{[0-9]+}", zValidator("json", updateClassSchema), async (c) => {
     const classId = Number.parseInt(c.req.param("id"));
     const body = await c.req.valid("json");
     try {

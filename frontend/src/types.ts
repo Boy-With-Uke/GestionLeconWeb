@@ -19,26 +19,29 @@ export type ClasseFiliere = {
 export type Classe = {
   id_classe: number;
   nomClasse: string;
-  classeMatiere: number;
   classeFiliere: ClasseFiliere;
+  classeMatiere: Matiere[];
 };
-export type enseignant = {
+
+export type Enseignant = {
   nom: string;
   prenom: string;
+};
+
+export type Lecon = {
+  titre: string;
+  typeLecon: string;
+};
+
+export type ClasseMatiere = {
+  classes: Classe;
 };
 
 export type Matiere = {
   id_matiere: number;
   nom: string;
   description: string;
-  enseignant: enseignant;
-  lecon: number;
-  classMatiere: classeMatiere;
-};
-
-export type classeMatiere = {
-  classes: classes;
-};
-export type classes = {
-  nomClasse: string;
+  enseignant: Enseignant;
+  lecon: Lecon[];
+  classeMatiere: ClasseMatiere[];
 };

@@ -112,7 +112,7 @@ function Item({
               {classe.nomClasse === "" ? "Aucune Classe" : classe.nomClasse}
             </CardTitle>
             <CardDescription>
-              Nombre de Matiere: {classe.classeMatiere}
+              Nombre de Matiere: {classe.classeMatiere.length}
             </CardDescription>
           </div>
         </CardHeader>
@@ -205,8 +205,8 @@ export default function ListeClasseFiliere() {
       let classes: Classe[] = data.classes.map((classe: any) => ({
         id_classe: classe.id_classe,
         nomClasse: classe.nomClasse,
-        classeMatiere: classe.classeMatiere.length,
-        classeFiliere: classe.classeFiliere,
+        classeMatiere: classe.classeMatiere, // Assurez-vous que cette propriété existe et est bien formatée
+        classeFiliere: classe.classeFiliere, // Assurez-vous que cette propriété existe et est bien formatée
       }));
 
       if (filiereName) {
@@ -252,42 +252,52 @@ export default function ListeClasseFiliere() {
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
-              <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
-                {currentClasses.map((classe) => (
-                  <Item
-                    key={classe.id_classe}
-                    classe={classe}
-                    onClick={() => handleCardClick(classe.nomClasse)}
-                    getClasses={getClasses}
-                  />
-                ))}
-              </div>
-              <Pagination className="mt-10">
-                <PaginationContent>
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => paginate(currentPage - 1)}
-                    />
-                  </PaginationItem>
-                  {Array.from(
-                    { length: Math.ceil(classes.length / classesPerPage) },
-                    (_, i) => (
-                      <PaginationItem key={i + 1}>
-                        <PaginationLink
-                          href="#"
-                          onClick={() => paginate(i + 1)}
-                          isActive={i + 1 === currentPage}
-                        >
-                          {i + 1}
-                        </PaginationLink>
+              {classes.length === 0 ? (
+                <p className="text-5xl dark:text-primary">
+                  Pas encore de classes !!!
+                </p>
+              ) : (
+                <>
+                  <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {currentClasses.map((classe) => (
+                      <Item
+                        key={classe.id_classe}
+                        classe={classe}
+                        onClick={() => handleCardClick(classe.nomClasse)}
+                        getClasses={getClasses}
+                      />
+                    ))}
+                  </div>
+                  <Pagination className="mt-10">
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => paginate(currentPage - 1)}
+                        />
                       </PaginationItem>
-                    )
-                  )}
-                  <PaginationItem>
-                    <PaginationNext onClick={() => paginate(currentPage + 1)} />
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
+                      {Array.from(
+                        { length: Math.ceil(classes.length / classesPerPage) },
+                        (_, i) => (
+                          <PaginationItem key={i + 1}>
+                            <PaginationLink
+                              href="#"
+                              onClick={() => paginate(i + 1)}
+                              isActive={i + 1 === currentPage}
+                            >
+                              {i + 1}
+                            </PaginationLink>
+                          </PaginationItem>
+                        )
+                      )}
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => paginate(currentPage + 1)}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -44,7 +44,7 @@ function App() {
             path="/ListeClasseFiliere/:filiereName"
             element={<ListeClasseFiliere />}
           />
-          <Route path="/ListeMatiere/:className" element={<ListeMatiere />} />
+          <Route path="/ListeMatiere/:classeName" element={<ListeMatiere />} />
           <Route path="/ListeMatiere" element={<ListeMatiere />} />
           <Route path="/AjoutLecon" element={<AjoutLecon />} />
           <Route path="/AjoutEvaluation" element={<AjoutEvaluation />} />
