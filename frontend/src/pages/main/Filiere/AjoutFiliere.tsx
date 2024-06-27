@@ -1,5 +1,6 @@
 "use client";
 import OrbitingLoader from "@/components/OrbitingLoader";
+import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/navbar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,13 +14,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { getActualUser } from "@/utils/function";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
-import Sidebar from "@/components/Sidebar";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { type User } from "@/types";
 
 const formSchema = z.object({
   nomFiliere: z.string().min(5, {
@@ -27,14 +29,6 @@ const formSchema = z.object({
   }),
 });
 export default function AjoutFiliere() {
-  type User = {
-    id_user: string;
-    nom: string;
-    prenom: string;
-    email: string;
-    niveauAccess: string;
-  };
-
   const [actualUser, setActualUser] = useState<User | null>(null);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
@@ -48,39 +42,6 @@ export default function AjoutFiliere() {
     },
   });
   // 1. Define your form
-  const getActualUser = async () => {
-    if (!userCookie) {
-      toast({
-        variant: "destructive",
-        title: `Erreur`,
-        description: "Vous devez vous connecter pour acceder a cette ressource",
-      });
-      navigate("/");
-      return;
-    } else {
-      try {
-        const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
-        if (!res.ok) {
-          console.error("Failed to fetch user data:", res.statusText);
-          return;
-        }
-        const data = await res.json();
-        const user: User = data.user;
-        setActualUser(user);
-        console.log(actualUser);
-        if (data.user.niveauAccess !== "ADMIN") {
-          toast({
-            variant: "destructive",
-            title: `Erreur`,
-            description: ` Ressources indisponibles pour votre niveau d'acces`,
-          });
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-  };
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const req = await fetch(`http://localhost:5173/api/filiere`, {
@@ -125,16 +86,31 @@ export default function AjoutFiliere() {
     console.log(values);
   };
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    const fetchUser = async () => {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      if (userCookie) {
+        await getActualUser(userCookie, setActualUser, toast, navigate);
+      }
+      return () => clearTimeout(timer);
+    };
 
-    // Fetch user data
-    getActualUser();
+    fetchUser();
+  }, [userCookie, toast, navigate]);
 
-    // Clear the timer if the component unmounts
-    return () => clearTimeout(timer);
-  }, []);
+  useEffect(() => {
+    if (!isLoading && actualUser) {
+      if (actualUser.niveauAccess !== "ADMIN") {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: `Ressources indisponibles pour votre niveau d'accès`,
+        });
+        navigate("/");
+      }
+    }
+  }, [isLoading, actualUser, navigate, toast]);
   return (
     <>
       {isLoading ? (

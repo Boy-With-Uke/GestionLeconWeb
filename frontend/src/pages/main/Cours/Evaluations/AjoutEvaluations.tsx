@@ -20,6 +20,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { type User } from "@/types";
+import { getActualUser } from "@/utils/function";
 
 const formSchema = z.object({
   titre: z.string().min(3, {
@@ -36,14 +38,6 @@ const formSchema = z.object({
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export default function AjoutEvaluation() {
-  type User = {
-    id_user: string;
-    nom: string;
-    prenom: string;
-    email: string;
-    niveauAccess: string;
-  };
-
   const [actualUser, setActualUser] = useState<User | null>(null);
   const userCookie = Cookies.get("user");
   const [isLoading, setIsLoading] = useState(true);
@@ -65,39 +59,6 @@ export default function AjoutEvaluation() {
   };
 
   // 1. Define your form
-  const getActualUser = async () => {
-    if (!userCookie) {
-      toast({
-        variant: "destructive",
-        title: `Erreur`,
-        description: "Vous devez vous connecter pour accéder à cette ressource",
-      });
-      navigate("/");
-      return;
-    } else {
-      try {
-        const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
-        if (!res.ok) {
-          console.error("Failed to fetch user data:", res.statusText);
-          return;
-        }
-        const data = await res.json();
-        const user: User = data.user;
-        setActualUser(user);
-        console.log(actualUser);
-        if (data.user.niveauAccess !== "ADMIN") {
-          toast({
-            variant: "destructive",
-            title: `Erreur`,
-            description: `Ressources indisponibles pour votre niveau d'accès`,
-          });
-          navigate("/");
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-  };
 
   const onSubmit = async (values: FormSchemaType) => {
     const allowedExtensions = ["pdf"];
@@ -162,18 +123,35 @@ export default function AjoutEvaluation() {
     }
     console.log(values);
   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+      if (userCookie) {
+        await getActualUser(userCookie, setActualUser, toast, navigate);
+      }
+      return () => clearTimeout(timer);
+    };
+
+    fetchUser();
+  }, [userCookie, toast, navigate]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-
-    // Fetch user data
-    getActualUser();
-
-    // Clear the timer if the component unmounts
-    return () => clearTimeout(timer);
-  }, []);
+    if (!isLoading && actualUser) {
+      if (
+        actualUser.niveauAccess !== "ADMIN" &&
+        actualUser.niveauAccess !== "ENSEIGNANT"
+      ) {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: `Ressources indisponibles pour votre niveau d'accès`,
+        });
+        navigate("/");
+      }
+    }
+  }, [isLoading, actualUser, navigate, toast]);
 
   return (
     <>
