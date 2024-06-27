@@ -1,36 +1,63 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+"use client";
 
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from "react";
 
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { Button } from "@/components/ui/button";
+import { Form } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { type Filiere } from "@/types";
+import { useToast } from "../ui/use-toast";
 
 const formSchema = z.object({
-  cardId: z.string(),
+  id: z.number(),
 });
 
 export default function DeleteForm({
-  cardId,
+  props,
   setIsOpen,
+  onSuccess,
 }: {
-  cardId: string;
+  props: Filiere;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  onSuccess: () => void;
 }) {
+  const filiere = props;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      cardId: cardId,
+      id: filiere?.id_filiere,
     },
   });
-
   const isLoading = form.formState.isSubmitting;
+  const { toast } = useToast();
 
   const onSubmit = async () => {
     try {
+      const req = await fetch(
+        `http://localhost:5173/api/filiere/${filiere.id_filiere}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(req);
+      const data = await req.json();
+      if (req.status === 200) {
+        toast({
+          title: `Success`,
+          description: data.message || `Suppresion reussi`,
+        });
+        onSuccess();
+      } else {
+        toast({
+          variant: "destructive",
+          title: `Erreur`,
+          description: `Erreur lors de la suppression`,
+        });
+      }
       setIsOpen(false);
     } catch (error) {
       console.log(error);
@@ -52,7 +79,7 @@ export default function DeleteForm({
             type="button"
             onClick={() => setIsOpen(false)}
           >
-            Cancel
+            Retour
           </Button>
           <Button
             size="lg"
@@ -63,7 +90,7 @@ export default function DeleteForm({
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Deleting
+                Supprimer
               </>
             ) : (
               <span>Delete</span>

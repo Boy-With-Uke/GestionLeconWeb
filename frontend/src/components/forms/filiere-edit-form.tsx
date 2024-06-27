@@ -14,13 +14,7 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useToast } from "../ui/use-toast";
-
-type Filiere = {
-  id_filiere: number;
-  nomFiliere: string;
-  nombreClasse: number;
-};
-
+import { type Filiere } from "@/types";
 const formSchema = z.object({
   name: z.string().min(1),
 });

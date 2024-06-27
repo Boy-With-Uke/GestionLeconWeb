@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useNavigate } from "react-router-dom";
@@ -34,28 +36,9 @@ import {
   PaginationLink,
   PaginationNext,
 } from "@/components/ui/pagination";
-
-type Person = {
-  id: string;
-  name: string;
-  role: string;
-  description: string;
-  image: string;
-};
-
-type Filiere = {
-  id_filiere: number;
-  nomFiliere: string;
-  nombreClasse: number;
-};
-
-type User = {
-  id_user: number;
-  nom: string;
-  prenom: string;
-  email: string;
-  niveauAccess: string;
-};
+import DeleteForm from "@/components/forms/filiere-delete-form";
+import { type Filiere } from "@/types";
+import { type User } from "@/types";
 
 function Item({
   filiere,
@@ -66,10 +49,16 @@ function Item({
 }) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleEditClick = (event: React.MouseEvent) => {
-    event.preventDefault(); // Prevents DropdownMenu.Content from closing
+  const handleEditClick = () => {
     setIsEditOpen(true);
+    setMenuOpen(false); // Close the menu
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteOpen(true);
+    setMenuOpen(false); // Close the menu
   };
 
   return (
@@ -77,12 +66,24 @@ function Item({
       <ResponsiveDialog
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        title="Edit Filiere"
+        title={`Modification de la Filière: ${filiere.nomFiliere}`}
       >
         <EditForm
           props={filiere}
           setIsOpen={setIsEditOpen}
           onSuccess={getFilieres}
+        />
+      </ResponsiveDialog>
+      <ResponsiveDialog
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        title={`Suppression de la Filière: ${filiere.nomFiliere}`}
+        description={`Êtes-vous sûr de vouloir supprimer la filière "${filiere.nomFiliere}" ?`}
+      >
+        <DeleteForm
+          props={filiere}
+          onSuccess={getFilieres}
+          setIsOpen={setIsDeleteOpen}
         />
       </ResponsiveDialog>
       <Card
@@ -93,7 +94,7 @@ function Item({
           <div className="flex flex-col">
             <CardTitle className="text-base">
               {filiere.nomFiliere === ""
-                ? "Aucune filiere"
+                ? "Aucune filière"
                 : filiere.nomFiliere}
             </CardTitle>
             <CardDescription>
@@ -104,7 +105,7 @@ function Item({
 
         <div className="absolute right-4 top-4 z-10">
           <span>
-            <DropdownMenu>
+            <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
@@ -129,7 +130,7 @@ function Item({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
                   <button
-                    onClick={() => setIsDeleteOpen(true)}
+                    onClick={handleDeleteClick}
                     className="w-full justify-start flex text-red-500 rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
                   >
                     <IconMenu
@@ -147,7 +148,7 @@ function Item({
   );
 }
 
-export default function CardPage() {
+export default function ListeFiliere() {
   const userCookie = Cookies.get("user");
   const [actualUser, setActualUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
