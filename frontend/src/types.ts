@@ -28,9 +28,12 @@ export type Enseignant = {
   prenom: string;
 };
 
-export type Lecon = {
+export type Lesson = {
+  id_lecon: number;
   titre: string;
+  contenue: string;
   typeLecon: string;
+  matiereLesson: Matiere[];
 };
 
 export type ClasseMatiere = {
@@ -42,6 +45,6 @@ export type Matiere = {
   nom: string;
   description: string;
   enseignant: Enseignant;
-  lecon: Lecon[];
+  lecon: Lesson[];
   classeMatiere: ClasseMatiere[];
 };

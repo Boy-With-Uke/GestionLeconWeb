@@ -121,7 +121,7 @@ function Item({
               Nombre de Lecons+Evaluations: {matiere.lecon.length}
             </CardDescription>
           </div>
-        </CardHeader>
+        </CardHeader>7
 
         {actualUser?.niveauAccess === "ADMIN" ? (
           <>
@@ -214,7 +214,7 @@ export default function ListeMatiere() {
         nom: matiere.nom,
         description: matiere.description,
         enseignant: matiere.enseignant,
-        lecon: matiere.lecon.length,
+        lecon: matiere.lecon,
         classeMatiere: matiere.classeMatiere, // Assurez-vous que cette propriété existe
       }));
 

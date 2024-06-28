@@ -1,13 +1,29 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
+import DeleteForm from "@/components/forms/matiere-delete-form";
+import EditForm from "@/components/forms/matiere-edit-form";
 import OrbitingLoader from "@/components/main/OrbitingLoader";
 import Sidebar from "@/components/main/Sidebar";
+import IconMenu from "@/components/main/icon-menu";
 import Navbar from "@/components/main/navbar";
+import { ResponsiveDialog } from "@/components/main/responsive-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -17,98 +33,201 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  type Matiere,
+  type User,
+  type Classe,
+  type ClasseMatiere,
+  type Enseignant,
+} from "@/types";
+import { getActualUser } from "@/utils/function";
 import Cookies from "js-cookie";
+import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import "../../../assets/css/fonts.css";
+
+function Item({
+  matiere,
+  getClasses: getClasses,
+  onClick,
+}: {
+  matiere: Matiere;
+  getClasses: () => void;
+  onClick: () => void;
+}) {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const userCookie = Cookies.get("user");
+  const [actualUser, setActualUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (userCookie) {
+      getActualUser(userCookie, setActualUser, toast, navigate);
+    }
+  }, []);
+
+  const handleEditClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the click from propagating to the card
+    setIsEditOpen(true);
+    setMenuOpen(false); // Close the menu
+  };
+
+  const handleDeleteClick = (event: React.MouseEvent) => {
+    event.stopPropagation(); // Prevent the click from propagating to the card
+    setIsDeleteOpen(true);
+    setMenuOpen(false); // Close the menu
+  };
+
+  return (
+    <>
+      <ResponsiveDialog
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title={`Modification de la Matiere: ${matiere.nom}`}
+      >
+        <EditForm
+          props={matiere}
+          setIsOpen={setIsEditOpen}
+          onSuccess={getClasses}
+        />
+      </ResponsiveDialog>
+      <ResponsiveDialog
+        isOpen={isDeleteOpen}
+        setIsOpen={setIsDeleteOpen}
+        title={`Suppression de la Matiere: ${matiere.nom}`}
+        description={`Êtes-vous sûr de vouloir supprimer la filière "${matiere.nom}" ?`}
+      >
+        <DeleteForm
+          props={matiere}
+          onSuccess={getClasses}
+          setIsOpen={setIsDeleteOpen}
+        />
+      </ResponsiveDialog>
+      <Card
+        className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 relative hover:shadow-xl duration-200 transition-all cursor-pointer"
+        style={{ width: "200px" }}
+        onClick={onClick} // Attach the onClick handler here
+      >
+        <CardHeader className="flex flex-row gap-4 items-center pb-2">
+          <div className="flex flex-col">
+            <CardTitle className="text-base">
+              {matiere.nom === "" ? "Aucune Classe" : matiere.nom}
+            </CardTitle>
+            <CardDescription>
+              Nombre de Lecons+Evaluations: {matiere.lecon.length}
+            </CardDescription>
+          </div>
+        </CardHeader>
+        7
+        {actualUser?.niveauAccess === "ADMIN" ? (
+          <>
+            <div className="absolute right-4 top-4 z-10">
+              <span>
+                <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                      onClick={(e) => e.stopPropagation()} // Prevent click propagation to the card
+                    >
+                      <MoreVertical className="h-4 w-4" />
+                      <span className="sr-only">Open menu</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-[160px] z-50">
+                    <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
+                      <button
+                        onClick={handleEditClick}
+                        className="w-full justify-start flex rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                      >
+                        <IconMenu
+                          text="Edit"
+                          icon={<SquarePen className="h-4 w-4" />}
+                        />
+                      </button>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem className="group flex w-full items-center justify-between text-left p-0 text-sm font-base text-neutral-500">
+                      <button
+                        onClick={handleDeleteClick}
+                        className="w-full justify-start flex text-red-500 rounded-md p-2 transition-all duration-75 hover:bg-neutral-100"
+                      >
+                        <IconMenu
+                          text="Delete"
+                          icon={<Trash2 className="h-4 w-4" />}
+                        />
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </span>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+      </Card>
+    </>
+  );
+}
 
 export default function ListeCours() {
   const { subjectName: subjectName } = useParams<{ subjectName?: string }>();
-
-  type matiere = {
-    nom: string;
-  };
-
-  type matiereLesson = {
-    matiere: matiere;
-  };
-
-  type Lesson = {
-    id_lecon: number;
-    titre: string;
-    contenue: string;
-    type: string;
-    matiereLesson: string[]; // Changer ici pour string[]
-  };
-
-  type User = {
-    id_user: number;
-    nom: string;
-    prenom: string;
-    email: string;
-    niveauAccess: string;
-  };
-
-  const [actualUser, setActualUser] = useState<User | null>(null);
-  const [lessons, setLessons] = useState<Lesson[]>([]);
   const userCookie = Cookies.get("user");
+  const [actualUser, setActualUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Pagination state
+  const [matieres, setMatieres] = useState<Matiere[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const lessonsPerPage = 6;
+  const matieresPerPage = 6;
 
-  const getActualUser = async () => {
-    if (!userCookie) {
-      toast({
-        variant: "destructive",
-        title: `Erreur`,
-        description: "Vous devez vous connecter pour accéder à cette ressource",
-      });
-      navigate("/");
-      return;
-    } else {
-      try {
-        const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
-        if (!res.ok) {
-          console.error("Failed to fetch user data:", res.statusText);
-          return;
-        }
-        const data = await res.json();
-        const user: User = data.user;
-        setActualUser(user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
+  const startIndex = (currentPage - 1) * matieresPerPage;
+  const endIndex = startIndex + matieresPerPage;
+
+  // Get current filieres
+  const currentMatieres = matieres.slice(startIndex, endIndex);
+
+  // Change page
+  const paginate = (pageNumber: number) => {
+    if (
+      pageNumber >= 1 &&
+      pageNumber <= Math.ceil(matieres.length / matieresPerPage)
+    ) {
+      setCurrentPage(pageNumber);
     }
   };
 
-  const getLessons = async () => {
+  const getMatiere = async () => {
     try {
-      const req = await fetch(`http://localhost:5173/api/lesson`);
+      const req = await fetch(`http://localhost:5173/api/matiere`);
       const data = await req.json();
+      console.log(data); // Vérifiez la structure des données ici
 
-      let lessons: Lesson[] = data.lessons.map((lesson: any) => {
-        const matiereNames = lesson.matiereLesson.map(
-          (ml: any) => ml.matiere.nom
-        );
-        return {
-          id_lecon: lesson.id_lecon,
-          titre: lesson.titre,
-          contenue: lesson.contenue,
-          type: lesson.type,
-          matiereLesson: matiereNames, // Utiliser ici un tableau de noms de matières
-        };
-      });
+      let matieres: Matiere[] = data.Matiere.map((matiere: any) => ({
+        id_matiere: matiere.id_matiere,
+        nom: matiere.nom,
+        description: matiere.description,
+        enseignant: matiere.enseignant,
+        lecon: matiere.lecon,
+        classeMatiere: matiere.classeMatiere, // Assurez-vous que cette propriété existe
+      }));
 
-      if (subjectName) {
-        lessons = lessons.filter((lesson) =>
-          lesson.matiereLesson.includes(subjectName)
+      if (classeName) {
+        matieres = matieres.filter((matiere) =>
+          matiere.classeMatiere.some(
+            (cm: ClasseMatiere) => cm.classes.nomClasse === classeName
+          )
         );
       }
 
-      setLessons(lessons);
+      setMatieres(matieres);
+      console.log(matieres);
       setTimeout(() => {
         setIsLoading(false);
       }, 2000);
@@ -116,32 +235,18 @@ export default function ListeCours() {
       console.error("Error fetching classes data:", error);
     }
   };
+
   useEffect(() => {
     // Fetch user data
-    getActualUser();
-    getLessons();
-  }, [subjectName]);
-
-  // Calculate start and end indices
-  const startIndex = (currentPage - 1) * lessonsPerPage;
-  const endIndex = startIndex + lessonsPerPage;
-
-  // Get current filieres
-  const currentLessons = lessons.slice(startIndex, endIndex);
-
-  // Change page
-  const paginate = (pageNumber: number) => {
-    if (
-      pageNumber >= 1 &&
-      pageNumber <= Math.ceil(lessons.length / lessonsPerPage)
-    ) {
-      setCurrentPage(pageNumber);
+    if (userCookie) {
+      getActualUser(userCookie, setActualUser, toast, navigate);
     }
+    getMatiere();
+  }, []);
+  const handleCardClick = (filiereName: string) => {
+    navigate(`/ListeCours/${filiereName}`);
   };
 
-  const handleCardClick = (id: number) => {
-    navigate(`/View/${id}`);
-  };
   return (
     <>
       {isLoading ? (
@@ -154,41 +259,30 @@ export default function ListeCours() {
           <OrbitingLoader />
         </div>
       ) : (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-full">
           <Sidebar />
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
-              {lessons.length === 0 ? (
+              {matieres.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore de Lessons !!!
+                  Pas encore de matieres !!!
                 </p>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {currentLessons.map((lesson) => (
-                      <Card
-                        key={lesson.id_lecon}
-                        onClick={() => handleCardClick(lesson.id_lecon)}
-                        className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
-                        style={{ width: "250px" }}
-                      >
-                        <CardHeader className="flex flex-row gap-4 items-center pb-2">
-                          <div className="flex flex-col">
-                            <CardTitle className="text-base">
-                              {lesson.titre === ""
-                                ? "Aucune personne connectée"
-                                : lesson.titre}
-                            </CardTitle>
-                            <CardDescription>
-                              Type de cours: {lesson.type}
-                            </CardDescription>
-                          </div>
-                        </CardHeader>
-                      </Card>
+                  <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {" "}
+                    {currentMatieres.map((matiere) => (
+                      <Item
+                        key={matiere.id_matiere}
+                        matiere={matiere}
+                        onClick={() => handleCardClick(matiere.nom)}
+                        getClasses={getMatiere}
+                      />
                     ))}
                   </div>
-                  <Pagination>
+
+                  <Pagination className="mt-10">
                     <PaginationContent>
                       <PaginationItem>
                         <PaginationPrevious
@@ -196,7 +290,9 @@ export default function ListeCours() {
                         />
                       </PaginationItem>
                       {Array.from(
-                        { length: Math.ceil(lessons.length / lessonsPerPage) },
+                        {
+                          length: Math.ceil(matieres.length / matieresPerPage),
+                        },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
                             <PaginationLink
