@@ -1,3 +1,7 @@
+export type MatiereLesson = {
+  matiere: Matiere;
+};
+
 export type Filiere = {
   id_filiere: number;
   nomFiliere: string;
@@ -32,8 +36,8 @@ export type Lesson = {
   id_lecon: number;
   titre: string;
   contenue: string;
-  typeLecon: string;
-  matiereLesson: Matiere[];
+  typeLecon: "LESSON" | "EVALUATION";
+  matiereLesson: MatiereLesson[];
 };
 
 export type ClasseMatiere = {

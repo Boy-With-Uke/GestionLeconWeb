@@ -178,8 +178,6 @@ export const LessonRoutes = new Hono()
     const fileName = data.get("filename") as string;
     const idLecon = data.get("id");
     const type = data.get("typeLecon") as string;
-    const matiere = data.get("matiere");
-
     const newTitre = data.get("newTitre") as string;
 
     if (!file || !(file instanceof File)) {
@@ -189,25 +187,61 @@ export const LessonRoutes = new Hono()
 
     const buffer = await file.arrayBuffer();
     try {
-      const existingMatiere = await prisma.matiere.findUnique({
-        where: {
-          id_matiere: parseInt(matiere as string),
-        },
-      });
-      if (!existingMatiere) {
-        c.status(401);
-        return c.json({
-          message: "Matiere non existante",
-        });
-      }
-
       const existingLessonOrEva = await prisma.lecon.findUnique({
         where: {
           id_lecon: parseInt(idLecon as string),
         },
       });
 
-      if (!existingLessonOrEva || existingLessonOrEva.typeLecon !== type) {
+      // if (!existingLessonOrEva || existingLessonOrEva.typeLecon !== type) {
+      //   c.status(401);
+      //   return c.json({
+      //     message:
+      //       type === "LESSON"
+      //         ? "Leçon non existante"
+      //         : "Évaluation non existante",
+      //   });
+      // }
+
+      // Supprimer l'ancien fichier PDF
+      if (existingLessonOrEva) {
+        const oldFilePath = path.join(
+          __dirname,
+          "../../../frontend/public",
+          existingLessonOrEva.contenue
+        );
+        if (fs.existsSync(oldFilePath)) {
+          fs.unlinkSync(oldFilePath);
+        }
+
+        // Écrire le nouveau fichier PDF
+        const newFilePath = path.join(
+          __dirname,
+          "../../../frontend/public/Pdf/Lecon",
+          fileName
+        );
+        fs.writeFileSync(newFilePath, Buffer.from(buffer));
+
+        // Mettre à jour la leçon
+        const updatedLesson = await prisma.lecon.update({
+          where: {
+            id_lecon: existingLessonOrEva.id_lecon,
+          },
+          data: {
+            titre: newTitre || "",
+            contenue: `/Pdf/Lecon/${fileName}`,
+            typeLecon: type || "",
+          },
+        });
+        c.status(200);
+        return c.json({
+          message:
+            type === "LESSON"
+              ? "Mise à jour de la leçon réussie"
+              : "Mise à jour de l'évaluation réussie",
+          updatedLesson: updatedLesson,
+        });
+      } else {
         c.status(401);
         return c.json({
           message:
@@ -216,66 +250,39 @@ export const LessonRoutes = new Hono()
               : "Évaluation non existante",
         });
       }
-
-      // Supprimer l'ancien fichier PDF
-      const oldFilePath = path.join(
-        __dirname,
-        "../../../frontend/public",
-        existingLessonOrEva.contenue
-      );
-      if (fs.existsSync(oldFilePath)) {
-        fs.unlinkSync(oldFilePath);
-      }
-
-      // Écrire le nouveau fichier PDF
-      const newFilePath = path.join(
-        __dirname,
-        "../../../frontend/public/Pdf/Lecon",
-        fileName
-      );
-      fs.writeFileSync(newFilePath, Buffer.from(buffer));
-
-      // Mettre à jour la leçon
-      const updatedLesson = await prisma.lecon.update({
-        where: {
-          id_lecon: existingLessonOrEva.id_lecon,
-        },
-        data: {
-          titre: newTitre || "",
-          contenue: `/Pdf/Lecon/${fileName}`,
-          typeLecon: type || "",
-        },
-      });
-
-      // Mettre à jour la liaison entre la matière et la leçon
-      const LessonSubjectLink = await prisma.matiereContenantLecon.upsert({
-        where: {
-          matieresId_lessonId: {
-            matieresId: existingMatiere.id_matiere,
-            lessonId: existingLessonOrEva.id_lecon,
-          },
-        },
-        update: {
-          matiere: { connect: { id_matiere: parseInt(matiere as string) } },
-          lessons: { connect: { id_lecon: updatedLesson.id_lecon } },
-        },
-        create: {
-          matiere: { connect: { id_matiere: parseInt(matiere as string) } },
-          lessons: { connect: { id_lecon: updatedLesson.id_lecon } },
-        },
-      });
-
-      c.status(200);
-      return c.json({
-        message:
-          type === "LESSON"
-            ? "Mise à jour de la leçon réussie"
-            : "Mise à jour de l'évaluation réussie",
-        updatedLesson: updatedLesson,
-      });
     } catch (error) {
       c.status(500);
       return c.json({ error });
     }
+  })
+  .delete("/:id", async (c) => {
+    const id = parseInt(c.req.param("id"));
+    const existingLecon = await prisma.lecon.findUnique({
+      where: {
+        id_lecon: id,
+      },
+    });
+    if (!existingLecon) {
+      c.status(401);
+      return c.json({
+        message: "Lecon non existante",
+      });
+    } else {
+      const oldFilePath = path.join(
+        __dirname,
+        "../../../frontend/public",
+        existingLecon.contenue
+      );
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+      }
+    }
+    const deletedLecon = await prisma.lecon.delete({
+      where: {
+        id_lecon: id,
+      },
+    });
+    let message = "Lecon supprimé avec succès";
+    c.status(200);
+    return c.json({ message, deletedLecon });
   });
-

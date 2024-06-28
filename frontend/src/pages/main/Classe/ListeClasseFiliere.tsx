@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import DeleteForm from "@/components/forms/classe-delete-form";
+import DeleteForm from "@/components/forms/cours-delete-form";
 import EditForm from "@/components/forms/classe-edit-form";
 import OrbitingLoader from "@/components/main/OrbitingLoader";
 import Sidebar from "@/components/main/Sidebar";

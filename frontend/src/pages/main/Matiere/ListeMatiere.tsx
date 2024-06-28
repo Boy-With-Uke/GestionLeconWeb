@@ -121,7 +121,7 @@ function Item({
               Nombre de Lecons+Evaluations: {matiere.lecon.length}
             </CardDescription>
           </div>
-        </CardHeader>7
+        </CardHeader>
 
         {actualUser?.niveauAccess === "ADMIN" ? (
           <>
