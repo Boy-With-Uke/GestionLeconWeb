@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import OrbitingLoader from "@/components/main/OrbitingLoader";
 import Sidebar from "@/components/main/Sidebar";
@@ -15,6 +17,8 @@ import { ScrollToTop } from "@/components/main/ScrollToTop";
 import { CardDescription } from "@/components/ui/card";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import "../../../assets/css/animations.css";
+import { Download } from "react-bootstrap-icons";
+
 export default function ViewCours() {
   const { coursId: coursId } = useParams<{ coursId?: string }>();
 
@@ -91,7 +95,7 @@ export default function ViewCours() {
 
         const lessonsContainer = data.user.lessons;
 
-        let lessonsGeted: Lessonliste[] = lessonsContainer.map(
+        const lessonsGeted: Lessonliste[] = lessonsContainer.map(
           (lessonWrapper: any) => {
             const lesson = lessonWrapper.lessons;
             const matiereNames = lesson.matiereLesson.map(
@@ -231,6 +235,14 @@ export default function ViewCours() {
                           </div>
                         )}
                       </button>
+                      <a
+                        href={cours.contenue}
+                        download={cours.titre}
+                        className="flex items-center space-x-2 text-primary"
+                      >
+                        <Download className="text-primary" />
+                        <span>Télécharger</span>
+                      </a>
                     </div>
                     <div>
                       <CardDescription>
