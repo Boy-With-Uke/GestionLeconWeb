@@ -15,20 +15,11 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 // Icons
 import { ScrollToTop } from "@/components/main/ScrollToTop";
 import { CardDescription } from "@/components/ui/card";
-import { Heart, HeartFill } from "react-bootstrap-icons";
+import { Download, Heart, HeartFill } from "react-bootstrap-icons";
 import "../../../assets/css/animations.css";
-import { Download } from "react-bootstrap-icons";
 
 export default function ViewCours() {
   const { coursId: coursId } = useParams<{ coursId?: string }>();
-
-  type Matiere = {
-    nom: string;
-  };
-
-  type MatiereLesson = {
-    matiere: Matiere;
-  };
 
   type Lessonliste = {
     id_lecon: number;
@@ -63,6 +54,7 @@ export default function ViewCours() {
     lessons: Lessonliste[];
   };
 
+  //TODO: get actual user
   const [actualUser, setActualUser] = useState<User | null>(null);
   const [cours, setCours] = useState<Lesson | null>(null);
   const userCookie = Cookies.get("user");
