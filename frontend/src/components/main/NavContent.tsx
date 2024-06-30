@@ -18,32 +18,33 @@ import { cn } from "@/lib/utils";
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Liste des lecons",
-    href: "/docs/primitives/alert-dialog",
+    href: "/ListeLecon",
     description: "Une liste de lecons faites par des enseignants chevronnes",
   },
   {
-    title: "Liste des enseignants",
-    href: "/docs/primitives/hover-card",
-    description: "Les enseignants experimentees choisi par nos soins",
+    title: "Liste des evaluations",
+    href: "/ListeEvaluation",
+    description:
+      "Une liste d'evaluations faites par des enseignants chevronnes",
   },
   {
     title: "Liste des matieres",
-    href: "/docs/primitives/progress",
+    href: "/ListeMatiere",
     description: "Les matieres que nos enseignants enseignent",
   },
   {
-    title: "Liste des evaluations",
-    href: "/docs/primitives/scroll-area",
-    description: "Les evaluations que vous devriez suivre",
+    title: "Liste des filiers",
+    href: "/ListeFiliere",
+    description: "Les filieres que vous pouvez suivre",
   },
   {
     title: "Liste des cours",
-    href: "/docs/primitives/tabs",
+    href: "/ListeCours/",
     description: "Les cours de chaque matieres que vous pouvez suivre",
   },
   {
-    title: "Les contributteurs",
-    href: "/docs/primitives/tooltip",
+    title: "Vos favoris",
+    href: "/ListeFavoris",
     description:
       "Ceux qui contribue chaque jour a l'amelioration de cette application",
   },
@@ -113,7 +114,7 @@ export default function NavContent() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link to="/docs">
+          <Link to="/">
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               En s'avoir plus
             </NavigationMenuLink>
