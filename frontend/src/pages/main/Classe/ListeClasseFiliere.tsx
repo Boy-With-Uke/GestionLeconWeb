@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import DeleteForm from "@/components/forms/cours-delete-form";
+import DeleteForm from "@/components/forms/classe-delete-form";
 import EditForm from "@/components/forms/classe-edit-form";
 import OrbitingLoader from "@/components/main/OrbitingLoader";
 import Sidebar from "@/components/main/Sidebar";
@@ -40,6 +40,7 @@ import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../../assets/css/fonts.css";
+import { Input } from "@/components/ui/input";
 
 function Item({
   classe,
@@ -184,9 +185,6 @@ export default function ListeClasseFiliere() {
   const startIndex = (currentPage - 1) * classesPerPage;
   const endIndex = startIndex + classesPerPage;
 
-  // Get current filieres
-  const currentClasses = classes.slice(startIndex, endIndex);
-
   // Change page
   const paginate = (pageNumber: number) => {
     if (
@@ -234,6 +232,12 @@ export default function ListeClasseFiliere() {
   const handleCardClick = (classeName: string) => {
     navigate(`/ListeMatiere/${classeName}`);
   };
+  const [searchText, setSearchText] = useState("");
+  const filteredClasses = classes.filter((classe) =>
+    classe.nomClasse.toLowerCase().includes(searchText.toLowerCase())
+  );
+  // Get current filieres
+  const currentClasses = filteredClasses.slice(startIndex, endIndex);
 
   return (
     <>
@@ -258,6 +262,14 @@ export default function ListeClasseFiliere() {
                 </p>
               ) : (
                 <>
+                  <div className="flex w-full justify-center items-center py-4 pb-9">
+                    <Input
+                      placeholder="Filtrer les noms..."
+                      className="max-w-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
                   <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {currentClasses.map((classe) => (
                       <Item
@@ -276,7 +288,11 @@ export default function ListeClasseFiliere() {
                         />
                       </PaginationItem>
                       {Array.from(
-                        { length: Math.ceil(classes.length / classesPerPage) },
+                        {
+                          length: Math.ceil(
+                            filteredClasses.length / classesPerPage
+                          ),
+                        },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
                             <PaginationLink

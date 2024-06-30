@@ -40,6 +40,7 @@ import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/fonts.css";
+import { Input } from "@/components/ui/input";
 
 function Item({
   filiere,
@@ -180,19 +181,23 @@ export default function ListeFiliere() {
 
   const [filiers, setFilieres] = useState<Filiere[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState("");
   const filieresPerPage = 6;
 
   const startIndex = (currentPage - 1) * filieresPerPage;
   const endIndex = startIndex + filieresPerPage;
 
-  // Get current filieres
-  const currentFilieres = filiers.slice(startIndex, endIndex);
+  const filteredFilieres = filiers.filter((filiere) =>
+    filiere.nomFiliere.toLowerCase().includes(searchText.toLowerCase())
+  );
+
+  const currentFilieres = filteredFilieres.slice(startIndex, endIndex);
 
   // Change page
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&
-      pageNumber <= Math.ceil(filiers.length / filieresPerPage)
+      pageNumber <= Math.ceil(filteredFilieres.length / filieresPerPage)
     ) {
       setCurrentPage(pageNumber);
     }
@@ -224,6 +229,7 @@ export default function ListeFiliere() {
     }
     getFilieres();
   }, []);
+
   const handleCardClick = (filiereName: string) => {
     navigate(`/ListeClasseFiliere/${filiereName}`);
   };
@@ -245,6 +251,14 @@ export default function ListeFiliere() {
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
+              <div className="flex w-full justify-center items-center py-4 pb-9">
+                <Input
+                  placeholder="Filtrer les noms..."
+                  className="max-w-sm"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+              </div>
               <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                 {currentFilieres.map((filiere) => (
                   <Item
@@ -263,7 +277,11 @@ export default function ListeFiliere() {
                     />
                   </PaginationItem>
                   {Array.from(
-                    { length: Math.ceil(filiers.length / filieresPerPage) },
+                    {
+                      length: Math.ceil(
+                        filteredFilieres.length / filieresPerPage
+                      ),
+                    },
                     (_, i) => (
                       <PaginationItem key={i + 1}>
                         <PaginationLink

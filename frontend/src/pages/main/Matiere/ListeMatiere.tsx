@@ -33,19 +33,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  type Matiere,
-  type User,
-  type Classe,
-  type ClasseMatiere,
-  type Enseignant,
-} from "@/types";
+import { type ClasseMatiere, type Matiere, type User } from "@/types";
 import { getActualUser } from "@/utils/function";
 import Cookies from "js-cookie";
 import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../../../assets/css/fonts.css";
+import { Input } from "@/components/ui/input";
 
 function Item({
   matiere,
@@ -191,7 +186,6 @@ export default function ListeMatiere() {
   const endIndex = startIndex + matieresPerPage;
 
   // Get current filieres
-  const currentMatieres = matieres.slice(startIndex, endIndex);
 
   // Change page
   const paginate = (pageNumber: number) => {
@@ -247,6 +241,12 @@ export default function ListeMatiere() {
     navigate(`/ListeCours/${filiereName}`);
   };
 
+  const [searchText, setSearchText] = useState("");
+  const filteredMatieres = matieres.filter((matiere) =>
+    matiere.nom.toLowerCase().includes(searchText.toLowerCase())
+  );
+  // Get current filieres
+  const currentMatieres = filteredMatieres.slice(startIndex, endIndex);
   return (
     <>
       {isLoading ? (
@@ -270,6 +270,14 @@ export default function ListeMatiere() {
                 </p>
               ) : (
                 <>
+                  <div className="flex w-full justify-center items-center py-4 pb-9">
+                    <Input
+                      placeholder="Filtrer les noms..."
+                      className="max-w-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
                   <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {" "}
                     {currentMatieres.map((matiere) => (
@@ -291,7 +299,9 @@ export default function ListeMatiere() {
                       </PaginationItem>
                       {Array.from(
                         {
-                          length: Math.ceil(matieres.length / matieresPerPage),
+                          length: Math.ceil(
+                            filteredMatieres.length / matieresPerPage
+                          ),
                         },
                         (_, i) => (
                           <PaginationItem key={i + 1}>

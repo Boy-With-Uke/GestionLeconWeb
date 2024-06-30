@@ -40,6 +40,7 @@ import { MoreVertical, SquarePen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "@/assets/css/fonts.css";
+import { Input } from "@/components/ui/input";
 
 function Item({
   lesson,
@@ -185,7 +186,6 @@ export default function ListeEvaluation() {
   const endIndex = startIndex + coursesPerPage;
 
   // Get current filieres
-  const currentCours = lessons.slice(startIndex, endIndex);
 
   // Change page
   const paginate = (pageNumber: number) => {
@@ -247,6 +247,12 @@ export default function ListeEvaluation() {
   const handleCardClick = (id: number) => {
     navigate(`/View/${id}`);
   };
+  const [searchText, setSearchText] = useState("");
+  const filteredCourses = lessons.filter((lesson) =>
+    lesson.titre.toLowerCase().includes(searchText.toLowerCase())
+  );
+  // Get current filieres
+  const currentCours = filteredCourses.slice(startIndex, endIndex);
 
   return (
     <>
@@ -271,6 +277,14 @@ export default function ListeEvaluation() {
                 </p>
               ) : (
                 <>
+                  <div className="flex w-full justify-center items-center py-4 pb-9">
+                    <Input
+                      placeholder="Filtrer les noms..."
+                      className="max-w-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
                   <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
                     {" "}
                     {currentCours.map((lesson) => (
@@ -292,7 +306,9 @@ export default function ListeEvaluation() {
                       </PaginationItem>
                       {Array.from(
                         {
-                          length: Math.ceil(lessons.length / coursesPerPage),
+                          length: Math.ceil(
+                            filteredCourses.length / coursesPerPage
+                          ),
                         },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
