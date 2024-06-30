@@ -24,7 +24,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Input } from "@/components/ui/input";
 type Matiere = {
   nom: string;
 };
@@ -49,7 +49,38 @@ type User = {
   niveauAccess: string;
 };
 
-export default function ListeFavoris66() {
+function Item({
+  lesson,
+  getClasses: getClasses,
+  onClick,
+}: {
+  lesson: Lesson;
+  getClasses: () => void;
+  onClick: () => void;
+}) {
+  return (
+    <>
+      <Card
+        className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 relative hover:shadow-xl duration-200 transition-all cursor-pointer"
+        style={{ width: "200px" }}
+        onClick={onClick} // Attach the onClick handler here
+      >
+        <CardHeader className="flex flex-row gap-4 items-center pb-2">
+          <div className="flex flex-col">
+            <CardTitle className="text-base">
+              {lesson.titre === "" ? "Aucune Classe" : lesson.titre}
+            </CardTitle>
+            <CardDescription className="text-center flex flex-row">
+              Type de cours: {lesson.typeLecon}
+            </CardDescription>
+          </div>
+        </CardHeader>
+      </Card>
+    </>
+  );
+}
+
+export default function ListeFavoris() {
   const [actualUser, setActualUser] = useState<User | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const userCookie = Cookies.get("user");
@@ -117,8 +148,6 @@ export default function ListeFavoris66() {
   const startIndex = (currentPage - 1) * lessonsPerPage;
   const endIndex = startIndex + lessonsPerPage;
 
-  const currentLessons = lessons.slice(startIndex, endIndex);
-
   const paginate = (pageNumber: number) => {
     if (
       pageNumber >= 1 &&
@@ -131,6 +160,12 @@ export default function ListeFavoris66() {
   const handleCardClick = (id: number) => {
     navigate(`/View/${id}`);
   };
+  const [searchText, setSearchText] = useState("");
+  const filteredCourses = lessons.filter((lesson) =>
+    lesson.titre.toLowerCase().includes(searchText.toLowerCase())
+  );
+  // Get current filieres
+  const currentCours = filteredCourses.slice(startIndex, endIndex);
 
   return (
     <>
@@ -144,41 +179,38 @@ export default function ListeFavoris66() {
           <OrbitingLoader />
         </div>
       ) : (
-        <div className="flex h-screen overflow-hidden">
+        <div className="flex h-full">
           <Sidebar />
           <div className="flex flex-col w-full">
             <Navbar />
             <div className="flex-1 flex flex-col justify-center items-center pr-9 pl-9 bg-slate-100 dark:bg-slate-950">
               {lessons.length === 0 ? (
                 <p className="text-5xl dark:text-primary">
-                  Pas encore de Favoris !!!
+                  Pas encore de cours !!!
                 </p>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    {currentLessons.map((lesson) => (
-                      <Card
+                  <div className="flex w-full justify-center items-center py-4 pb-9">
+                    <Input
+                      placeholder="Filtrer les noms..."
+                      className="max-w-sm"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    {" "}
+                    {currentCours.map((lesson) => (
+                      <Item
                         key={lesson.id_lecon}
+                        lesson={lesson}
                         onClick={() => handleCardClick(lesson.id_lecon)}
-                        className="drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900 cursor-pointer"
-                        style={{ width: "250px" }}
-                      >
-                        <CardHeader className="flex flex-row gap-4 items-center pb-2">
-                          <div className="flex flex-col">
-                            <CardTitle className="text-base">
-                              {lesson.titre === ""
-                                ? "Aucune personne connectée"
-                                : lesson.titre}
-                            </CardTitle>
-                            <CardDescription>
-                              Type de cours: {lesson.typeLecon}
-                            </CardDescription>
-                          </div>
-                        </CardHeader>
-                      </Card>
+                        getClasses={getActualUser}
+                      />
                     ))}
                   </div>
-                  <Pagination>
+
+                  <Pagination className="mt-10">
                     <PaginationContent>
                       <PaginationItem>
                         <PaginationPrevious
@@ -186,7 +218,11 @@ export default function ListeFavoris66() {
                         />
                       </PaginationItem>
                       {Array.from(
-                        { length: Math.ceil(lessons.length / lessonsPerPage) },
+                        {
+                          length: Math.ceil(
+                            filteredCourses.length / lessonsPerPage
+                          ),
+                        },
                         (_, i) => (
                           <PaginationItem key={i + 1}>
                             <PaginationLink
