@@ -26,6 +26,8 @@ const updateteUserSchema = userSchema.omit({
   id_user: true,
   motDePasse: true,
   niveauAccess: true,
+  classe: true,
+  email: true,
 });
 const postUserFav = z.object({
   id_lecon: z.number(),
@@ -330,20 +332,11 @@ export const userRoutes = new Hono()
           id_user: userId,
         },
       });
-      const existingClasse = await prisma.classe.findFirst({
-        where: {
-          id_classe: body.classe,
-        },
-      });
 
       let message;
 
       if (!existingUser) {
         message = `L'utilisateur avec l\'id: ${userId} n'existe pas`;
-        c.status(404);
-        return c.json({ message });
-      } else if (!existingClasse) {
-        message = `Cette classe avec l\'id: ${body.classe} n'existe pas`;
         c.status(404);
         return c.json({ message });
       } else {
@@ -354,15 +347,9 @@ export const userRoutes = new Hono()
           data: {
             nom: body.nom,
             prenom: body.prenom,
-            email: body.email,
-            classe: {
-              connect: {
-                id_classe: body.classe,
-              },
-            },
           },
         });
-        message = `L'utilisateur avec l\'id: ${userId} a été supprimé avec succès`;
+        message = `L'utilisateur avec l\'id: ${userId} a été modifier avec succès`;
         c.status(200);
         return c.json({ message, updatedUser });
       }
