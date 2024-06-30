@@ -107,10 +107,17 @@ export default function ViewCours() {
           lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
         );
 
+        // Vérifiez si la leçon actuelle est déjà dans les favoris
+        if (coursId) {
+          const isFav = lessonsGeted.some(
+            (lesson) => lesson.id_lecon === parseInt(coursId)
+          );
+          setIsFavorite(isFav);
+        }
+
         setTimeout(() => {
           setIsLoading(false);
         }, 2000);
-        // Indicate that loading is done// Indicate that loading is done
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -227,6 +234,7 @@ export default function ViewCours() {
                           </div>
                         )}
                       </button>
+
                       <a
                         href={cours.contenue}
                         download={cours.titre}

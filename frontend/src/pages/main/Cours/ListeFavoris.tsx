@@ -1,3 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable prefer-const */
 "use client";
 import OrbitingLoader from "@/components/main/OrbitingLoader";
 import Sidebar from "@/components/main/Sidebar";
@@ -95,9 +99,7 @@ export default function ListeFavoris66() {
           }
         );
 
-        setLessons(
-          lessonsGeted.filter((lesson) => lesson.typeLecon === "LESSON")
-        );
+        setLessons(lessonsGeted);
         setTimeout(() => {
           setIsLoading(false);
         }, 2000);
