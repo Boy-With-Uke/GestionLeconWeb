@@ -33,35 +33,40 @@ export default function Profil() {
 
   const navigate = useNavigate();
   // 1. Define your form
-  const getActualUser = async () => {
-    if (!userCookie) {
-      console.log("No user cookie found.");
-      navigate("/");
-      return;
-    } else {
-      try {
-        const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
-        if (!res.ok) {
-          console.error("Failed to fetch user data:", res.statusText);
-          return;
-        }
-        const data = await res.json();
-        console.log("User data fetched:", data.user);
-        const user: User = data.user;
-        setActualUser(user);
-        setUserClasse(data.user.classe.nomClasse);
-        setUserFiliere(data.user.classe.classeFiliere.nomFiliere);
-        setFavorisCount(data.coursCount);
-        const statusU = data.user.niveauAccess;
-        const status = statusU.toLowerCase();
-        const statusToUper = status.charAt(0).toUpperCase() + status.slice(1);
-        setStatus(statusToUper);
-        console.log(statusToUper);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+const getActualUser = async () => {
+  if (!userCookie) {
+    console.log("No user cookie found.");
+    navigate("/");
+    return;
+  } else {
+    try {
+      const res = await fetch(`http://localhost:5173/api/user/${userCookie}`);
+      if (!res.ok) {
+        console.error("Failed to fetch user data:", res.statusText);
+        return;
       }
+      const data = await res.json();
+      console.log("User data fetched:", data.user);
+      const user = data.user;
+      setActualUser(user);
+      setUserClasse(user.classe.nomClasse);
+      setUserFiliere(user.classe.classeFiliere.nomFiliere);
+
+      const statusU = user.niveauAccess;
+      const status = statusU.toLowerCase();
+      const statusToUper = status.charAt(0).toUpperCase() + status.slice(1);
+      setStatus(statusToUper);
+
+      // Pour obtenir le nombre de leçons
+      const favorisCount = user.lessons.length;
+      setFavorisCount(favorisCount);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     // Show the loader for at least 3 seconds
