@@ -108,7 +108,7 @@ function MountainIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
-      fill="#6C27D9"
+      fill="#21C45D"
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
