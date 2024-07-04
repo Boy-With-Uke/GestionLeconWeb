@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { HeroCards } from "./HeroCards";
+import Cookies from "js-cookie";
 
 export const Hero = () => {
+  const userCookie = Cookies.get("user");
   return (
     <section className="container grid lg:grid-cols-2 place-items-center py-20 md:py-32 gap-10">
       <div className="text-center lg:text-start space-y-6">
@@ -25,21 +27,24 @@ export const Hero = () => {
           </h2>{" "}
           <span>pour une vie d'etudiant plus simple</span>
         </main>
-
-        <div className="space-y-4 md:space-y-0 md:space-x-4">
-          <Link to="/Connexion">
-            <Button className="w-full md:w-1/3">Se connecter</Button>
-          </Link>
-          <Link to={"/Inscription"}>
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-primary hover:bg-primary hover:text-white w-full md:w-1/3"
-            >
-              Inscription
-            </Button>
-          </Link>
-        </div>
+        {userCookie ? (
+          <></>
+        ) : (
+          <div className="space-y-4 md:space-y-0 md:space-x-4">
+            <Link to="/Connexion">
+              <Button className="w-full md:w-1/3">Se connecter</Button>
+            </Link>
+            <Link to={"/Inscription"}>
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-primary hover:bg-primary hover:text-white w-full md:w-1/3"
+              >
+                Inscription
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Hero cards sections */}

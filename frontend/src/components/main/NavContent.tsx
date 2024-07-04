@@ -75,7 +75,7 @@ export default function NavContent() {
                   >
                     <Icons.logo className="h-6 w-6" />
                     <div className="mb-2 mt-4 text-lg font-medium">
-                      E-hanatra
+                      E-hianatra
                     </div>
                     <p className="text-sm leading-tight text-muted-foreground">
                       Une application pour les profs mais surtout pour les
