@@ -46,6 +46,7 @@ export default function Connexion() {
 
   // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // eto no manomboka
     try {
       const req = await fetch(`http://localhost:5173/api/user/connexion`, {
         method: "POST",
@@ -95,6 +96,8 @@ export default function Connexion() {
       });
     }
     console.log(values);
+
+    // atreto
   };
   useEffect(() => {
     // Show the loader for at least 3 seconds

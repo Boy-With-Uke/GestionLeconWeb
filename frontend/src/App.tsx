@@ -3,7 +3,6 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./App.css";
 import Acceuil from "./pages/Acceuil";
 import Connexion from "./pages/Connexion";
-import FiliereDetails from "./pages/FilieresDetails";
 import Inscription from "./pages/Inscription";
 import Profil from "./pages/Profil";
 import Test from "./pages/Test";
@@ -54,7 +53,6 @@ function App() {
           <Route path="/ListeEvaluation/" element={<ListeEvaluation />} />
           <Route path="/ListeFavoris/" element={<ListeFavoris />} />
           <Route path="/View/:coursId" element={<ViewCours />} />
-          <Route path="/filiere/:filiereName" element={<FiliereDetails />} />
         </Routes>
       </Router>
     </ThemeProvider>

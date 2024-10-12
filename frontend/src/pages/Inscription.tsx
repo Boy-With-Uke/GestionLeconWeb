@@ -63,6 +63,7 @@ export default function Inscription() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    // eto no manomboka
     try {
       const req = await fetch(`http://localhost:5173/api/user`, {
         method: "POST",
@@ -111,6 +112,7 @@ export default function Inscription() {
     }
 
     console.log(values);
+    // atreto
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import { Statistics } from "./Statistics";
-import pilot from "@/assets/Images/pilot.png";
+import mesupres from "@/assets/Images/mesupres.png";
 
 export const About = () => {
   return (
@@ -7,7 +7,7 @@ export const About = () => {
       <div className="bg-muted/50 border rounded-lg py-12">
         <div className="px-6 flex flex-col-reverse md:flex-row gap-8 md:gap-12">
           <img
-            src={pilot}
+            src={mesupres}
             alt=""
             className="w-[300px] object-contain rounded-lg"
           />
@@ -20,7 +20,7 @@ export const About = () => {
                 </span>{" "}
               </h2>
               <p className="text-xl text-muted-foreground mt-4">
-                E-hanatra est une plateforme éducative qui facilite la gestion
+                E-hiasanatra est une plateforme éducative qui facilite la gestion
                 des cours pour les enseignants et les étudiants. Elle permet de
                 créer et organiser du contenu pédagogique de manière efficace,
                 offrant un accès simplifié aux leçons, devoirs, et évaluations,

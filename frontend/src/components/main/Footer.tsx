@@ -1,4 +1,3 @@
-import { LogoIcon } from "./Icons2";
 
 export const Footer = () => {
   return (
@@ -14,7 +13,7 @@ export const Footer = () => {
             href="https://github.com/kermanArivelo"
             className="text-primary transition-all border-primary hover:border-b-2"
           >
-            Kerman Arivelo
+            R Nek
           </a>
         </h3>
       </section>

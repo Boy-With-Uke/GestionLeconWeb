@@ -1,3 +1,5 @@
+import rnek from "@/assets/Images/rnek.jpg";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +11,6 @@ import {
 } from "@/components/ui/card";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { FacebookIcon, Linkedin } from "lucide-react";
-import kerman from "@/assets/Images/kerman.png";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LightBulbIcon } from "./Icons2";
 
 export const HeroCards = () => {
@@ -48,15 +48,15 @@ export const HeroCards = () => {
         </CardContent>
       </Card>
 
-      {/* Team */}
+      {/* Kerman */}
       <Card className="absolute right-[20px] top-4 w-80 flex flex-col justify-center items-center drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
         <CardHeader className="flex justify-center items-center pb-2 mt-8">
           <img
-            src={kerman}
+            src={rnek}
             alt="user avatar"
             className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
           />
-          <CardTitle className="text-center">Kerman Arivelo</CardTitle>
+          <CardTitle className="text-center">R Nek</CardTitle>
           <CardDescription className="font-normal text-primary">
             Developpeur Junior
           </CardDescription>
@@ -65,7 +65,6 @@ export const HeroCards = () => {
         <CardContent className="pb-2 text-center">
           <p>Transformer vos reves en choses concretes est ma passion</p>
         </CardContent>
-
         <CardFooter>
           <div>
             <a
@@ -108,6 +107,8 @@ export const HeroCards = () => {
           </div>
         </CardFooter>
       </Card>
+
+      {/* Farany Kerman */}
 
       {/* Service */}
       <Card className="absolute w-[350px] -right-[10px] bottom-[35px]  drop-shadow-xl shadow-black/10 bg-white dark:shadow-primary dark:bg-slate-900">
